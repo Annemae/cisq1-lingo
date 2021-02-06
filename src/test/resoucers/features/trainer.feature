@@ -9,9 +9,35 @@ Feature: Training for Lingo
     And I should see the first letter
     And my score is "0"
 
-  Scenario: Start a new round
+  Scenario Outline: Start a new round
     Given I am playing a game
     And the round was won
-    And the last word had "5" letters
+    And the last word had "<previous length>" letters
     When I start a new round
-    Then the word to guess has "6" letters
+    Then the word to guess has "<next length>" letters
+
+    Examples:
+      | previous length | next length |
+      | 5               | 6           |
+      | 6               | 7           |
+      | 7               | 5           |
+
+    #Failure path
+    Given I am playing a game
+    And the round was lost
+    Then I cannot start a new round
+
+  Scenario Outline: Guessing a word
+    Given the round is still ongoing
+    When I take a "<guess>" for the "<word>"
+    Then I will receive "<feedback>" on what I just entered
+
+    Examples:
+      | word  | guess  | feedback                                    |
+      | BROOD | BINGO  | CORRECT, ABSENT, ABSENT, ABSENT, PRESENT    |
+      | BROOD | BROOD  | CORRECT, CORRECT, CORRECT, CORRECT, CORRECT |
+
+    #Failure path
+    Given the round is still ongoing
+    When the word I fill in has the wrong amount of letters
+    Then I will receive feedback that my guess is invalid
