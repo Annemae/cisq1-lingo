@@ -11,9 +11,13 @@ public class Feedback {
     private final String attempt;
     private final List<Mark> marks;
 
-    public Feedback(String attempt, List<Mark> marks) {
+    private Feedback(String attempt, List<Mark> marks) {
         this.attempt = attempt;
         this.marks = marks;
+    }
+
+    public static Feedback of(String attempt, List<Mark> marks) {
+        return new Feedback(attempt, marks);
     }
 
     public boolean isWordGuessed() {
@@ -25,6 +29,10 @@ public class Feedback {
             return true;
         }
         throw new InvalidFeedbackException("The guess is not valid.");
+    }
+
+    public List<Character> giveHint(List<Character> previousHint, String wordToGuess, List<Mark> marks) {
+        return new Hint(previousHint, wordToGuess, marks).getHint();
     }
 
     @Override
