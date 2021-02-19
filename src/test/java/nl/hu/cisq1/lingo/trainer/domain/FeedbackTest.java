@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidFeedbackException;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidHintException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,14 +19,23 @@ class FeedbackTest {
 
     private static Stream<Arguments> provideHintExamples() {
         return Stream.of(
-                Arguments.of("BALEN", "AVOND", List.of(PRESENT, ABSENT, ABSENT, ABSENT, ABSENT),
+                Arguments.of(new Word("BALEN"), "AVOND", List.of(PRESENT, ABSENT, ABSENT, ABSENT, ABSENT),
                         List.of('.', '.', '.', '.', '.'), List.of('.', '.', '.', '.', '.')),
-                Arguments.of("SCHOEN", "ACTIES", List.of(ABSENT, CORRECT, ABSENT, ABSENT, CORRECT, PRESENT),
+                Arguments.of(new Word("SCHOEN"), "ACTIES", List.of(ABSENT, CORRECT, ABSENT, ABSENT, CORRECT, PRESENT),
                         List.of('.', '.', '.', '.', '.', '.'), List.of('.', 'C', '.', '.', 'E', '.')),
-                Arguments.of("ALARM", "ATOOM", List.of(CORRECT, ABSENT, ABSENT, ABSENT, CORRECT),
+                Arguments.of(new Word("ALARM"), "ATOOM", List.of(CORRECT, ABSENT, ABSENT, ABSENT, CORRECT),
                         List.of('A', '.', '.', '.', 'M'), List.of('A', '.', '.', '.', 'M')),
-                Arguments.of("BRAAD", "BROOD", List.of(CORRECT, CORRECT, ABSENT, ABSENT, CORRECT),
+                Arguments.of(new Word("BRAAD"), "BROOD", List.of(CORRECT, CORRECT, ABSENT, ABSENT, CORRECT),
                         List.of('B', '.', '.', '.', 'D'), List.of('B', 'R', '.', '.', 'D'))
+        );
+    }
+
+    private static Stream<Arguments> provideWrongHintExamples() {
+        return Stream.of(
+                Arguments.of(new Word("WATER"), "BROOD", List.of(PRESENT, ABSENT, ABSENT, ABSENT),
+                        List.of('.', '.', '.', '.', '.')),
+                Arguments.of(new Word("SCHOEN"), "ACTIES", List.of(ABSENT, CORRECT, ABSENT, ABSENT, CORRECT, PRESENT),
+                        List.of('.', '.', '.', '.', '.'))
         );
     }
 
@@ -66,14 +76,31 @@ class FeedbackTest {
                 feedback::isGuessValid);
     }
 
+//    @Test
+//    @DisplayName("feedback static constructor works")
+//    void feedbackStaticConstructorWorks() {
+//        List<Mark> marks = List.of(ABSENT, CORRECT, PRESENT, CORRECT, ABSENT);
+//
+//    }
+
     @ParameterizedTest
     @MethodSource("provideHintExamples")
-    @DisplayName("feedback object gives back hint")
-    void giveTheRightHintBack(String wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint, List<Character> expectedHint) {
+    @DisplayName("feedback object gives back the correct hint")
+    void hintIsCorrect(Word wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint, List<Character> expectedHint) {
         Feedback feedback = Feedback.of(attempt, marks);
 
         List<Character> actualHint = feedback.giveHint(previousHint, wordToGuess, marks);
 
         assertEquals(expectedHint, actualHint);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideWrongHintExamples")
+    @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length")
+    void hintLengthIsIncorrect(Word wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint) {
+        Feedback feedback = Feedback.of(attempt, marks);
+
+        assertThrows(InvalidHintException.class,
+                () -> feedback.giveHint(previousHint, wordToGuess, marks));
     }
 }

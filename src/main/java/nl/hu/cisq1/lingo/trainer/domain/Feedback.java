@@ -31,7 +31,7 @@ public class Feedback {
         throw new InvalidFeedbackException("The guess is not valid.");
     }
 
-    public List<Character> giveHint(List<Character> previousHint, String wordToGuess, List<Mark> marks) {
+    public List<Character> giveHint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
         return new Hint(previousHint, wordToGuess, marks).getHint();
     }
 
