@@ -15,7 +15,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeedbackTest {
-    private final String attemptFiveLetters = "BROOD";
+    private final String exampleAttempt5Letters = "BROOD";
 
     private static Stream<Arguments> provideHintExamples() {
         return Stream.of(
@@ -43,7 +43,7 @@ class FeedbackTest {
     @DisplayName("word is guessed correctly")
     void wordIsGuessed() {
         List<Mark> marks = List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT);
-        Feedback feedback = Feedback.of(attemptFiveLetters, marks);
+        Feedback feedback = Feedback.of(exampleAttempt5Letters, marks);
 
         assertTrue(feedback.isWordGuessed());
     }
@@ -52,7 +52,7 @@ class FeedbackTest {
     @DisplayName("word is guessed incorrectly")
     void wordIsNotGuessed() {
         List<Mark> marks = List.of(ABSENT, CORRECT, PRESENT, CORRECT, ABSENT);
-        Feedback feedback = Feedback.of(attemptFiveLetters, marks);
+        Feedback feedback = Feedback.of(exampleAttempt5Letters, marks);
 
         assertFalse(feedback.isWordGuessed());
     }
@@ -61,7 +61,7 @@ class FeedbackTest {
     @DisplayName("guess is valid if no letters are invalid")
     void guessIsValid() {
         List<Mark> marks = List.of(ABSENT, CORRECT, PRESENT, CORRECT, ABSENT);
-        Feedback feedback = Feedback.of(attemptFiveLetters, marks);
+        Feedback feedback = Feedback.of(exampleAttempt5Letters, marks);
 
         assertTrue(feedback.isGuessValid());
     }
@@ -70,7 +70,7 @@ class FeedbackTest {
     @DisplayName("guess is invalid if all letters are invalid") //Omdat het altijd allemaal INVALID is en niet bijv. één INVALID.
     void guessIsInvalid() {
         List<Mark> marks = List.of(INVALID, INVALID, INVALID, INVALID, INVALID);
-        Feedback feedback = Feedback.of(attemptFiveLetters, marks);
+        Feedback feedback = Feedback.of(exampleAttempt5Letters, marks);
 
         assertThrows(InvalidFeedbackException.class,
                 feedback::isGuessValid);
@@ -85,7 +85,7 @@ class FeedbackTest {
 
     @ParameterizedTest
     @MethodSource("provideHintExamples")
-    @DisplayName("feedback object gives back the correct hint")
+    @DisplayName("hint is correct")
     void hintIsCorrect(Word wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint, List<Character> expectedHint) {
         Feedback feedback = Feedback.of(attempt, marks);
 
@@ -97,7 +97,7 @@ class FeedbackTest {
     @ParameterizedTest
     @MethodSource("provideWrongHintExamples")
     @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length")
-    void hintLengthIsIncorrect(Word wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint) {
+    void hintLengthIsIncorrect(Word wordToGuess, String attempt, List<Mark> marks, List<Character> previousHint) { //Nu nog length maar kan later aangepast worden.
         Feedback feedback = Feedback.of(attempt, marks);
 
         assertThrows(InvalidHintException.class,
