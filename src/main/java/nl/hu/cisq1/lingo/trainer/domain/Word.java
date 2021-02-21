@@ -12,6 +12,10 @@ public class Word {
         }
     }
 
+    public static Word of(String word) {
+        return new Word(word);
+    } //todo controleren
+
     public List<Character> getWord() {
         return this.word;
     }

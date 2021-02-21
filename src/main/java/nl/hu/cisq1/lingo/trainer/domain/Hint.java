@@ -26,7 +26,7 @@ public class Hint {
         }
     }
 
-    private List<Character> calculateHint() {
+    private void calculateHint() {
         int count = 0;
         for(Character character : previousHint) {
             if(character == '.') {
@@ -40,8 +40,6 @@ public class Hint {
             }
             count += 1;
         }
-
-        return hint;
     }
 
     public List<Character> getHint() {
