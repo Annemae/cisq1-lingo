@@ -42,7 +42,7 @@ public class Feedback {
                 if (character == wordToGuess.get(count)) {
                     marks.add(CORRECT);
                 } else if (character != wordToGuess.get(count) && wordToGuess.contains(character)) {
-                    marks.add(PRESENT);
+                    marks.add(PRESENT); //todo present ???
                 } else {
                     marks.add(ABSENT);
                 }
@@ -63,7 +63,7 @@ public class Feedback {
     }
 
     public List<Character> giveHint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
-        return new Hint(previousHint, wordToGuess, marks).getHint();
+        return Hint.of(previousHint, wordToGuess, marks).getHint();
     }
 
     public List<Mark> getMarks() {

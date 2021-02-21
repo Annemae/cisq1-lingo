@@ -15,29 +15,13 @@ import java.util.stream.Stream;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FeedbackTest {
-    private static Stream<Arguments> provideHintExamples() {
-        return Stream.of(
-                Arguments.of(Word.of("BALEN"), "AVOND", List.of('.', '.', '.', '.', '.'), List.of('.', '.', '.', '.', '.')),
-                Arguments.of(Word.of("SCHOEN"), "ACTIES", List.of('.', '.', '.', '.', '.', '.'), List.of('.', 'C', '.', '.', 'E', '.')),
-                Arguments.of(Word.of("ALARM"), "ATOOM", List.of('A', '.', '.', '.', 'M'), List.of('A', '.', '.', '.', 'M')),
-                Arguments.of(Word.of("BRAAD"), "BROOD", List.of('B', '.', '.', '.', 'D'), List.of('B', 'R', '.', '.', 'D'))
-        );
-    }
-
-//    private static Stream<Arguments> provideWrongHintExamples() {
-//        return Stream.of(
-//                Arguments.of(Word.of("WATER"), "BROOD", List.of('.', '.', '.', '.', '.')),
-//                Arguments.of(Word.of("SCHOEN"), "ACTIES", List.of('.', '.', '.', '.', '.'))
-//        );
-//    }
-
+class FeedbackTest { //TODO TEST IK WEL GENOEG NU?
     @Test
     @DisplayName("word is guessed correctly")
     void wordIsGuessed() {
         Feedback feedback = Feedback.of("BROOD", Word.of("BROOD"));
 
-        assertTrue(feedback.isWordGuessed()); //todo klopt dit?
+        assertTrue(feedback.isWordGuessed()); //todo klopt dit en andersom zetten?
         assertEquals(feedback.getMarks(), List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT));
     }
 
@@ -69,24 +53,12 @@ class FeedbackTest {
         assertEquals(feedback.getMarks(), List.of(INVALID, INVALID, INVALID, INVALID));
     }
 
-    @ParameterizedTest
-    @MethodSource("provideHintExamples")
-    @DisplayName("hint is correct")
-    void hintIsCorrect(Word wordToGuess, String attempt, List<Character> previousHint, List<Character> expectedHint) {
-        Feedback feedback = Feedback.of(attempt, wordToGuess);
-
-        List<Character> actualHint = feedback.giveHint(previousHint, wordToGuess, feedback.getMarks());
-
-        assertEquals(expectedHint, actualHint);
-    }
-
-//    @ParameterizedTest
-//    @MethodSource("provideWrongHintExamples")
-//    @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length")
-//    void hintLengthIsIncorrect(Word wordToGuess, String attempt, List<Character> previousHint) { //Nu nog length maar kan later aangepast worden.
-//        Feedback feedback = Feedback.of(attempt, wordToGuess);
+//    @Test
+//    @DisplayName("static constructor gives the same object back as new") //todo anders
+//    void staticConstructorWorks() {
+//        Feedback expected = new Feedback("BROOD", Word.of("BROOD"));
+//        Feedback actual = Feedback.of("BROOD", Word.of("BROOD"));
 //
-//        assertThrows(InvalidHintException.class,
-//                () -> feedback.giveHint(previousHint, wordToGuess, feedback.getMarks()));
+//        assertEquals(expected.hashCode(), actual.hashCode());
 //    }
 }

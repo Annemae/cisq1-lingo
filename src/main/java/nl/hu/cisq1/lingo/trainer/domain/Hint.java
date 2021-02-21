@@ -7,14 +7,14 @@ import java.util.List;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
-public class Hint {
+public class Hint { //todo equalas etc, and static?
     private final List<Character> previousHint;
     private final List<Character> wordToGuess;
     private final List<Mark> marks;
 
     private final List<Character> hint = new ArrayList<>();
 
-    public Hint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
+    private Hint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
         if((marks.size() != previousHint.size()) || (marks.size() != wordToGuess.getWord().size())) {
             throw new InvalidHintException("The hint is not valid.");
         } else {
@@ -24,6 +24,10 @@ public class Hint {
 
             this.calculateHint();
         }
+    }
+
+    public static Hint of(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
+        return new Hint(previousHint, wordToGuess, marks);
     }
 
     private void calculateHint() {
