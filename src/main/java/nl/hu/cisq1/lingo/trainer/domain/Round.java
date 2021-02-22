@@ -1,42 +1,44 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.ABSENT;
 
 public class Round {
     private Word wordToGuess;
-    private List<List<Character>> hints;
-    private List<List<Mark>> feedback;
+    private List<Feedback> feedback;
 
-    public Round(Word wordToGuess, Random random) { //todo index: Random.nextInt() moet waarschijnlijk in service.
+    public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
-        this.hints = new ArrayList<>();
-        this.feedback = new ArrayList<>();
-
-        this.makeFirstHint(random);
     }
 
-    private void makeFirstHint(Random random) {
-        List<Character> firstHint = new ArrayList<>();
-        List<Character> wordArray = this.wordToGuess.getWord();
+    public void takeGuess(String attempt) {
 
-        for(int i = 0; i < wordArray.size(); i++) {
-            if(i == random.nextInt(wordArray.size())) {
-                firstHint.add(wordArray.get(i));
-            } else {
-                firstHint.add('.');
-            }
-        }
-
-        this.hints.add(firstHint);
     }
 
-    public Word getWordToGuess() {
-        return wordToGuess;
-    }
+//    private void makeFirstHint(Random random) {
+//        List<Character> firstHint = new ArrayList<>();
+//        List<Character> wordArray = this.wordToGuess.getWord();
+//
+//        for(int i = 0; i < wordArray.size(); i++) {
+//            if(i == random.nextInt(wordArray.size())) {
+//                firstHint.add(wordArray.get(i));
+//            } else {
+//                firstHint.add('.');
+//            }
+//        }
+//
+//        this.hints.add(firstHint);
+//    }
 
-    public List<List<Character>> getHints() { //Returns the most recent hint that's been added to the list.
-        return hints;
-    }
+//    public List<Character> takeGuess(String attempt) {
+//        Feedback feedback = Feedback.of(attempt, this.wordToGuess);
+//        this.feedback.add(feedback);
+//
+//        Hint hint = Hint.of(this.getLastHint(), wordToGuess, feedback.getMarks());
+//        this.hints.add(hint.getHint());
+//
+//        return this.getLastHint();
+//    }
 }

@@ -7,43 +7,37 @@ import java.util.List;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
-public class Hint { //todo equalas etc, and static?
-    private final List<Character> previousHint;
-    private final List<Character> wordToGuess;
-    private final List<Mark> marks;
+public class Hint { //todo previoushint optional
+    private final List<Character> hint;
 
-    private final List<Character> hint = new ArrayList<>();
+    public Hint(List<Character> characters) {
+       this.hint = characters;
+    }
 
-    private Hint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
-        if((marks.size() != previousHint.size()) || (marks.size() != wordToGuess.getWord().size())) {
+    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) {
+        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getWord().size())) {
             throw new InvalidHintException("The hint is not valid.");
         } else {
-            this.previousHint = previousHint;
-            this.marks = marks;
-            this.wordToGuess = wordToGuess.getWord();
-
-            this.calculateHint();
+            return new Hint(calculateHint(previousHint, wordToGuess, marks));
         }
     }
 
-    public static Hint of(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
-        return new Hint(previousHint, wordToGuess, marks);
-    }
-
-    private void calculateHint() {
+    private static List<Character> calculateHint(Hint previousHint, Word wordToGuess, List<Mark> marks) {
+        List<Character> characters = new ArrayList<>();
         int count = 0;
-        for(Character character : previousHint) {
+        for(Character character : previousHint.getHint()) {
             if(character == '.') {
                 if(marks.get(count) == CORRECT) {
-                    hint.add(wordToGuess.get(count));
+                    characters.add(wordToGuess.getWord().get(count));
                 } else {
-                    hint.add('.');
+                    characters.add('.');
                 }
             } else {
-                hint.add(character);
+                characters.add(character);
             }
             count += 1;
         }
+        return characters;
     }
 
     public List<Character> getHint() {

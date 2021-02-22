@@ -10,45 +10,15 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
 public class Feedback {
     private final String attempt;
-    private final Word wordToGuess;
+    private final List<Mark> marks;
 
-    private final List<Mark> marks = new ArrayList<>();
-
-    private Feedback(String attempt, Word wordToGuess) {
+    private Feedback(String attempt, List<Mark> marks) {
         this.attempt = attempt;
-        this.wordToGuess = wordToGuess;
-
-        this.calculateFeedback();
+        this.marks = marks;
     }
 
-    public static Feedback of(String attempt, Word word) {
-        return new Feedback(attempt, word);
-    }
-
-    private void calculateFeedback() {
-        List<Character> wordToGuess = this.wordToGuess.getWord();
-        List<Character> attempt = new ArrayList<>();
-        for (char character : this.attempt.toCharArray()) {
-            attempt.add(character);
-        }
-
-        if (wordToGuess.size() != attempt.size()) {
-            attempt.forEach(character -> {
-                marks.add(INVALID);
-            });
-        } else {
-            int count = 0;
-            for (Character character : attempt) {
-                if (character == wordToGuess.get(count)) {
-                    marks.add(CORRECT);
-                } else if (character != wordToGuess.get(count) && wordToGuess.contains(character)) {
-                    marks.add(PRESENT); //todo present ???
-                } else {
-                    marks.add(ABSENT);
-                }
-                count += 1;
-            }
-        }
+    public static Feedback of(String attempt, List<Mark> marks) {
+        return new Feedback(attempt, marks);
     }
 
     public boolean isWordGuessed() {
@@ -62,13 +32,10 @@ public class Feedback {
         throw new InvalidFeedbackException("The guess is not valid.");
     }
 
-    public List<Character> giveHint(List<Character> previousHint, Word wordToGuess, List<Mark> marks) {
-        return Hint.of(previousHint, wordToGuess, marks).getHint();
+    public Hint giveHint(Hint previousHint, Word wordToGuess) {
+        return Hint.of(previousHint, wordToGuess, this.marks);
     }
 
-    public List<Mark> getMarks() {
-        return marks;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -76,20 +43,18 @@ public class Feedback {
         if (o == null || getClass() != o.getClass()) return false;
         Feedback feedback = (Feedback) o;
         return Objects.equals(attempt, feedback.attempt) &&
-                Objects.equals(wordToGuess, feedback.wordToGuess) &&
                 Objects.equals(marks, feedback.marks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attempt, wordToGuess, marks);
+        return Objects.hash(attempt, marks);
     }
 
     @Override
     public String toString() {
         return "Feedback{" +
                 "attempt='" + attempt + '\'' +
-                ", wordToGuess=" + wordToGuess +
                 ", marks=" + marks +
                 '}';
     }
