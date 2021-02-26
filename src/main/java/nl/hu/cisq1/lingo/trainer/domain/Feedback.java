@@ -1,7 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidFeedbackException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +29,7 @@ public class Feedback { //Klasse die de marks genereerd.
     }
 
     public boolean isGuessValid() {
-        if(marks.stream().noneMatch(mark -> mark == INVALID)) {
-            return true;
-        }
-        throw new InvalidFeedbackException("The guess is not valid.");
+        return marks.stream().noneMatch(mark -> mark == INVALID);
     }
 
     private void calculateMarks(String attempt, Word wordToGuess) {
@@ -43,7 +38,7 @@ public class Feedback { //Klasse die de marks genereerd.
             attemptCharacters.add(character);
         }
 
-        if (wordToGuess.getLength() != attemptCharacters.size()) {
+        if (wordToGuess.getLength() != attemptCharacters.size()) {//todo of geen string is  em verkeerde beginletter
             attemptCharacters.forEach(character -> {
                 this.marks.add(INVALID);
             });

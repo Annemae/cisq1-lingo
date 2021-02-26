@@ -18,12 +18,13 @@ public class Hint {
     public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) { //todo if anders?
         if(previousHint == null && marks == null) {
             return calculateFirstHint(wordToGuess);
-        }
-
-        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())) {
-            throw new InvalidHintException("The hint is not valid.");
         } else {
-            return new Hint(calculateHint(previousHint, wordToGuess, marks));
+            assert previousHint != null;
+            if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())) {
+                throw new InvalidHintException("The hint is not valid.");
+            } else {
+                return new Hint(calculateHint(previousHint, wordToGuess, marks));
+            }
         }
     }
 

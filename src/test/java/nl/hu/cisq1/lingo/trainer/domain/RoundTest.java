@@ -1,21 +1,18 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
-import java.util.Random;
 
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.ABSENT;
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTest {
-    //make guess
     //make wrong guess
     //word is an actual word
     //word guess is right length
-    //
 
     @Test
     @DisplayName("gives back hint with first letter after starting new round")
@@ -26,16 +23,55 @@ class RoundTest {
     }
 
     @Test
-    @DisplayName("take a guess and get right feedback back")
+    @DisplayName("take a valid guess and get right feedback back")
     void takeValidGuess() {
         Round round = new Round(Word.of("GITAAR"));
 
+        Turn turn = round.takeGuess("GIETER");
+
+        Feedback feedback = turn.getFeedback();
+        Hint hint = turn.getHint();
+
+        assertEquals(List.of(CORRECT, CORRECT, ABSENT, PRESENT, ABSENT, CORRECT), feedback.getMarks());
+        assertEquals(List.of('G', 'I', '.', '.', '.', 'R'), hint.getHint());
+    }
+
+    @Test
+    @DisplayName("take an invalid guess and get right feedback back")
+    void takeInvalidGuess() {
+        Round round = new Round(Word.of("GITAAR"));
+
+        assertThrows(InvalidGuessException.class,
+                () -> round.takeGuess("KOEK"));
+    }
+
+    @Test
+    @DisplayName("round is over")
+    void roundIsOver() {
+        Round round = new Round(Word.of("BANGER"));
+
+        round.takeGuess("BANGER");
+
+        assertTrue(round.isOver());
+    }
+
+    @Test
+    @DisplayName("round is not over")
+    void roundIsNotOver() {
+        Round round = new Round(Word.of("BANGER"));
+
         round.takeGuess("KOEKEN");
 
-        Feedback feedback = round.getLastTurn().getFeedback();
-        Hint hint = round.getLastTurn().getHint();
+        assertFalse(round.isOver());
+    }
 
-        assertEquals(List.of(ABSENT, ABSENT, ABSENT, ABSENT, ABSENT, ABSENT), feedback.getMarks());
-        assertEquals(List.of('G', '.', '.', '.', '.', '.'), hint.getHint());
+    @Test
+    @DisplayName("round gives back latest turn")
+    void givesBackLastTurn() {
+        Round round = new Round(Word.of("BROOD"));
+        round.takeGuess("BRAAD");
+        Turn lastTurn = round.getLastTurn();
+
+        assertEquals(List.of(CORRECT, CORRECT, ABSENT, ABSENT, CORRECT), lastTurn.getFeedback().getMarks());
     }
 }

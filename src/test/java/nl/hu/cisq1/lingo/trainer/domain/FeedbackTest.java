@@ -1,12 +1,9 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidFeedbackException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.List;
-
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,8 +42,7 @@ class FeedbackTest { //todo aparte testen?
     void guessIsInvalid() {
         Feedback feedback = Feedback.of("KORT", Word.of("LANGER"));
 
-        assertThrows(InvalidFeedbackException.class,
-                feedback::isGuessValid);
+        assertFalse(feedback.isGuessValid());
         assertEquals(List.of(INVALID, INVALID, INVALID, INVALID), feedback.getMarks());
     }
 

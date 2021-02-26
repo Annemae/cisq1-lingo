@@ -1,15 +1,14 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.ABSENT;
-
 public class Round {
-    private Word wordToGuess;
+    private final Word wordToGuess;
     private List<Turn> turns;
-    private Hint firstHint;
+    private final Hint firstHint;
 
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
@@ -21,15 +20,28 @@ public class Round {
     public Turn takeGuess(String attempt) {
         Feedback feedback = new Feedback(attempt, this.wordToGuess);
 
-        if(this.turns.size() == 0) {
-            this.turns.add(new Turn(feedback, this.firstHint));
-        } else {
-            Hint hint = Hint.of(this.getLastTurn().getHint(), this.wordToGuess, feedback.getMarks());
+        if(feedback.isGuessValid()) {
+            Hint hint;
+            if (this.turns.size() == 0) {
+                hint = Hint.of(this.firstHint, this.wordToGuess, feedback.getMarks());
+            } else {
+                hint = Hint.of(this.getLastTurn().getHint(), this.wordToGuess, feedback.getMarks());
+            }
             this.turns.add(new Turn(feedback, hint));
+        } else {
+            throw new InvalidGuessException("Guess is not valid.");
         }
         return this.getLastTurn();
     }
 
+    public boolean isOver() {
+        Feedback lastFeedback = getLastTurn().getFeedback();
+        if(this.turns.size() < 6) {
+            return lastFeedback.isWordGuessed();
+        } else {
+            return true;
+        }
+    }
 
     public Hint getFirstHint() {
         return this.firstHint;
