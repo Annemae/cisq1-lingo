@@ -6,22 +6,24 @@ import java.util.Objects;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
-public class Feedback { //Klasse die de marks genereerd.
+public class Feedback {
     private final String attempt;
     private final Word wordToGuess;
 
     private final List<Mark> marks;
+    private final Hint hint;
 
-    public Feedback(String attempt, Word wordToGuess) {
+    public Feedback(String attempt, Word wordToGuess, Hint previousHint) {
         this.attempt = attempt;
         this.wordToGuess = wordToGuess;
         this.marks = new ArrayList<>();
 
         this.calculateMarks(attempt, wordToGuess);
+        this.hint = Hint.of(previousHint, wordToGuess, this.getMarks());
     }
 
-    public static Feedback of(String attempt, Word wordToGuess) {
-        return new Feedback(attempt, wordToGuess);
+    public static Feedback of(String attempt, Word wordToGuess, Hint previousHint) {
+        return new Feedback(attempt, wordToGuess, previousHint);
     }
 
     public boolean isWordGuessed() {
@@ -62,6 +64,10 @@ public class Feedback { //Klasse die de marks genereerd.
         return marks;
     }
 
+    public Hint getHint() {
+        return hint;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,12 +75,13 @@ public class Feedback { //Klasse die de marks genereerd.
         Feedback feedback = (Feedback) o;
         return Objects.equals(attempt, feedback.attempt) &&
                 Objects.equals(wordToGuess, feedback.wordToGuess) &&
-                Objects.equals(marks, feedback.marks);
+                Objects.equals(marks, feedback.marks) &&
+                Objects.equals(hint, feedback.hint);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attempt, wordToGuess, marks);
+        return Objects.hash(attempt, wordToGuess, marks, hint);
     }
 
     @Override
@@ -83,6 +90,7 @@ public class Feedback { //Klasse die de marks genereerd.
                 "attempt='" + attempt + '\'' +
                 ", wordToGuess=" + wordToGuess +
                 ", marks=" + marks +
+                ", hint=" + hint +
                 '}';
     }
 }
