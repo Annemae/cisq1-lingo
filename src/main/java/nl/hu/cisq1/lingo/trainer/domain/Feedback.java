@@ -8,17 +8,22 @@ import java.util.Objects;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
-public class Feedback {
+public class Feedback { //Klasse die de marks genereerd.
     private final String attempt;
+    private final Word wordToGuess;
+
     private final List<Mark> marks;
 
-    private Feedback(String attempt, List<Mark> marks) {
+    public Feedback(String attempt, Word wordToGuess) {
         this.attempt = attempt;
-        this.marks = marks;
+        this.wordToGuess = wordToGuess;
+        this.marks = new ArrayList<>();
+
+        this.calculateMarks(attempt, wordToGuess);
     }
 
-    public static Feedback of(String attempt, List<Mark> marks) {
-        return new Feedback(attempt, marks);
+    public static Feedback of(String attempt, Word wordToGuess) {
+        return new Feedback(attempt, wordToGuess);
     }
 
     public boolean isWordGuessed() {
@@ -32,10 +37,35 @@ public class Feedback {
         throw new InvalidFeedbackException("The guess is not valid.");
     }
 
-    public Hint giveHint(Hint previousHint, Word wordToGuess) {
-        return Hint.of(previousHint, wordToGuess, this.marks);
+    private void calculateMarks(String attempt, Word wordToGuess) {
+        List<Character> attemptCharacters = new ArrayList<>();
+        for (char character : attempt.toCharArray()) {
+            attemptCharacters.add(character);
+        }
+
+        if (wordToGuess.getLength() != attemptCharacters.size()) {
+            attemptCharacters.forEach(character -> {
+                this.marks.add(INVALID);
+            });
+        } else {
+            int count = 0;
+            for (Character character : attemptCharacters) {
+                if (character == wordToGuess.getWord().get(count)) {
+                    this.marks.add(CORRECT);
+                } else if (character != wordToGuess.getWord().get(count) && wordToGuess.getWord().contains(character)) { //todo korter
+                    this.marks.add(PRESENT); //todo present ???
+                } else {
+                    this.marks.add(ABSENT);
+                }
+                count += 1;
+            }
+        }
     }
 
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -43,18 +73,20 @@ public class Feedback {
         if (o == null || getClass() != o.getClass()) return false;
         Feedback feedback = (Feedback) o;
         return Objects.equals(attempt, feedback.attempt) &&
+                Objects.equals(wordToGuess, feedback.wordToGuess) &&
                 Objects.equals(marks, feedback.marks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attempt, marks);
+        return Objects.hash(attempt, wordToGuess, marks);
     }
 
     @Override
     public String toString() {
         return "Feedback{" +
                 "attempt='" + attempt + '\'' +
+                ", wordToGuess=" + wordToGuess +
                 ", marks=" + marks +
                 '}';
     }

@@ -4,18 +4,23 @@ import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidHintException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
-public class Hint { //todo previoushint optional
+public class Hint {
     private final List<Character> hint;
 
     public Hint(List<Character> characters) {
-       this.hint = characters;
+        this.hint = characters;
     }
 
-    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) {
-        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getWord().size())) {
+    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) { //todo if anders?
+        if(previousHint == null && marks == null) {
+            return calculateFirstHint(wordToGuess);
+        }
+
+        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())) {
             throw new InvalidHintException("The hint is not valid.");
         } else {
             return new Hint(calculateHint(previousHint, wordToGuess, marks));
@@ -40,7 +45,35 @@ public class Hint { //todo previoushint optional
         return characters;
     }
 
+    private static Hint calculateFirstHint(Word wordToGuess) { //todo vragem
+        List<Character> firstHint = new ArrayList<>();
+        List<Character> wordArray = wordToGuess.getWord();
+
+        for(int i = 0; i < wordArray.size(); i++) {
+            if(i == 0) {
+                firstHint.add(wordArray.get(0));
+            } else {
+                firstHint.add('.');
+            }
+        }
+        return new Hint(firstHint);
+    }
+
     public List<Character> getHint() {
         return this.hint;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hint hint1 = (Hint) o;
+        return Objects.equals(hint, hint1.hint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hint);
     }
 }
