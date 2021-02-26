@@ -17,29 +17,25 @@ class RoundTest {
     //word guess is right length
     //
 
-//    @Test
-//    @DisplayName("gives back hint with first letter after starting new round")
-//    void roundIsMadeAndGivesFirstLetter() {
-//        Random random = Mockito.mock(Random.class); //todo uitzoeken hoe dit werkt.
-//        Mockito.when(random.nextBoolean()).thenReturn(true);
-//
-//        Round round = new Round(Word.of("GITAAR"), random);
-//        Feedback feedback = round.getFeedback().get(0);
-//
-//        assertEquals(List.of('G', '.', '.', '.', '.', '.'), round.getFeedback().get(0)); //todo or aparte method met firstHint?
-//    }
+    @Test
+    @DisplayName("gives back hint with first letter after starting new round")
+    void roundIsMadeAndGivesFirstLetter() {
+        Round round = new Round(Word.of("GITAAR"));
 
-//    @Test
-//    @DisplayName("take a guess and get right feedback back")
-//    void takeValidGuess() {
-//        Random random = Mockito.mock(Random.class); //todo uitzoeken hoe dit werkt.
-//        Mockito.when(random.nextBoolean()).thenReturn(true);
-//
-//        Round round = new Round(Word.of("GITAAR"), random);
-//
-//        round.takeGuess("KOEKEN");
-//
-//        assertEquals(List.of(ABSENT, ABSENT, ABSENT, ABSENT, ABSENT, ABSENT), round.getLastFeedback().getMarks());
-//        assertEquals(List.of('G', '.', '.', '.', '.', '.'), round.getLastHint());
-//    }
+        assertEquals(List.of('G', '.', '.', '.', '.', '.'), round.getFirstHint().getHint()); //todo or aparte method met firstHint?
+    }
+
+    @Test
+    @DisplayName("take a guess and get right feedback back")
+    void takeValidGuess() {
+        Round round = new Round(Word.of("GITAAR"));
+
+        round.takeGuess("KOEKEN");
+
+        Feedback feedback = round.getLastTurn().getFeedback();
+        Hint hint = round.getLastTurn().getHint();
+
+        assertEquals(List.of(ABSENT, ABSENT, ABSENT, ABSENT, ABSENT, ABSENT), feedback.getMarks());
+        assertEquals(List.of('G', '.', '.', '.', '.', '.'), hint.getHint());
+    }
 }
