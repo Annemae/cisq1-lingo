@@ -34,7 +34,7 @@ class FeedbackTest {
         Feedback feedback = Feedback.of("BROOD", Word.of("PAARD"), new Hint(List.of('P', '.', '.', '.', '.')));
 
         assertTrue(feedback.isGuessValid());
-        assertEquals(List.of(ABSENT, PRESENT, ABSENT, ABSENT, CORRECT), feedback.getMarks());
+        assertEquals(List.of(CORRECT, PRESENT, ABSENT, ABSENT, CORRECT), feedback.getMarks());
     }
 
 //    @Test

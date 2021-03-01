@@ -7,19 +7,19 @@ import java.util.List;
 
 public class Round {
     private final Word wordToGuess;
-    private List<Feedback> feedback;
+    private List<Feedback> attempts;
 
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
-        this.feedback = new ArrayList<>();
-        feedback.add(Feedback.of("", wordToGuess, Hint.calculateFirstHint(wordToGuess)));
+        this.attempts = new ArrayList<>();
+        attempts.add(Feedback.of("", wordToGuess, Hint.calculateFirstHint(wordToGuess)));
     }
 
     public Feedback takeGuess(String attempt) {
         Feedback newFeedback = new Feedback(attempt, wordToGuess, getLastFeedback().getHint());
 
         if(newFeedback.isGuessValid()) {
-            this.feedback.add(newFeedback);
+            this.attempts.add(newFeedback);
         } else {
             throw new InvalidGuessException("Guess is not valid.");
         }
@@ -29,7 +29,7 @@ public class Round {
 
     public boolean isOver() {
         Feedback lastFeedback = getLastFeedback();
-        if(this.feedback.size() < 6) {
+        if(this.attempts.size() < 6) {
             return lastFeedback.isWordGuessed();
         } else {
             return true;
@@ -38,10 +38,10 @@ public class Round {
 
     //FEEDBACK
     public Feedback getLastFeedback() {
-        return this.feedback.get(this.feedback.size() - 1);
+        return this.attempts.get(this.attempts.size() - 1);
     }
 
     public List<Feedback> getAllFeedback() {
-        return feedback;
+        return attempts;
     }
 }
