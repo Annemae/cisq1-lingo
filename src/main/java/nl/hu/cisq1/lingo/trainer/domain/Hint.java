@@ -12,19 +12,15 @@ public class Hint {
     private final List<Character> hint;
 
     public Hint(List<Character> characters) {
-        this.hint = characters;
+        hint = characters;
     }
 
-    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) { //todo if anders?
-        if(previousHint == null && marks == null) {
-            return calculateFirstHint(wordToGuess);
+    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) {
+        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())
+                || marks.stream().anyMatch(mark -> mark == INVALID)) {
+            throw new InvalidHintException("The hint can't be generated with given data.");
         } else {
-            assert previousHint != null;
-            if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())) {
-                throw new InvalidHintException("The hint is not valid.");
-            } else {
-                return new Hint(calculateHint(previousHint, wordToGuess, marks));
-            }
+            return new Hint(calculateHint(previousHint, wordToGuess, marks));
         }
     }
 
@@ -46,7 +42,7 @@ public class Hint {
         return characters;
     }
 
-    private static Hint calculateFirstHint(Word wordToGuess) { //todo vragem
+    public static Hint calculateFirstHint(Word wordToGuess) { //todo vragem
         List<Character> firstHint = new ArrayList<>();
         List<Character> wordArray = wordToGuess.getWord();
 
@@ -61,7 +57,7 @@ public class Hint {
     }
 
     public List<Character> getHint() {
-        return this.hint;
+        return hint;
     }
 
 

@@ -8,11 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WordTest {
 
     @Test
-    @DisplayName("static constructor gives the same object back as new")
+    @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
         Word expected = new Word("WORD");
         Word actual = Word.of("WORD");
 
         assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual);
     }
 }

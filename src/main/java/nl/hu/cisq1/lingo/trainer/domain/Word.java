@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Word { //todo equals and static??
+public class Word {
     public List<Character> word = new ArrayList<>();
     public int length;
 

@@ -46,7 +46,10 @@ public class HintTest { //todo calculatefirsthint test
                         List.of(INVALID, INVALID, INVALID, INVALID)),
                 Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
                         Word.of("WATER"),
-                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID))
+                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID)),
+                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
+                        Word.of("WATER"),
+                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID))
         );
     }
 
@@ -61,19 +64,29 @@ public class HintTest { //todo calculatefirsthint test
 
     @ParameterizedTest
     @MethodSource("provideWrongHintExamples")
-    @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length")
-    void hintLengthIsIncorrect(Hint previousHint, Word wordToGuess, List<Mark> marks) { //Nu nog length maar kan later aangepast worden.
+    @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length or marks include INVALID")
+    void hintLengthIsIncorrect(Hint previousHint, Word wordToGuess, List<Mark> marks) {
 
         assertThrows(InvalidHintException.class,
                 () -> Hint.of(previousHint, wordToGuess, marks));
     }
 
     @Test
-    @DisplayName("static constructor gives the same object back as new")
+    @DisplayName("calculating first hint is correct")
+    void calculateFirstHintIsCorrect() {
+        Hint expected = new Hint(List.of('P', '.', '.', '.', '.', '.'));
+        Word word = Word.of("PAPIER");
+
+        assertEquals(expected, Hint.calculateFirstHint(word));
+    }
+
+    @Test
+    @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
         Hint expected = new Hint(List.of('B', 'R', 'A', '.', 'D'));
         Hint actual = Hint.of(new Hint(List.of('B', 'R', '.', '.', 'D')), Word.of("BRAAD"), List.of(CORRECT, CORRECT, CORRECT, ABSENT, CORRECT));
 
         assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual);
     }
 }
