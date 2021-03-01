@@ -16,10 +16,14 @@ public class Feedback {
     public Feedback(String attempt, Word wordToGuess, Hint previousHint) {
         this.attempt = attempt;
         this.wordToGuess = wordToGuess;
-        this.marks = new ArrayList<>();
+        marks = new ArrayList<>();
 
-        this.calculateMarks(attempt, wordToGuess);
-        this.hint = Hint.of(previousHint, wordToGuess, this.getMarks());
+        if(attempt.equals("")) {
+            this.calculateFirstMarks(wordToGuess);
+        } else {
+            this.calculateMarks(attempt, wordToGuess);
+        }
+        hint = Hint.of(previousHint, wordToGuess, this.getMarks());
     }
 
     public static Feedback of(String attempt, Word wordToGuess, Hint previousHint) {
@@ -34,27 +38,41 @@ public class Feedback {
         return marks.stream().noneMatch(mark -> mark == INVALID);
     }
 
+    private void calculateFirstMarks(Word wordToGuess) {
+        List<Character> wordToGuessCharacters = wordToGuess.getWord();
+        for(int i = 0; i < wordToGuessCharacters.size(); i++) {
+            if(i == 0) {
+                marks.add(CORRECT);
+            } else {
+                marks.add(ABSENT);
+            }
+        }
+    }
+
     private void calculateMarks(String attempt, Word wordToGuess) {
         List<Character> attemptCharacters = new ArrayList<>();
+        List<Character> wordToGuessCharacters = wordToGuess.getWord();
         for (char character : attempt.toCharArray()) {
             attemptCharacters.add(character);
         }
 
         if (wordToGuess.getLength() != attemptCharacters.size()) {//todo of geen string is  em verkeerde beginletter
             attemptCharacters.forEach(character -> {
-                this.marks.add(INVALID);
+                marks.add(INVALID);
             });
         } else {
-            int count = 0;
-            for (Character character : attemptCharacters) {
-                if (character == wordToGuess.getWord().get(count)) {
-                    this.marks.add(CORRECT);
-                } else if (character != wordToGuess.getWord().get(count) && wordToGuess.getWord().contains(character)) { //todo korter
-                    this.marks.add(PRESENT); //todo present ???
+            for(int i = 0; i < attemptCharacters.size(); i++) {
+                if(i == 0) {
+                    marks.add(CORRECT);
                 } else {
-                    this.marks.add(ABSENT);
+                    if (attemptCharacters.get(i) == wordToGuessCharacters.get(i)) {
+                        marks.add(CORRECT);
+                    } else if (attemptCharacters.get(i) != wordToGuessCharacters.get(i) && wordToGuessCharacters.contains(attemptCharacters.get(i))) {
+                        marks.add(PRESENT); //todo present ???
+                    } else {
+                        marks.add(ABSENT);
+                    }
                 }
-                count += 1;
             }
         }
     }
@@ -67,6 +85,7 @@ public class Feedback {
     public Hint getHint() {
         return hint;
     }
+
 
     @Override
     public boolean equals(Object o) {

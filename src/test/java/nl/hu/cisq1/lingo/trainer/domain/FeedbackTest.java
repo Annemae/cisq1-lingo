@@ -8,7 +8,7 @@ import java.util.List;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FeedbackTest { //todo aparte testen?
+class FeedbackTest {
 
     @Test
     @DisplayName("word is guessed correctly")
@@ -47,11 +47,12 @@ class FeedbackTest { //todo aparte testen?
 //    }
 
     @Test
-    @DisplayName("static constructor gives the same object back as new")
+    @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
         Feedback expected = new Feedback("WORD", Word.of("WORD"), new Hint(List.of('W', '.', '.', '.')));
         Feedback actual = Feedback.of("WORD", Word.of("WORD"), new Hint(List.of('W', '.', '.', '.')));
 
         assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual);
     }
 }

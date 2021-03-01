@@ -42,7 +42,7 @@ public class Hint {
         return characters;
     }
 
-    public static Hint calculateFirstHint(Word wordToGuess) { //todo vragem
+    public static Hint calculateFirstHint(Word wordToGuess) {
         List<Character> firstHint = new ArrayList<>();
         List<Character> wordArray = wordToGuess.getWord();
 

@@ -10,16 +10,14 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTest {
-    //make wrong guess
-    //word is an actual word
-    //word guess is right length
-
     @Test
     @DisplayName("gives back hint with first letter after starting new round")
     void roundIsMadeAndGivesFirstLetter() {
         Round round = new Round(Word.of("GITAAR"));
+        Feedback feedback = round.getLastFeedback();
+        Hint hint = feedback.getHint();
 
-        assertEquals(List.of('G', '.', '.', '.', '.', '.'), round.getFirstHint().getHint()); //todo or aparte method met firstHint?
+        assertEquals(List.of('G', '.', '.', '.', '.', '.'), hint.getHint());
     }
 
     @Test
@@ -64,8 +62,8 @@ class RoundTest {
     }
 
     @Test
-    @DisplayName("round gives back latest turn")
-    void givesBackLastTurn() {
+    @DisplayName("round gives back most recent feedback")
+    void givesBackMostRecentFeedback() {
         Round round = new Round(Word.of("BROOD"));
         round.takeGuess("BRAAD");
 
