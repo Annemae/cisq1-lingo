@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,11 @@ class HintTest {
     @BeforeAll
     static void setUp() {
         FEEDBACK.add(Feedback.of("BROOM", BREAD));
+    }
+
+    @AfterAll
+    static void tearDown() {
+        FEEDBACK.clear();
     }
 
     @ParameterizedTest
