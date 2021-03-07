@@ -10,12 +10,12 @@ public class InactiveState implements State {
     }
 
     @Override
-    public Feedback createNewRound(Word wordToGuess) {
+    public Round createNewRound(Word wordToGuess) {
         throw new InvalidGameStateException("This game isn't active anymore, you can't create a new round.");
     }
 
     @Override
-    public Feedback takeGuess(String attempt) {
+    public void takeGuess(String attempt) {
         throw new InvalidGameStateException("This game isn't active anymore, you can't take a guess.");
     }
 }

@@ -1,92 +1,90 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidHintException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HintTest { //todo calculatefirsthint test
+class HintTest {
+    private static final Word BREAD = Word.of("BREAD");
+    private static final List<Feedback> FEEDBACK = new ArrayList<>();
+
     private static Stream<Arguments> provideHintExamples() {
         return Stream.of(
-                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
-                        Word.of("BALEN"),
-                        List.of(PRESENT, ABSENT, ABSENT, PRESENT, ABSENT),
-                        new Hint(List.of('.', '.', '.', '.', '.'))),
-                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.', '.')),
-                        Word.of("SCHOEN"),
-                        List.of(ABSENT, CORRECT, ABSENT, ABSENT, CORRECT, PRESENT),
-                        new Hint(List.of('.', 'C', '.', '.', 'E', '.'))),
-                Arguments.of(new Hint(List.of('A', '.', '.', '.', 'M')),
-                        Word.of("ALARM"),
-                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, CORRECT),
-                        new Hint(List.of('A', '.', '.', '.', 'M'))),
-                Arguments.of(new Hint(List.of('B', '.', '.', '.', 'D')),
-                        Word.of("BRAAD"),
-                        List.of(CORRECT, CORRECT, ABSENT, ABSENT, CORRECT),
-                        new Hint(List.of('B', 'R', '.', '.', 'D'))),
-                Arguments.of(new Hint(List.of('B', 'R', '.', '.', 'D')),
-                        Word.of("BROOD"),
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
-                        new Hint(List.of('B', 'R', 'O', 'O', 'D')))
+            Arguments.of(Feedback.of("BINGO", BREAD),
+                    List.of('B', 'R', '.', '.', '.')),
+            Arguments.of(Feedback.of("BRAND", BREAD),
+                    List.of('B', 'R', '.', '.', 'D')),
+            Arguments.of(Feedback.of("BREAD", BREAD),
+                    List.of('B', 'R', 'E', 'A', 'D'))
         );
     }
 
     private static Stream<Arguments> provideWrongHintExamples() {
         return Stream.of(
-                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
-                        Word.of("WATER"),
-                        List.of(INVALID, INVALID, INVALID, INVALID)),
-                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
-                        Word.of("WATER"),
-                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID)),
-                Arguments.of(new Hint(List.of('.', '.', '.', '.', '.')),
-                        Word.of("WATER"),
-                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID))
+            Arguments.of(Feedback.of("BATH", BREAD),
+                    List.of('B', 'R', '.', '.', '.')),
+            Arguments.of(Feedback.of("BROTHER", BREAD),
+                    List.of('B', 'R', '.', '.', '.')),
+            Arguments.of(Feedback.of("COCOA", BREAD),
+                    List.of('B', 'R', '.', '.', '.'))
         );
+    }
+
+    @BeforeAll
+    static void setUp() {
+        FEEDBACK.add(Feedback.of("BROOM", BREAD));
     }
 
     @ParameterizedTest
     @MethodSource("provideHintExamples")
     @DisplayName("hint is correct")
-    void hintIsCorrect(Hint previousHint, Word wordToGuess, List<Mark> marks, Hint expectedHint) {
-        Hint hint = Hint.of(previousHint, wordToGuess, marks);
+    void hintIsCorrect(Feedback feedback, List<Character> expected) {
+        FEEDBACK.add(feedback); //GIVEN
 
-        assertEquals(expectedHint.getHint(), hint.getHint());
+        Hint hint = Hint.of(FEEDBACK, BREAD); //WHEN
+
+        assertEquals(expected, hint.getHintCharacters()); //THEN
     }
 
     @ParameterizedTest
     @MethodSource("provideWrongHintExamples")
     @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length or marks include INVALID")
-    void hintLengthIsIncorrect(Hint previousHint, Word wordToGuess, List<Mark> marks) {
+    void hintLengthIsIncorrect(Feedback feedback, List<Character> expected) {
+        FEEDBACK.add(feedback); //GIVEN
 
-        assertThrows(InvalidHintException.class,
-                () -> Hint.of(previousHint, wordToGuess, marks));
+        Hint hint = Hint.of(FEEDBACK, BREAD); //WHEN
+
+        assertEquals(expected, hint.getHintCharacters()); //THEN
     }
 
     @Test
-    @DisplayName("calculating first hint is correct")
-    void calculateFirstHintIsCorrect() {
-        Hint expected = new Hint(List.of('P', '.', '.', '.', '.', '.'));
-        Word word = Word.of("PAPIER");
+    @DisplayName("calculating initial hint is correct") //todo controleren?
+    void calculateInitialHintWorks() {
+        List<Feedback> feedback = new ArrayList<>(); //GIVEN
+        feedback.add(Feedback.of("BINGO", BREAD));
 
-        assertEquals(expected, Hint.calculateFirstHint(word));
+        Hint actual = Hint.of(feedback, BREAD); //WHEN
+        List<Character> expected = List.of('B', '.', '.', '.', '.');
+
+        assertEquals(expected, actual.getHintCharacters()); //THEN
     }
 
     @Test
     @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
-        Hint expected = new Hint(List.of('B', 'R', 'A', '.', 'D'));
-        Hint actual = Hint.of(new Hint(List.of('B', 'R', '.', '.', 'D')), Word.of("BRAAD"), List.of(CORRECT, CORRECT, CORRECT, ABSENT, CORRECT));
+        Hint expected = new Hint(FEEDBACK, BREAD); //WHEN
+        Hint actual = Hint.of(FEEDBACK, BREAD);
 
-        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected.hashCode(), actual.hashCode()); //THEN
         assertEquals(expected, actual);
     }
 }

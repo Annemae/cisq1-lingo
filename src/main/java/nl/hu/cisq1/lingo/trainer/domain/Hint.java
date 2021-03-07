@@ -1,7 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidHintException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,40 +7,36 @@ import java.util.Objects;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
 public class Hint {
-    private final List<Character> hint;
+    private final List<Character> hintCharacterList;
 
-    public Hint(List<Character> characters) {
-        hint = characters;
+    public Hint(List<Feedback> feedbackList, Word wordToGuess) {
+        hintCharacterList = calculateHint(feedbackList, wordToGuess);
     }
 
-    public static Hint of(Hint previousHint, Word wordToGuess, List<Mark> marks) {
-        if((marks.size() != previousHint.getHint().size()) || (marks.size() != wordToGuess.getLength())
-                || marks.stream().anyMatch(mark -> mark == INVALID)) {
-            throw new InvalidHintException("The hint can't be generated with given data.");
-        } else {
-            return new Hint(calculateHint(previousHint, wordToGuess, marks));
-        }
+    public static Hint of(List<Feedback> feedbackList, Word wordToGuess) {
+        return new Hint(feedbackList, wordToGuess);
     }
 
-    private static List<Character> calculateHint(Hint previousHint, Word wordToGuess, List<Mark> marks) {
-        List<Character> characters = new ArrayList<>();
-        int count = 0;
-        for(Character character : previousHint.getHint()) {
-            if(character == '.') {
-                if(marks.get(count) == CORRECT) {
-                    characters.add(wordToGuess.getWord().get(count));
-                } else {
-                    characters.add('.');
+    private List<Character> calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
+        List<Character> characters = calculateInitialCharacters(wordToGuess);
+        List<Character> wordCharacters = wordToGuess.getWord();
+
+        for (Feedback feedback : feedbackList) {
+            List<Mark> marks = feedback.getMarks();
+            if (!marks.contains(INVALID)) {
+                for (int i = 0; i < wordToGuess.getLength(); i++) {
+                    if (marks.get(i) == CORRECT) {
+                        characters.set(i, wordCharacters.get(i));
+                    }
                 }
-            } else {
-                characters.add(character);
-            }
-            count += 1;
-        }
-        return characters;
-    }
 
-    public static Hint calculateFirstHint(Word wordToGuess) {
+            }
+        }
+
+        return characters;
+    } //todo korter?
+
+    private List<Character> calculateInitialCharacters(Word wordToGuess) {
         List<Character> firstHint = new ArrayList<>();
         List<Character> wordArray = wordToGuess.getWord();
 
@@ -53,24 +47,30 @@ public class Hint {
                 firstHint.add('.');
             }
         }
-        return new Hint(firstHint);
+        return firstHint;
     }
 
-    public List<Character> getHint() {
-        return hint;
+    public List<Character> getHintCharacters() {
+        return hintCharacterList;
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Hint hint1 = (Hint) o;
-        return Objects.equals(hint, hint1.hint);
+        Hint hint = (Hint) o;
+        return Objects.equals(hintCharacterList, hint.hintCharacterList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hint);
+        return Objects.hash(hintCharacterList);
+    }
+
+    @Override
+    public String toString() {
+        return "Hint{" +
+                "hintCharacterList=" + hintCharacterList +
+                '}';
     }
 }

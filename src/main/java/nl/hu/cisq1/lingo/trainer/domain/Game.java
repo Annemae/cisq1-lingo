@@ -15,24 +15,28 @@ public class Game {
         rounds = new ArrayList<>();
         score = 0;
         gameStatus = PLAYING;
-        state = new ActiveState(this);
+        state = new ActiveState(this, new DefaultScoreStrategy());
     }
 
     public void changeState(State state) {
         this.state = state;
     }
 
-    public Feedback createNewRound(String wordToGuess) {
+    public Round createNewRound(String wordToGuess) {
         return state.createNewRound(Word.of(wordToGuess));
     }
 
-    public Feedback takeGuess(String attempt) {
-        return state.takeGuess(attempt);
+    public void takeGuess(String attempt) {
+        state.takeGuess(attempt);
     }
 
-//    public Progress getProgress() {
-//        return new Progress(state.getProgress(), score);
-//    }
+    public Progress showProgress() {
+        Round round = getCurrentRound();
+        Feedback feedback = round.getLastFeedback();
+        Hint hint = round.giveHint();
+
+        return new Progress(score, feedback, hint);
+    }
 
     //ROUND
     public void addRound(Round round) {
@@ -49,5 +53,14 @@ public class Game {
 
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
+    }
+
+    //SCORE
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

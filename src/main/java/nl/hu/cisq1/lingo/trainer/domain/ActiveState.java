@@ -8,13 +8,15 @@ import static nl.hu.cisq1.lingo.trainer.domain.GameStatus.*;
 
 public class ActiveState implements State {
     private final Game game;
+    private final ScoreStrategy scoreStrategy;
 
-    public ActiveState(Game game) {
+    public ActiveState(Game game, ScoreStrategy scoreStrategy) {
         this.game = game;
+        this.scoreStrategy = scoreStrategy;
     }
 
     @Override
-    public Feedback createNewRound(Word wordToGuess) {
+    public Round createNewRound(Word wordToGuess) {
         if(game.getGameStatus() == WAITING_FOR_ROUND) {
             throw new InvalidGameStateException("Can't create a new round, because a round is already in progress.");
         }
@@ -24,20 +26,25 @@ public class ActiveState implements State {
         game.addRound(round);
         game.setGameStatus(WAITING_FOR_ROUND);
 
-        return round.getLastFeedback();
+        return round;
     }
 
     @Override
-    public Feedback takeGuess(String attempt) {
+    public void takeGuess(String attempt) {
         Round currentRound = game.getCurrentRound();
-        Feedback feedback = currentRound.takeGuess(attempt);
+
+        currentRound.takeGuess(attempt);
+
         List<Feedback> allFeedback = currentRound.getAllFeedback();
 
-        if(currentRound.isOver() || allFeedback.size() == 5) {
+        if(currentRound.isOver() && allFeedback.size() <= 5) { //todo ??? inactivestate
+            game.setGameStatus(PLAYING);
+
+            int newScore = scoreStrategy.calculateScore(currentRound);
+            game.setScore(game.getScore() + newScore);
+        } else if (!currentRound.isOver() && allFeedback.size() >= 5) {
             game.changeState(new InactiveState(game));
             game.setGameStatus(ELIMINATED);
         }
-
-        return feedback;
     }
 }

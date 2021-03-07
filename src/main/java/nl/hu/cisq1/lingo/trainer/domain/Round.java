@@ -1,30 +1,25 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Round {
     private final Word wordToGuess;
-    private List<Feedback> attempts;
+    private final List<Feedback> attempts;
 
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.attempts = new ArrayList<>();
-        attempts.add(Feedback.of("", wordToGuess, Hint.calculateFirstHint(wordToGuess)));
     }
 
-    public Feedback takeGuess(String attempt) {
-        Feedback newFeedback = new Feedback(attempt, wordToGuess, getLastFeedback().getHint());
+    public void takeGuess(String attempt) {
+        Feedback newFeedback = new Feedback(attempt, wordToGuess);
 
-        if(newFeedback.isGuessValid()) {
-            this.attempts.add(newFeedback);
-        } else {
-            throw new InvalidGuessException("Guess is not valid.");
-        }
+        this.attempts.add(newFeedback);
+    }
 
-        return this.getLastFeedback();
+    public Hint giveHint() {
+        return Hint.of(attempts, wordToGuess);
     }
 
     public boolean isOver() {
@@ -43,5 +38,9 @@ public class Round {
 
     public List<Feedback> getAllFeedback() {
         return attempts;
+    }
+
+    public int amountAttemptsMade() {
+        return attempts.size();
     }
 }
