@@ -1,6 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -18,7 +18,7 @@ class HintTest {
     private static final Word BREAD = Word.of("BREAD");
     private static final List<Feedback> FEEDBACK = new ArrayList<>();
 
-    private static Stream<Arguments> provideHintExamples() {
+    private static Stream<Arguments> provideHintExamplesWithValidMarks() {
         return Stream.of(
             Arguments.of(Feedback.of("BINGO", BREAD),
                     List.of('B', 'R', '.', '.', '.')),
@@ -29,7 +29,7 @@ class HintTest {
         );
     }
 
-    private static Stream<Arguments> provideWrongHintExamples() {
+    private static Stream<Arguments> provideHintExamplesWithInvalidMarks() {
         return Stream.of(
             Arguments.of(Feedback.of("BATH", BREAD),
                     List.of('B', 'R', '.', '.', '.')),
@@ -41,19 +41,14 @@ class HintTest {
     }
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() { //TODO controleren of ik dit goed gebruik
         FEEDBACK.add(Feedback.of("BROOM", BREAD));
     }
 
-    @AfterAll
-    static void tearDown() {
-        FEEDBACK.clear();
-    }
-
     @ParameterizedTest
-    @MethodSource("provideHintExamples")
-    @DisplayName("hint is correct")
-    void hintIsCorrect(Feedback feedback, List<Character> expected) {
+    @MethodSource("provideHintExamplesWithValidMarks")
+    @DisplayName("hint is correct with given valid marks")
+    void hintIsCorrectWithValidMarks(Feedback feedback, List<Character> expected) {
         FEEDBACK.add(feedback); //GIVEN
 
         Hint hint = Hint.of(FEEDBACK, BREAD); //WHEN
@@ -62,9 +57,9 @@ class HintTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideWrongHintExamples")
-    @DisplayName("hint is incorrect when wordToGuess length or previousHint length differ from marks length or marks include INVALID")
-    void hintLengthIsIncorrect(Feedback feedback, List<Character> expected) {
+    @MethodSource("provideHintExamplesWithInvalidMarks")
+    @DisplayName("hint is correct with given invalid marks")
+    void hintIsCorrectWithInvalidMarks(Feedback feedback, List<Character> expected) {
         FEEDBACK.add(feedback); //GIVEN
 
         Hint hint = Hint.of(FEEDBACK, BREAD); //WHEN
@@ -73,12 +68,11 @@ class HintTest {
     }
 
     @Test
-    @DisplayName("calculating initial hint is correct") //todo controleren?
+    @DisplayName("calculating initial/first hint is correct")
     void calculateInitialHintWorks() {
-        List<Feedback> feedback = new ArrayList<>(); //GIVEN
-        feedback.add(Feedback.of("BINGO", BREAD));
+        List<Feedback> emptyFeedbackList = Collections.emptyList(); //GIVEN
 
-        Hint actual = Hint.of(feedback, BREAD); //WHEN
+        Hint actual = Hint.of(emptyFeedbackList, BREAD); //WHEN
         List<Character> expected = List.of('B', '.', '.', '.', '.');
 
         assertEquals(expected, actual.getHintCharacters()); //THEN

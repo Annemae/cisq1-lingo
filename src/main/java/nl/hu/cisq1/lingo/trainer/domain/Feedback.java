@@ -36,9 +36,9 @@ public class Feedback {
         throw new InvalidGuessException("Guess is invalid, because guess is not the right length.");
     }
 
-    private void calculateMarks(String attempt, Word wordToGuess) { //todo shorter
+    private void calculateMarks(String attempt, Word wordToGuess) { //todo shorter and present
         List<Character> attemptCharacters = new ArrayList<>();
-        List<Character> wordToGuessCharacters = wordToGuess.getWord();
+        List<Character> wordToGuessCharacters = wordToGuess.getWordCharacters();
 
         for (char character : attempt.toCharArray()) {
             attemptCharacters.add(character);
@@ -55,7 +55,7 @@ public class Feedback {
                     if (attemptCharacters.get(i) == wordToGuessCharacters.get(i)) {
                         marks.add(CORRECT);
                     } else if (attemptCharacters.get(i) != wordToGuessCharacters.get(i) && wordToGuessCharacters.contains(attemptCharacters.get(i))) {
-                        marks.add(PRESENT); //todo present ???
+                        marks.add(PRESENT);
                     } else {
                         marks.add(ABSENT);
                     }
@@ -81,14 +81,5 @@ public class Feedback {
     @Override
     public int hashCode() {
         return Objects.hash(attempt, wordToGuess, marks);
-    }
-
-    @Override
-    public String toString() {
-        return "Feedback{" +
-                "attempt='" + attempt + '\'' +
-                ", wordToGuess=" + wordToGuess +
-                ", marks=" + marks +
-                '}';
     }
 }

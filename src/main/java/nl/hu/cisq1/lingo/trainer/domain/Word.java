@@ -5,22 +5,22 @@ import java.util.List;
 import java.util.Objects;
 
 public class Word {
-    public List<Character> word = new ArrayList<>();
-    public int length;
+    private final List<Character> wordCharacters = new ArrayList<>();
+    private final int length;
 
-    public Word(String word) {
-        for(char character : word.toCharArray()) {
-            this.word.add(character);
+    public Word(String wordCharacters) {
+        for(char character : wordCharacters.toCharArray()) {
+            this.wordCharacters.add(character);
         }
-        this.length = this.word.size();
+        this.length = this.wordCharacters.size();
     }
 
     public static Word of(String word) {
         return new Word(word);
     }
 
-    public List<Character> getWord() {
-        return this.word;
+    public List<Character> getWordCharacters() {
+        return this.wordCharacters;
     }
 
     public int getLength() {
@@ -34,19 +34,11 @@ public class Word {
         if (o == null || getClass() != o.getClass()) return false;
         Word word1 = (Word) o;
         return length == word1.length &&
-                Objects.equals(word, word1.word);
+                Objects.equals(wordCharacters, word1.wordCharacters);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(word, length);
-    }
-
-    @Override
-    public String toString() {
-        return "Word{" +
-                "word=" + word +
-                ", length=" + length +
-                '}';
+        return Objects.hash(wordCharacters, length);
     }
 }

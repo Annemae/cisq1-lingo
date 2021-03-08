@@ -19,7 +19,7 @@ public class Hint {
 
     private List<Character> calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
         List<Character> characters = calculateInitialCharacters(wordToGuess);
-        List<Character> wordCharacters = wordToGuess.getWord();
+        List<Character> wordCharacters = wordToGuess.getWordCharacters();
 
         for (Feedback feedback : feedbackList) {
             List<Mark> marks = feedback.getMarks();
@@ -38,7 +38,7 @@ public class Hint {
 
     private List<Character> calculateInitialCharacters(Word wordToGuess) {
         List<Character> firstHint = new ArrayList<>();
-        List<Character> wordArray = wordToGuess.getWord();
+        List<Character> wordArray = wordToGuess.getWordCharacters();
 
         for(int i = 0; i < wordArray.size(); i++) {
             if(i == 0) {
@@ -65,12 +65,5 @@ public class Hint {
     @Override
     public int hashCode() {
         return Objects.hash(hintCharacterList);
-    }
-
-    @Override
-    public String toString() {
-        return "Hint{" +
-                "hintCharacterList=" + hintCharacterList +
-                '}';
     }
 }
