@@ -62,9 +62,9 @@ class FeedbackTest {
     @Test
     @DisplayName("guess is invalid if all letters are invalid")
     void guessIsInvalid() {
-        Feedback feedback = Feedback.of("BROTHER", BREAD); //WHEN
+        Feedback feedback = Feedback.of("BROTHER", BREAD); //GIVEN
 
-        assertThrows(InvalidGuessException.class, //THEN
+        assertThrows(InvalidGuessException.class, //WHEN AND THEN
                 feedback::isGuessValid);
     }
 

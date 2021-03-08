@@ -32,7 +32,7 @@ public class Game {
 
     public Progress showProgress() {
         Round round = getCurrentRound();
-        Feedback feedback = round.getLastFeedback();
+        Feedback feedback = round.getRecentFeedback();
         Hint hint = round.giveHint();
 
         return new Progress(score, feedback, hint);

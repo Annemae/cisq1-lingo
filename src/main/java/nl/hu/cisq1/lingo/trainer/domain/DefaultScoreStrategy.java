@@ -4,7 +4,7 @@ public class DefaultScoreStrategy implements ScoreStrategy {
 
     @Override
     public int calculateScore(Round round) {
-        int attempts = round.amountAttemptsMade();
+        int attempts = round.amountOfAttempts();
 
         return 5 * (5 - attempts) + 5;
     }

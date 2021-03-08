@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTest {
     private static final Word BREAD = Word.of("BREAD");
-    private final Round round = new Round(BREAD);
 
     private static Stream<Arguments> provideGuessExamples() {
         return Stream.of(
@@ -27,34 +26,14 @@ class RoundTest {
         );
     }
 
-    @Test
-    @DisplayName("gives back hint with first letter after starting new round")
-    void roundIsMadeAndGivesFirstLetter() {
-        Hint hint = round.giveHint(); //WHEN
-
-        assertEquals(List.of('B', '.', '.', '.', '.'), hint.getHintCharacters()); //THEN
-    }
-
-    @Test
-    @DisplayName("gives back all feedback")
-    void givesBackAllFeedback() {
-        round.takeGuess("BINGO"); //GIVEN
-        round.takeGuess("BRAND");
-        round.takeGuess("BREAD");
-
-        List<Feedback> allFeedback = round.getAllFeedback(); //WHEN
-
-        assertEquals(3, allFeedback.size()); //THEN
-        assertEquals(3, round.amountAttemptsMade());
-    }
-
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
-    @DisplayName("taking a guess works")
+    @DisplayName("taking a guess works") //TODO controleren zo of anders?
     void takingGuessWorks(String attempt, List<Mark> expectedMarks, List<Character> expectedHintCharacters) {
-        round.takeGuess(attempt); //GIVEN
+        Round round = new Round(BREAD); //GIVEN
+        round.takeGuess(attempt);
 
-        Feedback feedback = round.getLastFeedback(); //WHEN
+        Feedback feedback = round.getRecentFeedback(); //WHEN
         Hint hint = round.giveHint();
 
         assertEquals(expectedMarks, feedback.getMarks()); //THEN
@@ -62,16 +41,60 @@ class RoundTest {
     }
 
     @Test
-    @DisplayName("round gives back latest feedback and hint")
-    void givesBackLatestFeedbackAndHint() {
-        round.takeGuess("BEARS"); //GIVEN
+    @DisplayName("gives back hint with first letter after starting new round")
+    void roundIsMadeAndGivesFirstHint() {
+        Word word = Word.of("WATER"); //GIVEN
+        Round round = new Round(word);
+
+        Hint hint = round.giveHint(); //WHEN
+
+        assertEquals(List.of('W', '.', '.', '.', '.'), hint.getHintCharacters()); //THEN
+    }
+
+    @Test
+    @DisplayName("round gives back most recent hint when asked") //TODO in before?
+    void getRecentHint() {
+        Round round = new Round(BREAD); //GIVEN I MAKE A ROUND...
+        round.takeGuess("BEARS"); //AND I TAKE TWO GUESSES
         round.takeGuess("BREAK");
 
-        Feedback latestFeedback = round.getLastFeedback(); //WHEN
-        Hint latestHint = round.giveHint();
+        Hint recentHint = round.giveHint(); //WHEN I ASK FOR HINT
 
-        assertEquals(List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT), latestFeedback.getMarks()); //THEN
-        assertEquals(List.of('B', 'R', 'E', 'A', '.'), latestHint.getHintCharacters());
+        assertEquals(List.of('B', 'R', 'E', 'A', '.'), recentHint.getHintCharacters()); //THEN I SHOULD GET BACK THE MOST RECENT FEEDBACK
+    }
+
+    @Test
+    @DisplayName("round gives back most recent feedback when asked")
+    void getRecentFeedbackGivesFeedback() {
+        Round round = new Round(BREAD); //GIVEN I MAKE A ROUND...
+        round.takeGuess("BEARS"); //AND I TAKE TWO GUESSES
+        round.takeGuess("BREAK");
+
+        Feedback recentFeedback = round.getRecentFeedback(); //WHEN I ASK FOR FEEDBACK
+
+        assertEquals(List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT), recentFeedback.getMarks()); //THEN I SHOULD GET BACK THE MOST RECENT FEEDBACK
+    }
+
+    @Test
+    @DisplayName("round gives error when there is no feedback when asked")
+    void getRecentFeedbackGivesError() {
+        Round round = new Round(BREAD); //GIVEN
+
+        assertThrows(IllegalStateException.class, //WHEN AND THEN
+                round::getRecentFeedback);
+    }
+
+    @Test
+    @DisplayName("round gives back all feedback")
+    void givesBackAllFeedback() { //TODO ask...
+        Round round = new Round(BREAD); //GIVEN I MAKE A NEW ROUND...
+        round.takeGuess("BINGO"); //AND I TAKE TWO GUESSES
+        round.takeGuess("BRAND");
+
+        List<Feedback> allFeedback = round.getAllFeedback(); //WHEN I ASK FOR ALL THE FEEDBACK
+
+        assertEquals(2, allFeedback.size()); //THEN I SHOULD GET TWO
+        assertEquals(2, round.amountOfAttempts());
     }
 
     @Test

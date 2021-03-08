@@ -45,20 +45,18 @@ public class Feedback {
         }
 
         if ((wordToGuess.getLength() != attemptCharacters.size()) ||
-        (wordToGuessCharacters.get(0) != attemptCharacters.get(0))) {
+        (!wordToGuessCharacters.get(0).equals(attemptCharacters.get(0))))
             attemptCharacters.forEach(character -> marks.add(INVALID));
-        } else {
+        else {
             for(int i = 0; i < attemptCharacters.size(); i++) {
                 if(i == 0) {
                     marks.add(CORRECT);
                 } else {
-                    if (attemptCharacters.get(i) == wordToGuessCharacters.get(i)) {
+                    if (attemptCharacters.get(i).equals(wordToGuessCharacters.get(i))) {
                         marks.add(CORRECT);
-                    } else if (attemptCharacters.get(i) != wordToGuessCharacters.get(i) && wordToGuessCharacters.contains(attemptCharacters.get(i))) {
+                    } else if (!attemptCharacters.get(i).equals(wordToGuessCharacters.get(i)) && wordToGuessCharacters.contains(attemptCharacters.get(i))) {
                         marks.add(PRESENT);
-                    } else {
-                        marks.add(ABSENT);
-                    }
+                    } else marks.add(ABSENT);
                 }
             }
         }

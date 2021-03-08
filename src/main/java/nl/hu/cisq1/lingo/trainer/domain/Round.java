@@ -23,24 +23,22 @@ public class Round {
     }
 
     public boolean isOver() {
-        Feedback lastFeedback = getLastFeedback();
-        if(this.attempts.size() < 6) {
-            return lastFeedback.isWordGuessed();
-        } else {
-            return true;
-        }
+        Feedback lastFeedback = getRecentFeedback();
+        return lastFeedback.isWordGuessed();
     }
 
-    //FEEDBACK
-    public Feedback getLastFeedback() {
-        return this.attempts.get(this.attempts.size() - 1);
+    //ATTEMPTS
+    public Feedback getRecentFeedback() {
+        if(amountOfAttempts() > 0) {
+            return this.attempts.get(this.attempts.size() - 1);
+        } else throw new IllegalStateException("Take a guess first, before asking for feedback.");
     }
 
     public List<Feedback> getAllFeedback() {
         return attempts;
     }
 
-    public int amountAttemptsMade() {
+    public int amountOfAttempts() {
         return attempts.size();
     }
 }

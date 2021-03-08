@@ -43,9 +43,7 @@ public class Hint {
         for(int i = 0; i < wordArray.size(); i++) {
             if(i == 0) {
                 firstHint.add(wordArray.get(0));
-            } else {
-                firstHint.add('.');
-            }
+            } else firstHint.add('.');
         }
         return firstHint;
     }
