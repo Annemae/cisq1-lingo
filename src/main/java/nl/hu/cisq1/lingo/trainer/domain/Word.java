@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Word {
-    private final List<Character> wordCharacters = new ArrayList<>();
+    private final List<Character> wordCharacters;
     private final int length;
 
     public Word(String wordCharacters) {
+        this.wordCharacters = new ArrayList<>();
         for(char character : wordCharacters.toCharArray()) {
             this.wordCharacters.add(character);
         }
@@ -19,6 +20,7 @@ public class Word {
         return new Word(word);
     }
 
+    //GETTERS
     public List<Character> getWordCharacters() {
         return this.wordCharacters;
     }

@@ -1,4 +1,7 @@
-package nl.hu.cisq1.lingo.trainer.domain;
+package nl.hu.cisq1.lingo.trainer.domain.game;
+
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.Hint;
 
 public class Progress {
     private int score;

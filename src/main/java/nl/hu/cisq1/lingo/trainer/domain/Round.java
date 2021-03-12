@@ -29,7 +29,7 @@ public class Round {
 
     //ATTEMPTS
     public Feedback getRecentFeedback() {
-        if(amountOfAttempts() > 0) {
+        if(amountOfGuesses() > 0) {
             return this.attempts.get(this.attempts.size() - 1);
         } else throw new IllegalStateException("Take a guess first, before asking for feedback.");
     }
@@ -38,7 +38,7 @@ public class Round {
         return attempts;
     }
 
-    public int amountOfAttempts() {
+    public int amountOfGuesses() {
         return attempts.size();
     }
 }

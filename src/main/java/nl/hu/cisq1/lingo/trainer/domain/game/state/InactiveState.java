@@ -1,13 +1,10 @@
-package nl.hu.cisq1.lingo.trainer.domain;
+package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGameStateException;
+import nl.hu.cisq1.lingo.trainer.domain.Round;
+import nl.hu.cisq1.lingo.trainer.domain.Word;
 
 public class InactiveState implements State {
-    private final Game game;
-
-    public InactiveState(Game game) {
-        this.game = game;
-    }
+    public InactiveState() {}
 
     @Override
     public Round createNewRound(Word wordToGuess) {

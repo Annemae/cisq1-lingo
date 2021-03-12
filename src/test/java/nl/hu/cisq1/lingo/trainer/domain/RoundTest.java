@@ -2,12 +2,8 @@ package nl.hu.cisq1.lingo.trainer.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,40 +11,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoundTest {
     private static final Word BREAD = Word.of("BREAD");
 
-    private static Stream<Arguments> provideGuessExamples() {
-        return Stream.of(
-                Arguments.of("BRAND",
-                        List.of(CORRECT, CORRECT, PRESENT, ABSENT, CORRECT),
-                        List.of('B', 'R', '.', '.', 'D')),
-                Arguments.of("BATH",
-                        List.of(INVALID, INVALID, INVALID, INVALID),
-                        List.of('B', '.', '.', '.', '.'))
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideGuessExamples")
-    @DisplayName("taking a guess works") //TODO controleren zo of anders?
-    void takingGuessWorks(String attempt, List<Mark> expectedMarks, List<Character> expectedHintCharacters) {
+    @Test
+    @DisplayName("taking a guess works")
+    void takeGuessWorks() {
         Round round = new Round(BREAD); //GIVEN
-        round.takeGuess(attempt);
 
-        Feedback feedback = round.getRecentFeedback(); //WHEN
-        Hint hint = round.giveHint();
+        round.takeGuess("BINGO"); //WHEN
 
-        assertEquals(expectedMarks, feedback.getMarks()); //THEN
-        assertEquals(expectedHintCharacters, hint.getHintCharacters());
+        assertEquals(1, round.amountOfGuesses()); //THEN
     }
 
     @Test
-    @DisplayName("gives back hint with first letter after starting new round")
-    void roundIsMadeAndGivesFirstHint() {
-        Word word = Word.of("WATER"); //GIVEN
-        Round round = new Round(word);
+    @DisplayName("gives back hint with first letter after starting new round and not taking guess yet")
+    void getFirstHintWhenRoundIsMade() {
+        Round round = new Round(BREAD); //GIVEN
 
         Hint hint = round.giveHint(); //WHEN
 
-        assertEquals(List.of('W', '.', '.', '.', '.'), hint.getHintCharacters()); //THEN
+        assertEquals(List.of('B', '.', '.', '.', '.'), hint.getHintCharacters()); //THEN
     }
 
     @Test
@@ -86,7 +66,7 @@ class RoundTest {
 
     @Test
     @DisplayName("round gives back all feedback")
-    void givesBackAllFeedback() { //TODO ask...
+    void getAllFeedback() { //TODO ask...
         Round round = new Round(BREAD); //GIVEN I MAKE A NEW ROUND...
         round.takeGuess("BINGO"); //AND I TAKE TWO GUESSES
         round.takeGuess("BRAND");
@@ -94,7 +74,7 @@ class RoundTest {
         List<Feedback> allFeedback = round.getAllFeedback(); //WHEN I ASK FOR ALL THE FEEDBACK
 
         assertEquals(2, allFeedback.size()); //THEN I SHOULD GET TWO
-        assertEquals(2, round.amountOfAttempts());
+        assertEquals(2, round.amountOfGuesses());
     }
 
     @Test
