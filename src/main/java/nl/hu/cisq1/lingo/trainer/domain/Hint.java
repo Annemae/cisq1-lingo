@@ -34,7 +34,7 @@ public class Hint {
         }
 
         return characters;
-    } //todo korter?
+    }
 
     private List<Character> calculateInitialCharacters(Word wordToGuess) {
         List<Character> firstHint = new ArrayList<>();
