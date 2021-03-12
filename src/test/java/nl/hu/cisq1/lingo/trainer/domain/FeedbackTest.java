@@ -1,12 +1,14 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,6 +26,8 @@ class FeedbackTest {
                         List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT)),
                 Arguments.of(Feedback.of("BREAK", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
+//                Arguments.of(Feedback.of("BAARD", BREAD), //TODO Aparte test voor present?
+//                        List.of(CORRECT, PRESENT, ABSENT, PRESENT, CORRECT)),
                 Arguments.of(Feedback.of("BREAD", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
                 Arguments.of(Feedback.of("CACAO", BREAD),
