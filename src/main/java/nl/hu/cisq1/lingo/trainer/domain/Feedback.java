@@ -43,6 +43,7 @@ public class Feedback {
     //CALCULATORS
     private void calculateMarks() {
         List<Character> wordToGuessCharacters = wordToGuess.getWordCharacters();
+        List<Character> absentCharacters = new ArrayList<>();
 
         if ((wordToGuess.getLength() != attempt.size()) ||
                 (!wordToGuessCharacters.get(0).equals(attempt.get(0))))
@@ -54,26 +55,29 @@ public class Feedback {
 
                 if (attemptCharacter.equals(wordToGuessCharacter)) {
                     marks.add(CORRECT);
-                } else if (wordToGuessCharacters.contains(attemptCharacter)) {
-                    calculatePresent(wordToGuessCharacters, attemptCharacter);
-                } else marks.add(ABSENT);
+                } else {
+                    absentCharacters.add(attemptCharacter);
+                    marks.add(ABSENT);
+                }
+            }
+        }
+        recalculatePresent(wordToGuessCharacters, absentCharacters);
+    }
+
+    private void recalculatePresent(List<Character> wordToGuessCharacters, List<Character> absentCharacters) {
+        int position = 0;
+        for (Character character : wordToGuessCharacters) {
+            int attemptPosition = attempt.indexOf(character);
+            if (attemptPosition != -1) {
+                if (absentCharacters.contains(character) && this.marks.get(position) == ABSENT) {
+                    absentCharacters.remove(character);
+
+                    this.marks.set(attempt.indexOf(character), PRESENT);
+                }
+                position += 1;
             }
         }
     }
-
-    private void calculatePresent(List<Character> wordToGuessCharacters, Character character) {
-        long amountCharactersInAttempt = this.attempt.stream().filter(character::equals).count();
-        long amountCharactersInWordToGuess = wordToGuessCharacters.stream().filter(character::equals).count();
-        long amountPresentInMarks = this.marks.stream().filter(mark -> mark == PRESENT).count();
-
-        if (amountPresentInMarks == amountCharactersInAttempt ||
-                amountCharactersInAttempt < amountPresentInMarks ||
-                amountCharactersInAttempt == 1 && amountCharactersInWordToGuess == 1) {
-            this.marks.add(PRESENT);
-        } else {
-            this.marks.add(ABSENT);
-        }
-    } //TODO ???
 
     //GETTERS
     public List<Mark> getMarks() {

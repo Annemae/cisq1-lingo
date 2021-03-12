@@ -26,8 +26,8 @@ class FeedbackTest {
                         List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT)),
                 Arguments.of(Feedback.of("BREAK", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
-//                Arguments.of(Feedback.of("BAARD", BREAD), //TODO Aparte test voor present?
-//                        List.of(CORRECT, PRESENT, ABSENT, PRESENT, CORRECT)),
+                Arguments.of(Feedback.of("BAARD", BREAD),
+                        List.of(CORRECT, PRESENT, ABSENT, PRESENT, CORRECT)),
                 Arguments.of(Feedback.of("BREAD", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
                 Arguments.of(Feedback.of("CACAO", BREAD),
@@ -37,6 +37,15 @@ class FeedbackTest {
                 Arguments.of(Feedback.of("BATH", BREAD),
                         List.of(INVALID, INVALID, INVALID, INVALID))
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideMarkExamples")
+    @DisplayName("the correct marks are displayed")
+    void marksAreCorrect(Feedback feedback, List<Mark> expected) {
+        List<Mark> actual = feedback.getMarks(); //WHEN
+
+        assertEquals(expected, actual); //THEN
     }
 
     @Test
@@ -70,15 +79,6 @@ class FeedbackTest {
 
         assertThrows(InvalidGuessException.class, //WHEN AND THEN
                 feedback::isGuessValid);
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideMarkExamples")
-    @DisplayName("the correct marks are displayed")
-    void marksAreCorrect(Feedback feedback, List<Mark> expected) {
-        List<Mark> actual = feedback.getMarks(); //WHEN
-
-        assertEquals(expected, actual); //THEN
     }
 
     @Test

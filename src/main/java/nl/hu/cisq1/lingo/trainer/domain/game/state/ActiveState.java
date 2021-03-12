@@ -38,12 +38,13 @@ public class ActiveState implements State {
 
         List<Feedback> allFeedback = currentRound.getAllFeedback();
 
-        if(currentRound.isOver() && allFeedback.size() <= 5) { //todo ??? inactivestate
+        if(currentRound.isOver() && allFeedback.size() <= 5) {
             game.setGameStatus(PLAYING);
 
             int attempts = game.getCurrentRound().amountOfGuesses();
             int newScore =  5 * (5 - attempts) + 5;
             game.setScore(game.getScore() + newScore);
+
         } else if (!currentRound.isOver() && allFeedback.size() >= 5) {
             game.changeState(new InactiveState());
             game.setGameStatus(ELIMINATED);

@@ -64,6 +64,10 @@ public class Game {
         return score;
     }
 
+    public List<Round> getRounds() {
+        return this.rounds;
+    }
+
     public void setScore(int score) {
         this.score = score;
     }
