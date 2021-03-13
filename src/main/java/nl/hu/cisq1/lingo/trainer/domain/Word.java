@@ -1,13 +1,27 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
+@Entity
+@Table(name = "word")
 public class Word {
-    private final List<Character> wordCharacters;
-    private final int length;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "word_id")
+    private UUID id;
+
+    @Lob
+    private List<Character> wordCharacters;
+
+    @Column
+    private int length;
+
+    public Word() {}
     public Word(String wordCharacters) {
         this.wordCharacters = new ArrayList<>();
         for(char character : wordCharacters.toCharArray()) {

@@ -2,14 +2,36 @@ package nl.hu.cisq1.lingo.trainer.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoundTest {
     private static final Word BREAD = Word.of("BREAD");
+
+//    @MethodSource
+//    private static Stream<Arguments> provideGuessExamples() {
+//        return Stream.of(
+//        );
+//    }
+//
+//
+//    @ParameterizedTest
+//    @MethodSource("provideGuessExamples")
+//    @DisplayName("taking a guess works")
+//    void takeGuessWorks(List<Feedback> feedbackList, List<Character> expected) {
+//        Round round = new Round(BREAD); //GIVEN
+//
+//        round.takeGuess("BINGO"); //WHEN
+//
+//        assertEquals(1, round.amountOfGuesses()); //THEN
+//    }
 
     @Test
     @DisplayName("taking a guess works")
@@ -20,6 +42,8 @@ class RoundTest {
 
         assertEquals(1, round.amountOfGuesses()); //THEN
     }
+
+
 
     @Test
     @DisplayName("gives back hint with first letter after starting new round and not taking guess yet")

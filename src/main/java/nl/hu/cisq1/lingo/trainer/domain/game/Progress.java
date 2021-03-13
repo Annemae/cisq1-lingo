@@ -13,4 +13,16 @@ public class Progress {
         this.feedback = feedback;
         this.hint = hint;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public Hint getHint() {
+        return hint;
+    }
 }

@@ -1,12 +1,27 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
+@Table(name = "round")
 public class Round {
-    private final Word wordToGuess;
-    private final List<Feedback> attempts;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "round_id")
+    private UUID id;
+
+    @OneToOne
+    private Word wordToGuess;
+
+    @OneToMany
+    @JoinColumn(name = "feedback_id")
+    private List<Feedback> attempts;
+
+    public Round() {}
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.attempts = new ArrayList<>();
@@ -25,6 +40,11 @@ public class Round {
     public boolean isOver() {
         Feedback lastFeedback = getRecentFeedback();
         return lastFeedback.isWordGuessed();
+    }
+
+
+    public Word getWordToGuess() {
+        return wordToGuess;
     }
 
     //ATTEMPTS
