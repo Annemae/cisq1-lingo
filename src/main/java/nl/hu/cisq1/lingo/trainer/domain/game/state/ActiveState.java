@@ -5,19 +5,17 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
-public class ActiveState implements State {
-    private final Game game;
+public class ActiveState implements State, Serializable {
 
-    public ActiveState(Game game) {
-        this.game = game;
-    }
+    public ActiveState() {}
 
     @Override
-    public Round createNewRound(Word wordToGuess) {
+    public Round createNewRound(Word wordToGuess, Game game) {
         if(game.getGameStatus() == WAITING_FOR_ROUND) {
             throw new InvalidGameStateException("Can't create a new round, because a round is already in progress.");
         }
@@ -31,7 +29,7 @@ public class ActiveState implements State {
     }
 
     @Override
-    public void takeGuess(String attempt) {
+    public void takeGuess(String attempt, Game game) {
         Round currentRound = game.getCurrentRound();
 
         currentRound.takeGuess(attempt);

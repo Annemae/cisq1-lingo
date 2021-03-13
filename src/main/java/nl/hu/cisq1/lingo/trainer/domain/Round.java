@@ -1,24 +1,24 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "round")
-public class Round {
+public class Round implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "round_id")
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Word wordToGuess;
 
-    @OneToMany
-    @JoinColumn(name = "feedback_id")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Feedback> attempts;
 
     public Round() {}

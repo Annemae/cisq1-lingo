@@ -38,7 +38,7 @@ public class TrainerService {
         return game;
     }
 
-    public Progress startNewRound(UUID id) {
+    public Game startNewRound(UUID id) {
         Game game = this.getGame(id);
         String word;
 
@@ -61,19 +61,15 @@ public class TrainerService {
         game.createNewRound(word);
         gameRepository.save(game);
 
-        return game.showProgress();
+        return game;
     }
 
-    public Progress guess(UUID id, String attempt) {
+    public Game guess(UUID id, String attempt) {
         Game game = this.getGame(id);
 
         game.takeGuess(attempt);
         gameRepository.save(game);
 
-        return game.showProgress();
+        return game;
     }
-
-    //get game
-    //take guess
-    //ask progress
 }

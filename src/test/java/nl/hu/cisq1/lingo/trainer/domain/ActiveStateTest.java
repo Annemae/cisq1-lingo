@@ -53,11 +53,11 @@ class ActiveStateTest {
     @DisplayName("take guess works")
     void takeGuessWorks(List<String> attempts, int expectedScore, GameStatus status) {
         Game game = new Game();
-        State activeState = new ActiveState(game);
+        State activeState = new ActiveState();
 
-        activeState.createNewRound(BREAD);
+        activeState.createNewRound(BREAD, game);
         for(String attempt : attempts) {
-            activeState.takeGuess(attempt);
+            activeState.takeGuess(attempt, game);
         }
 
         assertEquals(expectedScore, game.getScore());
@@ -68,14 +68,14 @@ class ActiveStateTest {
     @DisplayName("gamestate turns inactive after too many tries")
     void checkIfGameStateTurnsInactiveWhenEliminated() {
         Game gameSpy = spy(Game.class);
-        State activeState = new ActiveState(gameSpy);
+        State activeState = new ActiveState();
 
         gameSpy.createNewRound("GUESS");
-        activeState.takeGuess("ATTEMPT");
-        activeState.takeGuess("ATTEMPT");
-        activeState.takeGuess("ATTEMPT");
-        activeState.takeGuess("ATTEMPT");
-        activeState.takeGuess("ATTEMPT");
+        activeState.takeGuess("ATTEMPT", gameSpy);
+        activeState.takeGuess("ATTEMPT", gameSpy);
+        activeState.takeGuess("ATTEMPT", gameSpy);
+        activeState.takeGuess("ATTEMPT", gameSpy);
+        activeState.takeGuess("ATTEMPT", gameSpy);
 
         assertEquals(ELIMINATED, gameSpy.getGameStatus());
         verify(gameSpy).changeState(ArgumentMatchers.any());
@@ -85,12 +85,12 @@ class ActiveStateTest {
     @DisplayName("throws exception when round is already ongoing")
     void createRoundGivesError() {
         Game game = new Game(); //GIVEN
-        State activeState = new ActiveState(game);
+        State activeState = new ActiveState();
 
-        activeState.createNewRound(BREAD); //WHEN
+        activeState.createNewRound(BREAD, game); //WHEN
 
         assertThrows(InvalidGameStateException.class, () -> //THEN
-                activeState.createNewRound(BREAD)
+                activeState.createNewRound(BREAD, game)
         );
     }
 
@@ -98,9 +98,9 @@ class ActiveStateTest {
     @DisplayName("create a new round")
     void createRoundWorks() {
         Game game = new Game();
-        State activeState = new ActiveState(game);
+        State activeState = new ActiveState();
 
-        activeState.createNewRound(BREAD);
+        activeState.createNewRound(BREAD, game);
 
         assertEquals(1, game.getRounds().size());
         assertEquals(WAITING_FOR_ROUND, game.getGameStatus());

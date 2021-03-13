@@ -14,10 +14,9 @@ class InactiveStateTest {
     @DisplayName("create new round works")
     void createNewRoundGivesError() {
         State inactiveState = new InactiveState();
-        Word word = Word.of("ATTEMPT");
 
         assertThrows(InvalidGameStateException.class, () ->
-            inactiveState.createNewRound(word)
+            inactiveState.createNewRound(null, null)
         );
     }
 
@@ -27,7 +26,7 @@ class InactiveStateTest {
         State inactiveState = new InactiveState();
 
         assertThrows(InvalidGameStateException.class, () ->
-                inactiveState.takeGuess("ATTEMPT")
+                inactiveState.takeGuess(null, null)
         );
     }
 }
