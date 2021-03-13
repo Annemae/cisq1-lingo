@@ -89,4 +89,8 @@ public class Game {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }

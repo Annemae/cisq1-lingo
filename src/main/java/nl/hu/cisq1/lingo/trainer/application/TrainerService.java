@@ -28,14 +28,14 @@ public class TrainerService {
         } else throw new NoGameFoundException("Game was not found with given ID.");
     }
 
-    public Progress startGame() {
+    public Game startGame() {
         Game game = new Game();
         String word = wordService.provideRandomWord(5);
 
         game.createNewRound(word);
         gameRepository.save(game);
 
-        return game.showProgress();
+        return game;
     }
 
     public Progress startNewRound(UUID id) {

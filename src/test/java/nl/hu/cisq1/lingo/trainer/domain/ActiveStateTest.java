@@ -24,6 +24,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ActiveStateTest {
     private static final Word BREAD = Word.of("BREAD");
@@ -66,7 +67,7 @@ class ActiveStateTest {
     @Test
     @DisplayName("gamestate turns inactive after too many tries")
     void checkIfGameStateTurnsInactiveWhenEliminated() {
-        Game gameSpy = Mockito.spy(Game.class);
+        Game gameSpy = spy(Game.class);
         State activeState = new ActiveState(gameSpy);
 
         gameSpy.createNewRound("GUESS");
@@ -77,7 +78,7 @@ class ActiveStateTest {
         activeState.takeGuess("ATTEMPT");
 
         assertEquals(ELIMINATED, gameSpy.getGameStatus());
-        Mockito.verify(gameSpy).changeState(ArgumentMatchers.any());
+        verify(gameSpy).changeState(ArgumentMatchers.any());
     }
 
     @Test

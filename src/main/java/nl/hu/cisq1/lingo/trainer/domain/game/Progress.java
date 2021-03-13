@@ -3,6 +3,8 @@ package nl.hu.cisq1.lingo.trainer.domain.game;
 import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 
+import java.util.UUID;
+
 public class Progress {
     private int score;
     private Feedback feedback;
