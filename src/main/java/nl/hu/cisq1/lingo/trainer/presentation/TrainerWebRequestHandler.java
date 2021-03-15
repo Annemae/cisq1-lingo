@@ -1,20 +1,17 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
-import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-import nl.hu.cisq1.lingo.trainer.domain.game.Progress;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameResult;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
-import nl.hu.cisq1.lingo.trainer.presentation.dto.GameDTOResponse;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.GuessDTORequest;
+import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RestController //HATEOAS, STATUSCODE
@@ -27,46 +24,39 @@ public class TrainerWebRequestHandler {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<GameDTOResponse> startGame() {
-        Game game = service.startGame();
+    public ResponseEntity<ProgressDTOResponse> startGame() {
+        GameResult gameResult = service.startGame();
 
-        return new ResponseEntity<>(createGameDTOResponse(game), HttpStatus.CREATED);
+        return new ResponseEntity<>(createProgressDTOResponse(gameResult), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/{id}/round/start")
-    public ResponseEntity<GameDTOResponse> startNewRound(@PathVariable UUID id) {
-        Game game = service.startNewRound(id);
+    public ResponseEntity<ProgressDTOResponse> startNewRound(@PathVariable UUID id) {
+        GameResult gameResult = service.startNewRound(id);
 
-        return new ResponseEntity<>(createGameDTOResponse(game), HttpStatus.CREATED);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<GameDTOResponse> getGame(@PathVariable UUID id) {
-        Game game = service.getGame(id);
-
-        return new ResponseEntity<>(createGameDTOResponse(game), HttpStatus.OK);
+        return new ResponseEntity<>(createProgressDTOResponse(gameResult), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/{id}/guess")
-    public ResponseEntity<GameDTOResponse> takeGuess(@PathVariable UUID id, @Valid @RequestBody GuessDTORequest dto) {
-        Game game = service.guess(id, dto.attempt);
+    public ResponseEntity<ProgressDTOResponse> takeGuess(@PathVariable UUID id, @Valid @RequestBody GuessDTORequest dto) {
+        GameResult gameResult = service.guess(id, dto.attempt);
 
-        return new ResponseEntity<>(createGameDTOResponse(game), HttpStatus.OK);
+        return new ResponseEntity<>(createProgressDTOResponse(gameResult), HttpStatus.OK);
     }
 
 
-    private GameDTOResponse createGameDTOResponse(Game game) {
-        return new GameDTOResponse(game.getId(), game.getScore(), game.getGameStatus());
+    private ProgressDTOResponse createProgressDTOResponse(GameResult gameResult) {
+        return new ProgressDTOResponse(gameResult.getId(), gameResult.getScore(), gameResult.getFeedback(), gameResult.getHint());
     }
 
 
     @ExceptionHandler(value = InvalidGameStateException.class)
-    public ResponseEntity<String> igseHandler(InvalidGameStateException igse){
+    public ResponseEntity<String> igseHandler(InvalidGameStateException igse) {
         return new ResponseEntity<>(igse.getMessage(), HttpStatus.NOT_FOUND); //TODO andere status code
     }
 
     @ExceptionHandler(value = InvalidGuessException.class)
-    public ResponseEntity<String> igeHandler(InvalidGuessException ige){
+    public ResponseEntity<String> igeHandler(InvalidGuessException ige) {
         return new ResponseEntity<>(ige.getMessage(), HttpStatus.NOT_FOUND); //TODO andere status code
     }
 }

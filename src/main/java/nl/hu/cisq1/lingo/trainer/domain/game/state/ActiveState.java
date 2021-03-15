@@ -12,11 +12,12 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
 public class ActiveState implements State, Serializable {
 
-    public ActiveState() {}
+    public ActiveState() {
+    }
 
     @Override
     public Round createNewRound(Word wordToGuess, Game game) {
-        if(game.getGameStatus() == WAITING_FOR_ROUND) {
+        if (game.getGameStatus() == WAITING_FOR_ROUND) {
             throw new InvalidGameStateException("Can't create a new round, because a round is already in progress.");
         }
 
@@ -36,11 +37,11 @@ public class ActiveState implements State, Serializable {
 
         List<Feedback> allFeedback = currentRound.getAllFeedback();
 
-        if(currentRound.isOver() && allFeedback.size() <= 5) {
+        if (currentRound.isOver() && allFeedback.size() <= 5) {
             game.setGameStatus(PLAYING);
 
             int attempts = game.getCurrentRound().amountOfGuesses();
-            int newScore =  5 * (5 - attempts) + 5;
+            int newScore = 5 * (5 - attempts) + 5;
             game.setScore(game.getScore() + newScore);
 
         } else if (!currentRound.isOver() && allFeedback.size() >= 5) {

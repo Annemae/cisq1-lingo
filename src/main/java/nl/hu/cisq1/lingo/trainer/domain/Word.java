@@ -17,15 +17,16 @@ public class Word implements Serializable {
     private UUID id;
 
     @Column
-    private String word;
+    private String wordToGuess;
 
     @Column
     private int length;
 
-    public Word() {}
-    public Word(String word) {
-       this.word = word;
-       this.length = this.getWordCharacters().size();
+    public Word() {
+    }
+    public Word(String wordToGuess) {
+        this.wordToGuess = wordToGuess;
+        this.length = this.getWordCharacters().size();
     }
 
     public static Word of(String word) {
@@ -35,7 +36,7 @@ public class Word implements Serializable {
     //GETTERS
     public List<Character> getWordCharacters() {
         List<Character> wordCharacters = new ArrayList<>();
-        for(char character : word.toCharArray()) {
+        for (char character : wordToGuess.toCharArray()) {
             wordCharacters.add(character);
         }
         return wordCharacters;
@@ -51,11 +52,11 @@ public class Word implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Word word1 = (Word) o;
-        return length == word1.length && Objects.equals(id, word1.id) && Objects.equals(word, word1.word);
+        return length == word1.length && Objects.equals(id, word1.id) && Objects.equals(wordToGuess, word1.wordToGuess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, word, length);
+        return Objects.hash(id, wordToGuess, length);
     }
 }

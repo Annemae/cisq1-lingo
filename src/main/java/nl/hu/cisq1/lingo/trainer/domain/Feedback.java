@@ -30,7 +30,9 @@ public class Feedback implements Serializable {
     @ElementCollection(targetClass = Mark.class)
     private List<Mark> marks;
 
-    public Feedback() {}
+    public Feedback() {
+    }
+
     public Feedback(String attempt, Word wordToGuess) {
         this.attempt = attempt;
         this.wordToGuess = wordToGuess;
@@ -69,7 +71,7 @@ public class Feedback implements Serializable {
                 (!wordToGuessCharacters.get(0).equals(attemptCharacters.get(0))))
             attemptCharacters.forEach(character -> marks.add(INVALID));
         else {
-            for(int i = 0; i < attemptCharacters.size(); i++) {
+            for (int i = 0; i < attemptCharacters.size(); i++) {
                 Character attemptCharacter = attemptCharacters.get(i);
                 Character wordToGuessCharacter = wordToGuessCharacters.get(i);
 

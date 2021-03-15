@@ -1,6 +1,9 @@
 package nl.hu.cisq1.lingo.trainer.domain.game;
 
-import nl.hu.cisq1.lingo.trainer.domain.*;
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.Hint;
+import nl.hu.cisq1.lingo.trainer.domain.Round;
+import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.StateConverter;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
+import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 
 @Entity
 @Table(name = "game")
@@ -54,12 +57,12 @@ public class Game implements Serializable {
         state.takeGuess(attempt, this);
     }
 
-    public Progress showProgress() {
+    public GameResult createGameResult() {
         Round round = getCurrentRound();
-        Feedback feedback = round.getRecentFeedback();
+        Feedback feedback = round.getRecentFeedback().orElse(null);
         Hint hint = round.giveHint();
 
-        return new Progress(score, feedback, hint);
+        return new GameResult(id, score, gameStatus, feedback, hint, rounds);
     }
 
     //ROUND

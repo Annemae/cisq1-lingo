@@ -1,9 +1,8 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 
-import nl.hu.cisq1.lingo.trainer.domain.game.Progress;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,11 +42,11 @@ class GameTest {
             game.takeGuess(attempt);
         }
 
-        Progress progress = game.showProgress();
+        GameResult gameResult = game.createGameResult();
 
-        assertEquals(expectedScore, progress.getScore());
-        assertEquals(expectedMarks, progress.getFeedback().getMarks());
-        assertEquals(expectedHintCharacters, progress.getHint().getHintCharacters());
+        assertEquals(expectedScore, gameResult.getScore());
+        assertEquals(expectedMarks, gameResult.getFeedback().getMarks());
+        assertEquals(expectedHintCharacters, gameResult.getHint().getHintCharacters());
     }
 
 

@@ -2,30 +2,30 @@ package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-import nl.hu.cisq1.lingo.trainer.domain.game.Progress;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameResult;
 import nl.hu.cisq1.lingo.words.application.WordService;
-import nl.hu.cisq1.lingo.words.data.SpringWordRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
 
-
+import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.WAITING_FOR_ROUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class TrainerServiceTest {
-    @Mock
-    WordService wordService;
+    WordService wordService = mock(WordService.class);
+    Game game = new Game();
+
+    @BeforeEach
+    void setUp() {
+        when(wordService.provideRandomWord(any()))
+                .thenReturn("APPLE");
+
+        game.createNewRound("APPLE");
+    }
 
     @Test
     @DisplayName("throws exception when game is not found")
@@ -41,6 +41,7 @@ class TrainerServiceTest {
                 NoGameFoundException.class,
                 () -> trainerService.getGame(null)
         );
+
         verify(repository, times(1)).findById(any());
     }
 
@@ -64,14 +65,13 @@ class TrainerServiceTest {
     @DisplayName("start game saves")
     void startGameSaves() {
         SpringGameRepository repository = mock(SpringGameRepository.class);
-        WordService wordService = mock(WordService.class);
 
-        when(wordService.provideRandomWord(any()))
-                .thenReturn("APPLE");
+        when(repository.save(any(Game.class)))
+                .thenReturn(game);
 
         TrainerService trainerService = new TrainerService(repository, wordService);
-        trainerService.startGame();
+        GameResult gameResult = trainerService.startGame();
 
-        verify(repository, times(1)).save(any());
+        assertEquals(game.createGameResult().getId(), gameResult.getId());
     }
 }

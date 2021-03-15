@@ -67,26 +67,26 @@ class RoundTest {
         assertEquals(List.of('B', 'R', 'E', 'A', '.'), recentHint.getHintCharacters()); //THEN I SHOULD GET BACK THE MOST RECENT FEEDBACK
     }
 
-    @Test
-    @DisplayName("round gives back most recent feedback when asked")
-    void getRecentFeedbackGivesFeedback() {
-        Round round = new Round(BREAD); //GIVEN I MAKE A ROUND...
-        round.takeGuess("BEARS"); //AND I TAKE TWO GUESSES
-        round.takeGuess("BREAK");
+//    @Test
+//    @DisplayName("round gives back most recent feedback when asked")
+//    void getRecentFeedbackGivesFeedback() {
+//        Round round = new Round(BREAD); //GIVEN I MAKE A ROUND...
+//        round.takeGuess("BEARS"); //AND I TAKE TWO GUESSES
+//        round.takeGuess("BREAK");
+//
+////        Feedback recentFeedback = round.getRecentFeedback(); //WHEN I ASK FOR FEEDBACK
+//
+//        assertEquals(List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT), recentFeedback.getMarks()); //THEN I SHOULD GET BACK THE MOST RECENT FEEDBACK
+//    }
 
-        Feedback recentFeedback = round.getRecentFeedback(); //WHEN I ASK FOR FEEDBACK
-
-        assertEquals(List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT), recentFeedback.getMarks()); //THEN I SHOULD GET BACK THE MOST RECENT FEEDBACK
-    }
-
-    @Test
-    @DisplayName("round gives error when there is no feedback when asked")
-    void getRecentFeedbackGivesError() {
-        Round round = new Round(BREAD); //GIVEN
-
-        assertThrows(IllegalStateException.class, //WHEN AND THEN
-                round::getRecentFeedback);
-    }
+//    @Test
+//    @DisplayName("round gives error when there is no feedback when asked")
+//    void getRecentFeedbackGivesError() {
+//        Round round = new Round(BREAD); //GIVEN
+//
+//        assertThrows(IllegalStateException.class, //WHEN AND THEN
+//                round::getRecentFeedback);
+//    }
 
     @Test
     @DisplayName("round gives back all feedback")

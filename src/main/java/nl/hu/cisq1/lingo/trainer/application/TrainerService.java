@@ -4,7 +4,7 @@ import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-import nl.hu.cisq1.lingo.trainer.domain.game.Progress;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameResult;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +23,21 @@ public class TrainerService {
 
     public Game getGame(UUID id) {
         Optional<Game> optionalGame = gameRepository.findById(id);
-        if(optionalGame.isPresent()) {
+        if (optionalGame.isPresent()) {
             return optionalGame.get();
         } else throw new NoGameFoundException("Game was not found with given ID.");
     }
 
-    public Game startGame() {
+    public GameResult startGame() {
         Game game = new Game();
         String word = wordService.provideRandomWord(5);
 
         game.createNewRound(word);
-        gameRepository.save(game);
 
-        return game;
+        return gameRepository.save(game).createGameResult();
     }
 
-    public Game startNewRound(UUID id) {
+    public GameResult startNewRound(UUID id) {
         Game game = this.getGame(id);
         String word;
 
@@ -59,17 +58,15 @@ public class TrainerService {
         }
 
         game.createNewRound(word);
-        gameRepository.save(game);
 
-        return game;
+        return gameRepository.save(game).createGameResult();
     }
 
-    public Game guess(UUID id, String attempt) {
+    public GameResult guess(UUID id, String attempt) {
         Game game = this.getGame(id);
 
         game.takeGuess(attempt);
-        gameRepository.save(game);
 
-        return game;
+        return gameRepository.save(game).createGameResult();
     }
 }

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +22,8 @@ public class Round implements Serializable {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Feedback> attempts;
 
-    public Round() {}
+    public Round() {
+    }
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.attempts = new ArrayList<>();
@@ -38,8 +40,12 @@ public class Round implements Serializable {
     }
 
     public boolean isOver() {
-        Feedback lastFeedback = getRecentFeedback();
-        return lastFeedback.isWordGuessed();
+        Optional<Feedback> lastFeedbackOptional = getRecentFeedback();
+        if(lastFeedbackOptional.isPresent()) {
+            Feedback lastFeedback = lastFeedbackOptional.get();
+            return lastFeedback.isWordGuessed();
+
+        } else return false;
     }
 
 
@@ -48,10 +54,11 @@ public class Round implements Serializable {
     }
 
     //ATTEMPTS
-    public Feedback getRecentFeedback() {
-        if(amountOfGuesses() > 0) {
-            return this.attempts.get(this.attempts.size() - 1);
-        } else throw new IllegalStateException("Take a guess first, before asking for feedback.");
+    public Optional<Feedback> getRecentFeedback() {
+        if(attempts.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(this.attempts.get(this.attempts.size() - 1));
     }
 
     public List<Feedback> getAllFeedback() {

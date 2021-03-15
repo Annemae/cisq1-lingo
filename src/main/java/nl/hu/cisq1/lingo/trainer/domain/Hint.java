@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.CORRECT;
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 
 public class Hint {
     private final List<Character> hintCharacterList;
@@ -40,8 +41,8 @@ public class Hint {
         List<Character> firstHint = new ArrayList<>();
         List<Character> wordArray = wordToGuess.getWordCharacters();
 
-        for(int i = 0; i < wordArray.size(); i++) {
-            if(i == 0) {
+        for (int i = 0; i < wordArray.size(); i++) {
+            if (i == 0) {
                 firstHint.add(wordArray.get(0));
             } else firstHint.add('.');
         }
