@@ -1,8 +1,5 @@
-package nl.hu.cisq1.lingo.trainer.domain;
+package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
