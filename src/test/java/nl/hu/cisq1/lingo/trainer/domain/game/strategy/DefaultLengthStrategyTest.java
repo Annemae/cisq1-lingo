@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DefaultLengthStrategyTest {
+    DefaultLengthStrategy defaultLengthStrategy = new DefaultLengthStrategy();
+
     private static Stream<Arguments> provideCorrectWordLengthExamples() {
         return Stream.of(
                 Arguments.of(0, 5),
@@ -33,8 +35,6 @@ class DefaultLengthStrategyTest {
     @MethodSource("provideCorrectWordLengthExamples")
     @DisplayName("gives back the correct length")
     void calculateCorrectWordLength(int previous, int expected) {
-        DefaultLengthStrategy defaultLengthStrategy = new DefaultLengthStrategy();
-
         int actual = defaultLengthStrategy.calculateWordLength(previous);
 
         assertEquals(expected, actual);
@@ -44,8 +44,6 @@ class DefaultLengthStrategyTest {
     @MethodSource("provideIncorrectWordLengthExamples")
     @DisplayName("throws error when length is not supported")
     void calculateIncorrectWordLength(int length) {
-        DefaultLengthStrategy defaultLengthStrategy = new DefaultLengthStrategy();
-
         assertThrows(UnsupportedWordLengthException.class, () ->
                 defaultLengthStrategy.calculateWordLength(length));
     }

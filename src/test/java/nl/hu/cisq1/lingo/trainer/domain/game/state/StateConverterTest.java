@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StateConverterTest {
-    StateConverter stateConverter = new StateConverter();
+    private final StateConverter stateConverter = new StateConverter();
 
     private static Stream<Arguments> provideStateExamples() {
         return Stream.of(
@@ -23,7 +23,7 @@ class StateConverterTest {
 
     @ParameterizedTest
     @MethodSource("provideStateExamples")
-    @DisplayName("Convert to database column")
+    @DisplayName("convert to database column")
     void convertToDatabaseColumn(State state, String expected) {
         String actual = stateConverter.convertToDatabaseColumn(state);
 
@@ -32,7 +32,7 @@ class StateConverterTest {
 
     @ParameterizedTest
     @MethodSource("provideStateExamples")
-    @DisplayName("Convert to entity attribute")
+    @DisplayName("convert to entity attribute")
     void convertToEntityAttribute(State expected, String string) {
         State actual = stateConverter.convertToEntityAttribute(string);
 

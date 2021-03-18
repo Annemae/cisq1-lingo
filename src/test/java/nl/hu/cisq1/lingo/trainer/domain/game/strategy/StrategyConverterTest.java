@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StrategyConverterTest {
-    StrategyConverter strategyConverter = new StrategyConverter();
+    private final StrategyConverter strategyConverter = new StrategyConverter();
 
     @Test
-    @DisplayName("Convert to database column")
+    @DisplayName("convert to database column")
     void convertToDatabaseColumn() {
         String actual = strategyConverter.convertToDatabaseColumn(new DefaultLengthStrategy());
 
@@ -17,6 +17,7 @@ class StrategyConverterTest {
     }
 
     @Test
+    @DisplayName("convert to entity attribute")
     void convertToEntityAttribute() {
         WordLengthStrategy actual = strategyConverter.convertToEntityAttribute("defaultlengthstrategy");
 

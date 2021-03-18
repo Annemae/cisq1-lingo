@@ -65,7 +65,7 @@ class ActiveStateTest {
         Game gameSpy = spy(Game.class);
         State activeState = new ActiveState();
 
-        gameSpy.createNewRound("GUESS");
+        activeState.createNewRound(Word.of("ATTEMPD"), gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);

@@ -34,18 +34,6 @@ public class TrainerService {
         } else throw new NoGameFoundException("Game was not found with given ID.");
     }
 
-    public GameProgress showProgress(UUID id) {
-        return this.getGame(id).createGameProgress();
-    }
-
-    public GameProgress startGame() {
-        Game game = new Game(new DefaultLengthStrategy());
-
-        this.startNewRound(game);
-
-        return gameRepository.save(game).createGameProgress();
-    }
-
     private void startNewRound(Game game) {
         String word;
 
@@ -63,6 +51,18 @@ public class TrainerService {
         }
 
         game.createNewRound(word);
+    }
+
+    public GameProgress showProgress(UUID id) {
+        return this.getGame(id).createGameProgress();
+    }
+
+    public GameProgress startGame() {
+        Game game = new Game(new DefaultLengthStrategy());
+
+        this.startNewRound(game);
+
+        return gameRepository.save(game).createGameProgress();
     }
 
     public GameProgress guess(UUID id, String attempt) {

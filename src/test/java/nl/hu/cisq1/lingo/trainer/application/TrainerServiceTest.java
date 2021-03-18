@@ -17,9 +17,9 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class TrainerServiceTest {
-    WordService wordService = mock(WordService.class);
-    SpringGameRepository repository = mock(SpringGameRepository.class);
-    Game game = new Game(new DefaultLengthStrategy());
+    private final WordService wordService = mock(WordService.class);
+    private final SpringGameRepository repository = mock(SpringGameRepository.class);
+    private final Game game = new Game(new DefaultLengthStrategy());
 
     @BeforeEach
     void beforeEach() {
