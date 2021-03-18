@@ -71,19 +71,28 @@ public class Feedback implements Serializable {
                 (!wordToGuessCharacters.get(0).equals(attemptCharacters.get(0))))
             attemptCharacters.forEach(character -> marks.add(INVALID));
         else {
-            for (int i = 0; i < attemptCharacters.size(); i++) {
-                Character attemptCharacter = attemptCharacters.get(i);
-                Character wordToGuessCharacter = wordToGuessCharacters.get(i);
+                int index = 0;
+                for (Character character : attemptCharacters) {
 
-                if (attemptCharacter.equals(wordToGuessCharacter)) {
-                    marks.add(CORRECT);
-                } else {
-                    absentCharacters.add(attemptCharacter);
-                    marks.add(ABSENT);
+                    if (character.equals(wordToGuessCharacters.get(index))) {
+                        this.marks.add(CORRECT);
+                        wordToGuessCharacters.set(index, '_');
+                    }else {
+                        absentCharacters.add(character);
+                        this.marks.add(ABSENT);
+                    }
+                    index += 1;
                 }
             }
+
+            int index = 0;
+            for (Character character : attemptCharacters) {
+                if(absentCharacters.contains(character) && wordToGuessCharacters.contains(character)){
+                    absentCharacters.remove(character);
+                    this.marks.set(attempt.indexOf(character), PRESENT);
+                }
+                index += 1;
         }
-        recalculatePresent(wordToGuessCharacters, attemptCharacters, absentCharacters);
     }
 
     private void recalculatePresent(List<Character> wordToGuessCharacters, List<Character> attemptCharacters, List<Character> absentCharacters) {

@@ -12,8 +12,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
 public class ActiveState implements State, Serializable {
 
-    public ActiveState() {
-    }
+    public ActiveState() {}
 
     @Override
     public Round createNewRound(Word wordToGuess, Game game) {

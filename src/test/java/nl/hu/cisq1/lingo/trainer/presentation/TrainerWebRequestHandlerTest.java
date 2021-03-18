@@ -4,7 +4,7 @@ import nl.hu.cisq1.lingo.trainer.application.TrainerService;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
-import nl.hu.cisq1.lingo.trainer.domain.game.GameResult;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TrainerWebRequestHandlerTest {
-    GameResult gameResult;
+    GameProgress gameProgress;
 
     @BeforeEach
     void setUp() {
         Word wordToGuess = Word.of("APPLE");
 
-        gameResult = new GameResult(UUID.randomUUID(),
+        gameProgress = new GameProgress(UUID.randomUUID(),
                 0, GameStatus.WAITING_FOR_ROUND,
                 null, new Hint(Collections.emptyList(), wordToGuess),
                 List.of(new Round(wordToGuess))
@@ -40,13 +40,13 @@ class TrainerWebRequestHandlerTest {
         TrainerService trainerService = mock(TrainerService.class);
 
         when(trainerService.startGame())
-                .thenReturn(gameResult);
+                .thenReturn(gameProgress);
 
         TrainerWebRequestHandler trainerWebRequestHandler = new TrainerWebRequestHandler(trainerService);
         ResponseEntity<ProgressDTOResponse> responseEntity = trainerWebRequestHandler.startGame();
         ProgressDTOResponse progressDTOResponse = responseEntity.getBody();
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(gameResult.getId(), progressDTOResponse.getId());
+        assertEquals(gameProgress.getId(), progressDTOResponse.getId());
     }
 }

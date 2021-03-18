@@ -31,8 +31,7 @@ public class Game implements Serializable {
     @Column
     private int score;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column
+    @Enumerated(EnumType.STRING)
     private GameStatus gameStatus;
 
     @Convert(converter = StateConverter.class)
@@ -57,12 +56,12 @@ public class Game implements Serializable {
         state.takeGuess(attempt, this);
     }
 
-    public GameResult createGameResult() {
+    public GameProgress createGameResult() {
         Round round = getCurrentRound();
         Feedback feedback = round.getRecentFeedback().orElse(null);
         Hint hint = round.giveHint();
 
-        return new GameResult(id, score, gameStatus, feedback, hint, rounds);
+        return new GameProgress(id, score, gameStatus, feedback, hint, rounds);
     }
 
     //ROUND

@@ -51,12 +51,12 @@ public class Word implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Word word1 = (Word) o;
-        return length == word1.length && Objects.equals(id, word1.id) && Objects.equals(wordToGuess, word1.wordToGuess);
+        Word word = (Word) o;
+        return length == word.length && Objects.equals(id, word.id) && Objects.equals(wordToGuess, word.wordToGuess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, wordToGuess, length);
+        return Objects.hash(id);
     }
 }

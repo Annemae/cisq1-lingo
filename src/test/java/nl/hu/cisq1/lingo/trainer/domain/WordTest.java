@@ -15,5 +15,6 @@ class WordTest {
 
         assertEquals(expected.hashCode(), actual.hashCode()); //THEN
         assertEquals(expected, actual);
+        assertEquals(actual, actual);
     }
 }
