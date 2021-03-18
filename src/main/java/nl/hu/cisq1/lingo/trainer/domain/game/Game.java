@@ -4,6 +4,8 @@ import nl.hu.cisq1.lingo.trainer.domain.*;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.StateConverter;
+import nl.hu.cisq1.lingo.trainer.domain.game.strategy.StrategyConverter;
+import nl.hu.cisq1.lingo.trainer.domain.game.strategy.WordLengthStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;

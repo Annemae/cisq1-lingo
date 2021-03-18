@@ -3,25 +3,19 @@ package nl.hu.cisq1.lingo.trainer.domain;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
-import org.checkerframework.checker.units.qual.A;
+import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

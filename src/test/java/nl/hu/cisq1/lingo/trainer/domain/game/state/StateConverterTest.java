@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StateConverterTest {
+    StateConverter stateConverter = new StateConverter();
+
     private static Stream<Arguments> provideStateExamples() {
         return Stream.of(
                 Arguments.of(new ActiveState(),
@@ -23,8 +25,6 @@ class StateConverterTest {
     @MethodSource("provideStateExamples")
     @DisplayName("Convert to database column")
     void convertToDatabaseColumn(State state, String expected) {
-        StateConverter stateConverter = new StateConverter();
-
         String actual = stateConverter.convertToDatabaseColumn(state);
 
         assertEquals(expected, actual);
@@ -34,8 +34,6 @@ class StateConverterTest {
     @MethodSource("provideStateExamples")
     @DisplayName("Convert to entity attribute")
     void convertToEntityAttribute(State expected, String string) {
-        StateConverter stateConverter = new StateConverter();
-
         State actual = stateConverter.convertToEntityAttribute(string);
 
         assertTrue(actual.getClass().isAssignableFrom(expected.getClass()));
