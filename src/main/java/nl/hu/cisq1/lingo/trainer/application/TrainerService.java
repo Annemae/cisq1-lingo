@@ -1,10 +1,13 @@
 package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
+import nl.hu.cisq1.lingo.trainer.domain.DefaultLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
+import nl.hu.cisq1.lingo.trainer.domain.WordLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,9 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service //todo service testen -> roept hij het aan?? aparte methoden...
+import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
+
+@Service
 @Transactional
 public class TrainerService {
     private final SpringGameRepository gameRepository;
@@ -23,45 +28,42 @@ public class TrainerService {
         this.wordService = wordService;
     }
 
-    private Game getGame(UUID id) { //todo get show progress aanvragen
+    private Game getGame(UUID id) {
         Optional<Game> optionalGame = gameRepository.findById(id);
         if (optionalGame.isPresent()) {
             return optionalGame.get();
         } else throw new NoGameFoundException("Game was not found with given ID.");
     }
 
-    public GameProgress startGame() {
-        Game game = new Game();
-        String word = wordService.provideRandomWord(5);
-
-        game.createNewRound(word);
-
-        return gameRepository.save(game).createGameResult();
+    public GameProgress showProgress(UUID id) {
+        return this.getGame(id).createGameProgress();
     }
 
-    public GameProgress startNewRound(UUID id) {
-        Game game = this.getGame(id);
+    public GameProgress startGame() {
+        Game game = new Game(new DefaultLengthStrategy());
+
+        this.startNewRound(game);
+
+        return gameRepository.save(game).createGameProgress();
+    }
+
+    private void startNewRound(Game game) {
         String word;
 
-        Round lastRound = game.getCurrentRound();
-        Word lastWord = lastRound.getWordToGuess();
-        switch (lastWord.getLength()) {
-            case 5:
-                word = wordService.provideRandomWord(6);
-                break;
-            case 6:
-                word = wordService.provideRandomWord(7);
-                break;
-            case 7:
-                word = wordService.provideRandomWord(5);
-                break;
-            default:
-                throw new UnsupportedWordLengthException("Word length is not supported.");
+        if(game.getRounds().isEmpty()) {
+            word = wordService.provideRandomWord(5);
+        } else {
+            Round currentRound = game.getCurrentRound();
+            Word currentWordToGuess = currentRound.getWordToGuess();
+            int previousLength = currentWordToGuess.getLength();
+
+            WordLengthStrategy wordLengthStrategy = game.getWordLengthStrategy();
+
+            Integer nextWordLength = wordLengthStrategy.calculateWordLength(previousLength);
+            word = wordService.provideRandomWord(nextWordLength);
         }
 
         game.createNewRound(word);
-
-        return gameRepository.save(game).createGameResult();
     }
 
     public GameProgress guess(UUID id, String attempt) {
@@ -69,6 +71,10 @@ public class TrainerService {
 
         game.takeGuess(attempt);
 
-        return gameRepository.save(game).createGameResult();
+        if(game.getGameStatus() == PLAYING) {
+            this.startNewRound(game);
+        }
+
+        return gameRepository.save(game).createGameProgress();
     }
 }

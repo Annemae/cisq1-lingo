@@ -1,9 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain.game;
 
-import nl.hu.cisq1.lingo.trainer.domain.Feedback;
-import nl.hu.cisq1.lingo.trainer.domain.Hint;
-import nl.hu.cisq1.lingo.trainer.domain.Round;
-import nl.hu.cisq1.lingo.trainer.domain.Word;
+import nl.hu.cisq1.lingo.trainer.domain.*;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.StateConverter;
@@ -26,7 +23,7 @@ public class Game implements Serializable {
     private UUID id;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    private final List<Round> rounds;
+    private final List<Round> rounds = new ArrayList<>();
 
     @Column
     private int score;
@@ -37,11 +34,15 @@ public class Game implements Serializable {
     @Convert(converter = StateConverter.class)
     private State state;
 
-    public Game() {
-        rounds = new ArrayList<>();
+    @Convert(converter = StrategyConverter.class)
+    private WordLengthStrategy wordLengthStrategy;
+
+    public Game() {}
+    public Game(WordLengthStrategy wordLengthStrategy) {
         score = 0;
         gameStatus = PLAYING;
         state = new ActiveState();
+        this.wordLengthStrategy = wordLengthStrategy;
     }
 
     public void changeState(State state) {
@@ -56,7 +57,7 @@ public class Game implements Serializable {
         state.takeGuess(attempt, this);
     }
 
-    public GameProgress createGameResult() {
+    public GameProgress createGameProgress() {
         Round round = getCurrentRound();
         Feedback feedback = round.getRecentFeedback().orElse(null);
         Hint hint = round.giveHint();
@@ -97,5 +98,9 @@ public class Game implements Serializable {
     //GETTER
     public UUID getId() {
         return id;
+    }
+
+    public WordLengthStrategy getWordLengthStrategy() {
+        return wordLengthStrategy;
     }
 }

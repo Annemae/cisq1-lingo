@@ -52,7 +52,7 @@ class ActiveStateTest {
     @MethodSource("provideGuessExamples")
     @DisplayName("take guess works")
     void takeGuessWorks(List<String> attempts, int expectedScore, GameStatus status) {
-        Game game = new Game();
+        Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
 
         activeState.createNewRound(BREAD, game);
@@ -84,7 +84,7 @@ class ActiveStateTest {
     @Test
     @DisplayName("throws exception when round is already ongoing")
     void createRoundGivesError() {
-        Game game = new Game(); //GIVEN
+        Game game = new Game(new DefaultLengthStrategy()); //GIVEN
         State activeState = new ActiveState();
 
         activeState.createNewRound(BREAD, game); //WHEN
@@ -97,7 +97,7 @@ class ActiveStateTest {
     @Test
     @DisplayName("create a new round")
     void createRoundWorks() {
-        Game game = new Game();
+        Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
 
         activeState.createNewRound(BREAD, game);

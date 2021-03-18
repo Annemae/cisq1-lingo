@@ -29,16 +29,16 @@ public class TrainerWebRequestHandler {
         return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/{id}/round/start")
-    public ResponseEntity<ProgressDTOResponse> startNewRound(@PathVariable UUID id) {
-        GameProgress gameProgress = service.startNewRound(id);
-
-        return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.CREATED);
-    }
-
     @PostMapping(value = "/{id}/guess")
     public ResponseEntity<ProgressDTOResponse> takeGuess(@PathVariable UUID id, @Valid @RequestBody GuessDTORequest dto) {
         GameProgress gameProgress = service.guess(id, dto.attempt);
+
+        return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProgressDTOResponse> showProgress(@PathVariable UUID id) {
+        GameProgress gameProgress = service.showProgress(id);
 
         return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.OK);
     }

@@ -36,13 +36,13 @@ class GameTest {
     @MethodSource("provideGuessExamples")
     @DisplayName("give current progress works")
     void giveProgressWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks, List<Character> expectedHintCharacters) {
-        Game game = new Game();
+        Game game = new Game(new DefaultLengthStrategy());
         game.createNewRound("BREAD");
         for(String attempt : attempts) {
             game.takeGuess(attempt);
         }
 
-        GameProgress gameProgress = game.createGameResult();
+        GameProgress gameProgress = game.createGameProgress();
 
         assertEquals(expectedScore, gameProgress.getScore());
         assertEquals(expectedMarks, gameProgress.getFeedback().getMarks());
@@ -53,7 +53,7 @@ class GameTest {
     @Test
     @DisplayName("create a round")
     void createRoundWorks() {
-        Game game = new Game();
+        Game game = new Game(new DefaultLengthStrategy());
 
         game.createNewRound("WORTH");
 
@@ -64,7 +64,7 @@ class GameTest {
     @Test
     @DisplayName("current round is correct")
     void giveCorrectCurrentRound() {
-        Game game = new Game();
+        Game game = new Game(new DefaultLengthStrategy());
         game.createNewRound("WORTH");
         game.takeGuess("WORTH");
 
