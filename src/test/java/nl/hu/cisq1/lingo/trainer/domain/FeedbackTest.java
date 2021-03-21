@@ -22,12 +22,16 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(Feedback.of("BINGO", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
-                Arguments.of(Feedback.of("BEARS", BREAD),
-                        List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT)),
-                Arguments.of(Feedback.of("BREAK", BREAD),
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
+                //PRESENT
                 Arguments.of(Feedback.of("BAARD", BREAD),
                         List.of(CORRECT, PRESENT, ABSENT, PRESENT, CORRECT)),
+                Arguments.of(Feedback.of("BEARS", BREAD),
+                        List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT)),
+                Arguments.of(Feedback.of("BAAAN", BREAD),
+                        List.of(CORRECT, ABSENT, ABSENT, CORRECT, ABSENT)),
+
+                Arguments.of(Feedback.of("BREAK", BREAD),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(Feedback.of("BREAD", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
                 Arguments.of(Feedback.of("CACAO", BREAD),

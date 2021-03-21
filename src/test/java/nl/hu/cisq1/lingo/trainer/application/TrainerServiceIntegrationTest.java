@@ -70,7 +70,6 @@ class TrainerServiceIntegrationTest {
         verify(repository, times(1)).findById(any());
     }
 
-
     @Test
     @DisplayName("start game saves a game")
     void startGameSaves() {

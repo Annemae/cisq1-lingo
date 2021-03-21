@@ -29,7 +29,7 @@ public class TrainerWebRequestHandler {
         return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/{id}/guess")
+    @PostMapping(value = "/guess/{id}")
     public ResponseEntity<ProgressDTOResponse> takeGuess(@PathVariable UUID id, @Valid @RequestBody GuessDTORequest dto) {
         GameProgress gameProgress = service.guess(id, dto.attempt);
 

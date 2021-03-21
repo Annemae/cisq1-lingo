@@ -20,10 +20,10 @@ public class Feedback implements Serializable {
     @Column(name = "feedback_id")
     private UUID id;
 
-    @Column
-    private String attempt;
+    @ElementCollection
+    private List<Character> attemptCharacters;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Word wordToGuess;
 
     @Enumerated
@@ -32,21 +32,23 @@ public class Feedback implements Serializable {
 
     public Feedback() {
     }
-
     public Feedback(String attempt, Word wordToGuess) {
-        this.attempt = attempt;
+        this.attemptCharacters = new ArrayList<>();
+        for (char character : attempt.toCharArray()) {
+            this.attemptCharacters.add(character);
+        }
+
         this.wordToGuess = wordToGuess;
 
-        marks = new ArrayList<>();
+        this.marks = new ArrayList<>();
         calculateMarks();
     }
-
 
     public static Feedback of(String attempt, Word wordToGuess) {
         return new Feedback(attempt, wordToGuess);
     }
 
-
+    //BOOLEANS
     public boolean isWordGuessed() {
         return marks.stream().allMatch(mark -> mark == CORRECT);
     }
@@ -57,60 +59,54 @@ public class Feedback implements Serializable {
         } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length.");
     }
 
-    //CALCULATORS
+    //CALCULATOR
     private void calculateMarks() {
         List<Character> wordToGuessCharacters = wordToGuess.getWordCharacters();
         List<Character> absentCharacters = new ArrayList<>();
-        List<Character> attemptCharacters = new ArrayList<>();
 
-        for (char character : attempt.toCharArray()) {
-            attemptCharacters.add(character);
-        }
-
-        if ((wordToGuess.getLength() != attemptCharacters.size()) ||
-                (!wordToGuessCharacters.get(0).equals(attemptCharacters.get(0))))
-            attemptCharacters.forEach(character -> marks.add(INVALID));
+        if ((wordToGuess.getLength() != this.attemptCharacters.size()) ||
+                (!wordToGuessCharacters.get(0).equals(this.attemptCharacters.get(0))))
+            this.attemptCharacters.forEach(character -> marks.add(INVALID));
         else {
-                int index = 0;
-                for (Character character : attemptCharacters) {
-
-                    if (character.equals(wordToGuessCharacters.get(index))) {
-                        this.marks.add(CORRECT);
-                        wordToGuessCharacters.set(index, '_');
-                    }else {
-                        absentCharacters.add(character);
-                        this.marks.add(ABSENT);
-                    }
-                    index += 1;
-                }
-            }
-
             int index = 0;
-            for (Character character : attemptCharacters) {
-                if(absentCharacters.contains(character) && wordToGuessCharacters.contains(character)){
-                    absentCharacters.remove(character);
-                    this.marks.set(attempt.indexOf(character), PRESENT);
+            for (Character character : this.attemptCharacters) {
+
+                if (character.equals(wordToGuessCharacters.get(index))) {
+                    this.marks.add(CORRECT);
+                    wordToGuessCharacters.set(index, '_');
+                }else {
+                    absentCharacters.add(character);
+                    this.marks.add(ABSENT);
                 }
                 index += 1;
+            }
+        }
+
+        for (Character character : this.attemptCharacters) {
+            if(absentCharacters.contains(character) && wordToGuessCharacters.contains(character)){
+                absentCharacters.remove(character);
+                this.marks.set(this.attemptCharacters.indexOf(character), PRESENT);
+            }
         }
     }
 
 
-    //GETTERS
+    //GETTER
     public List<Mark> getMarks() {
         return marks;
     }
 
+    //EQUALS AND HASHCODE
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Feedback feedback = (Feedback) o;
-        return Objects.equals(id, feedback.id) && Objects.equals(attempt, feedback.attempt) && Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
+        return Objects.equals(id, feedback.id) && Objects.equals(attemptCharacters, feedback.attemptCharacters) && Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, attempt, wordToGuess, marks);
+        return Objects.hash(id, attemptCharacters, wordToGuess, marks);
     }
 }
