@@ -95,22 +95,6 @@ public class Feedback implements Serializable {
         }
     }
 
-    private void recalculatePresent(List<Character> wordToGuessCharacters, List<Character> attemptCharacters, List<Character> absentCharacters) {
-        for (Character character : wordToGuessCharacters) {
-            int attemptPosition = attemptCharacters.indexOf(character);
-            if (attemptPosition != -1) {
-                long countListAttempt = attemptCharacters.stream().filter(character::equals).count();
-                long countListWordToBeGuessed = wordToGuessCharacters.stream().filter(character::equals).count();
-                if (absentCharacters.contains(character) &&
-                        this.marks.get(attemptPosition) == ABSENT &&
-                        countListAttempt <= countListWordToBeGuessed
-                ) {
-                    absentCharacters.remove(character);
-                    this.marks.set(attemptCharacters.indexOf(character), PRESENT);
-                }
-            }
-        }
-    }
 
     //GETTERS
     public List<Mark> getMarks() {
