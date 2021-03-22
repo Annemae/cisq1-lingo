@@ -50,23 +50,23 @@ public class Feedback implements Serializable {
 
     //BOOLEANS
     public boolean isWordGuessed() {
-        return marks.stream().allMatch(mark -> mark == CORRECT);
+        return this.marks.stream().allMatch(mark -> mark == CORRECT);
     }
 
     public boolean isGuessValid() {
-        if (marks.stream().noneMatch(mark -> mark == INVALID)) {
+        if (this.marks.stream().noneMatch(mark -> mark == INVALID)) {
             return true;
         } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length.");
     }
 
     //CALCULATOR
     private void calculateMarks() {
-        List<Character> wordToGuessCharacters = wordToGuess.getWordCharacters();
+        List<Character> wordToGuessCharacters = this.wordToGuess.getWordCharacters();
         List<Character> absentCharacters = new ArrayList<>();
 
-        if ((wordToGuess.getLength() != this.attemptCharacters.size()) ||
+        if ((this.wordToGuess.getLength() != this.attemptCharacters.size()) ||
                 (!wordToGuessCharacters.get(0).equals(this.attemptCharacters.get(0))))
-            this.attemptCharacters.forEach(character -> marks.add(INVALID));
+            this.attemptCharacters.forEach(character -> this.marks.add(INVALID));
         else {
             int index = 0;
             for (Character character : this.attemptCharacters) {
@@ -93,7 +93,7 @@ public class Feedback implements Serializable {
 
     //GETTER
     public List<Mark> getMarks() {
-        return marks;
+        return this.marks;
     }
 
     //EQUALS AND HASHCODE

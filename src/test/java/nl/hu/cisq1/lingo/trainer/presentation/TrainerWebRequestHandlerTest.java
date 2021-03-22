@@ -56,7 +56,7 @@ class TrainerWebRequestHandlerTest {
         when(trainerService.guess(any(), any())) //GIVEN
                 .thenReturn(gameProgress);
 
-        trainerWebRequestHandler.takeGuess(UUID.randomUUID(), new GuessDTORequest()); //WHEN
+        trainerWebRequestHandler.takeGuess(UUID.randomUUID(), "ANY"); //WHEN
 
         verify(trainerService, times(1)).guess(any(), any()); //THEN
     }

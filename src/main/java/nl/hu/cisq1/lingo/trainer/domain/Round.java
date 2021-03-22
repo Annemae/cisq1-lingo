@@ -44,16 +44,15 @@ public class Round implements Serializable {
         if(lastFeedbackOptional.isPresent()) {
             Feedback lastFeedback = lastFeedbackOptional.get();
             return lastFeedback.isWordGuessed();
-
         } else return false;
     }
 
 
+    //GETTERS
     public Word getWordToGuess() {
         return wordToGuess;
     }
 
-    //ATTEMPTS
     public Optional<Feedback> getRecentFeedback() {
         if(attempts.isEmpty()) {
             return Optional.empty();

@@ -11,15 +11,16 @@ public class Hint {
     private final List<Character> hintCharacterList;
 
     public Hint(List<Feedback> feedbackList, Word wordToGuess) {
-        hintCharacterList = calculateHint(feedbackList, wordToGuess);
+        this.hintCharacterList = new ArrayList<>();
+        calculateHint(feedbackList, wordToGuess);
     }
 
     public static Hint of(List<Feedback> feedbackList, Word wordToGuess) {
         return new Hint(feedbackList, wordToGuess);
     }
 
-    private List<Character> calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
-        List<Character> characters = calculateInitialCharacters(wordToGuess);
+    private void calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
+        calculateInitialCharacters(wordToGuess);
         List<Character> wordCharacters = wordToGuess.getWordCharacters();
 
         for (Feedback feedback : feedbackList) {
@@ -27,30 +28,26 @@ public class Hint {
             if (!marks.contains(INVALID)) {
                 for (int i = 0; i < wordToGuess.getLength(); i++) {
                     if (marks.get(i) == CORRECT) {
-                        characters.set(i, wordCharacters.get(i));
+                        this.hintCharacterList.set(i, wordCharacters.get(i));
                     }
                 }
 
             }
         }
-
-        return characters;
     }
 
-    private List<Character> calculateInitialCharacters(Word wordToGuess) {
-        List<Character> firstHint = new ArrayList<>();
+    private void calculateInitialCharacters(Word wordToGuess) {
         List<Character> wordArray = wordToGuess.getWordCharacters();
 
         for (int i = 0; i < wordArray.size(); i++) {
             if (i == 0) {
-                firstHint.add(wordArray.get(0));
-            } else firstHint.add('.');
+                this.hintCharacterList.add(wordArray.get(0));
+            } else this.hintCharacterList.add('.');
         }
-        return firstHint;
     }
 
     public List<Character> getHintCharacters() {
-        return hintCharacterList;
+        return this.hintCharacterList;
     }
 
     @Override
