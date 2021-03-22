@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
+import nl.hu.cisq1.lingo.trainer.application.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.UUID;
 
-@RestController //HATEOAS, STATUSCODE //todo vooral integratietest belanhrijk unit, roept hij serviec aan??
+@RestController //HATEOAS, STATUSCODE
 @RequestMapping("/trainer")
 public class TrainerWebRequestHandler {
     private final TrainerService service;
@@ -49,13 +50,13 @@ public class TrainerWebRequestHandler {
     }
 
 
-    @ExceptionHandler(value = InvalidGameStateException.class)
-    public ResponseEntity<String> igseHandler(InvalidGameStateException igse) {
-        return new ResponseEntity<>(igse.getMessage(), HttpStatus.NOT_FOUND); //TODO andere status code
+    @ExceptionHandler(value = NoGameFoundException.class)
+    public ResponseEntity<String> ngfeHandler(NoGameFoundException ngfe) {
+        return new ResponseEntity<>(ngfe.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = InvalidGuessException.class)
-    public ResponseEntity<String> igeHandler(InvalidGuessException ige) {
-        return new ResponseEntity<>(ige.getMessage(), HttpStatus.NOT_FOUND); //TODO andere status code
+    @ExceptionHandler(value = InvalidGameStateException.class)
+    public ResponseEntity<String> igseHandler(InvalidGameStateException igse) {
+        return new ResponseEntity<>(igse.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 }

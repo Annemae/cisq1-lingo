@@ -1,11 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import nl.hu.cisq1.lingo.CiTestConfiguration;
-import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
-import nl.hu.cisq1.lingo.trainer.presentation.dto.GuessDTORequest;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.*;
@@ -19,10 +15,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @SpringBootTest
 @Import(CiTestConfiguration.class)
@@ -83,5 +82,52 @@ class TrainerWebRequestHandlerIntegrationTest {
                 .andExpect(jsonPath("$.id").value(id));
     }
 
+    @Test
+    @DisplayName("get with wrong id throws exception")
+    void wrongIdThrowsNoGameFoundException() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/trainer/{id}", UUID.randomUUID());
 
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        String errorMessage = result.getResponse().getContentAsString();
+        assertEquals("Game was not found with given ID.", errorMessage);
+    }
+
+
+//    @Test
+//    @DisplayName("guess gives back correct values")
+//    void invalidGuessThrowsInvalidGuessException() throws Exception {
+//        RequestBuilder request = MockMvcRequestBuilders
+//                .post("/trainer/{id}/{guess}", id, "INVAD");
+//
+//        MvcResult result = mockMvc.perform(request)
+//                .andExpect(status().isNotAcceptable())
+//                .andReturn();
+//
+//        String errorMessage = result.getResponse().getContentAsString();
+//        assertEquals("Guess is invalid, because guess is not the right length or starts with wrong letter.", errorMessage);
+//    }
+
+    @Test
+    @DisplayName("guess gives back correct values")
+    void invalidGuessThrowsException() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/trainer/{id}/{guess}", id, "ACORN");
+
+        mockMvc.perform(request);
+        mockMvc.perform(request);
+        mockMvc.perform(request);
+        mockMvc.perform(request);
+        mockMvc.perform(request);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isNotAcceptable())
+                .andReturn();
+
+        String errorMessage = result.getResponse().getContentAsString();
+        assertEquals("This game isn't active anymore, you can't take a guess.", errorMessage);
+    }
 }

@@ -56,7 +56,7 @@ public class Feedback implements Serializable {
     public boolean isGuessValid() {
         if (this.marks.stream().noneMatch(mark -> mark == INVALID)) {
             return true;
-        } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length.");
+        } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length or starts with wrong letter.");
     }
 
     //CALCULATOR

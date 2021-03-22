@@ -3,9 +3,10 @@ package nl.hu.cisq1.lingo.trainer.presentation.dto;
 import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class ProgressDTOResponse {
+public class ProgressDTOResponse implements Serializable {
     private int score;
     private Feedback feedback;
     private Hint hint;
