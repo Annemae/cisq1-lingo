@@ -10,7 +10,6 @@ import nl.hu.cisq1.lingo.trainer.domain.game.strategy.WordLengthStrategy;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
