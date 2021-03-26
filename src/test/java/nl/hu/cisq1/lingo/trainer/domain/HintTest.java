@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class HintTest {
     private static final Word BREAD = Word.of("BREAD");
 
     @MethodSource
-    private static Stream<Arguments> provideHintExamplesWithFeedbackList() { //TODO later kijken of er nog een methode bij kan zoals Robin aangaf
+    private static Stream<Arguments> provideHintExamples() { //TODO later kijken of er nog een methode bij kan zoals Robin aangaf
         return Stream.of(
                 Arguments.of(Collections.emptyList(),
                         List.of('B', '.', '.', '.', '.')), //Testing if initial hint is correct by not giving any feedback.
@@ -47,13 +48,40 @@ class HintTest {
         );
     }
 
+    static Stream<Arguments> provideEqualsExamples() {
+        Hint hint = new Hint(Collections.emptyList(), BREAD);
+        return Stream.of(
+                Arguments.of(hint,
+                        hint,
+                        true),
+                Arguments.of(hint,
+                        null,
+                        false),
+                Arguments.of(hint,
+                        new Hint(Collections.emptyList(), Word.of("ACORN")),
+                        false
+                )
+        );
+    }
+
     @ParameterizedTest
-    @MethodSource("provideHintExamplesWithFeedbackList")
+    @MethodSource("provideHintExamples")
     @DisplayName("hint is correct with given feedback list")
     void hintIsCorrectWithGivenFeedbackList(List<Feedback> feedbackList, List<Character> expected) {
         Hint hint = Hint.of(feedbackList, BREAD); //WHEN
 
         assertEquals(expected, hint.getHintCharacters()); //THEN
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideEqualsExamples")
+    @DisplayName("test equals")
+    void equalsTest(Hint hintOne, Hint hintTwo, boolean isEqual) {
+        if (hintTwo != null) {
+            assertEquals(Objects.equals(hintOne.hashCode(), hintTwo.hashCode()), isEqual);
+
+            assertEquals(hintOne.equals(hintTwo), isEqual);
+        }
     }
 
     @Test

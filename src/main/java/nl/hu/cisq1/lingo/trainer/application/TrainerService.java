@@ -1,6 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.application;
 
-import javassist.NotFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
@@ -12,7 +11,6 @@ import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.UUID;
 
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
@@ -29,10 +27,8 @@ public class TrainerService {
     }
 
     private Game getGame(UUID id) {
-        Optional<Game> optionalGame = gameRepository.findById(id);
-        if (optionalGame.isPresent()) {
-            return optionalGame.get();
-        } else throw new NoGameFoundException("Game was not found with given ID.");
+        return this.gameRepository.findById(id)
+                .orElseThrow(() -> new NoGameFoundException("Game was not found with given ID."));
     }
 
     private void startNewRound(Game game) {

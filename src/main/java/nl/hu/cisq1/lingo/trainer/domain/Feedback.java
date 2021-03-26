@@ -70,7 +70,6 @@ public class Feedback implements Serializable {
         else {
             int index = 0;
             for (Character character : this.attemptCharacters) {
-
                 if (character.equals(wordToGuessCharacters.get(index))) {
                     this.marks.add(CORRECT);
                     wordToGuessCharacters.set(index, '_');

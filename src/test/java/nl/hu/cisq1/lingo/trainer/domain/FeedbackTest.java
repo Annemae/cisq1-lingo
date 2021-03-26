@@ -7,7 +7,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
@@ -38,6 +40,22 @@ class FeedbackTest {
                         List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID)),
                 Arguments.of(Feedback.of("BATH", BREAD),
                         List.of(INVALID, INVALID, INVALID, INVALID))
+        );
+    }
+
+    static Stream<Arguments> provideEqualsExamples() {
+        Feedback feedback = new Feedback("BREAD", BREAD);
+        return Stream.of(
+                Arguments.of(feedback,
+                        feedback,
+                        true),
+                Arguments.of(feedback,
+                        null,
+                        false),
+                Arguments.of(feedback,
+                        new Feedback("BREAD", Word.of("ACORN")),
+                        false
+                )
         );
     }
 
@@ -81,6 +99,17 @@ class FeedbackTest {
 
         assertThrows(InvalidGuessException.class, //WHEN AND THEN
                 feedback::isGuessValid);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideEqualsExamples")
+    @DisplayName("test equals")
+    void equalsTest(Feedback feedbackOne, Feedback feedbackTwo, boolean isEqual) {
+        if (feedbackTwo != null) {
+            assertEquals(Objects.equals(feedbackOne.hashCode(), feedbackTwo.hashCode()), isEqual);
+
+            assertEquals(feedbackOne.equals(feedbackTwo), isEqual);
+        }
     }
 
     @Test

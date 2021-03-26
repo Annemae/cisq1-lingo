@@ -46,7 +46,6 @@ public class Word implements Serializable {
         return length;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,6 +56,6 @@ public class Word implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, wordToGuess, length);
     }
 }

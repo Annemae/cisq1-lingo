@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StrategyConverterTest {
     private final StrategyConverter strategyConverter = new StrategyConverter();
-
+//todo fix op default als anders is
     @Test
     @DisplayName("convert to database column")
     void convertToDatabaseColumn() {

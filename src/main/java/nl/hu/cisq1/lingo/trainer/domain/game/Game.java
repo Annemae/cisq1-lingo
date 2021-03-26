@@ -106,8 +106,4 @@ public class Game implements Serializable {
     public WordLengthStrategy getWordLengthStrategy() {
         return wordLengthStrategy;
     }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 }

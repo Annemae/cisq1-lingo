@@ -52,7 +52,7 @@ class GameTest {
         assertEquals(expectedHintCharacters, gameProgress.getHint().getHintCharacters());
     }
 
-
+//gamestatus
     @Test
     @DisplayName("create a round")
     void createRoundWorks() {

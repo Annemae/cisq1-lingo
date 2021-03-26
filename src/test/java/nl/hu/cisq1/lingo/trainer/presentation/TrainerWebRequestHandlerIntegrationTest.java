@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -56,7 +55,9 @@ class TrainerWebRequestHandlerIntegrationTest {
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.score").value(0))
-                .andExpect(jsonPath("$.feedback").value(IsNull.nullValue()));
+                .andExpect(jsonPath("$.feedback").value(IsNull.nullValue()))
+                .andExpect(jsonPath("$.hint").exists())
+                .andExpect(jsonPath("$.id").exists());
     }
 
     @Test

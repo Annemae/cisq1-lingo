@@ -6,7 +6,6 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
-import nl.hu.cisq1.lingo.trainer.presentation.dto.GuessDTORequest;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -70,19 +69,5 @@ class TrainerWebRequestHandlerTest {
         trainerWebRequestHandler.showProgress(UUID.randomUUID()); //WHEN
 
         verify(trainerService, times(1)).showProgress(any()); //THEN
-    }
-
-    @Test
-    @DisplayName("start game gives back game result")
-    void startGame() {
-        when(trainerService.startGame())
-                .thenReturn(gameProgress);
-
-        TrainerWebRequestHandler trainerWebRequestHandler = new TrainerWebRequestHandler(trainerService);
-        ResponseEntity<ProgressDTOResponse> responseEntity = trainerWebRequestHandler.startGame();
-        ProgressDTOResponse progressDTOResponse = responseEntity.getBody();
-
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(gameProgress.getId(), progressDTOResponse.getId());
     }
 }
