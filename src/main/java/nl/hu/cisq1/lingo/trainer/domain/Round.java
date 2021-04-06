@@ -10,7 +10,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "round")
 public class Round implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "round_id")
@@ -22,11 +21,15 @@ public class Round implements Serializable {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Feedback> attempts;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Feedback initialFeedback;
+
     public Round() {
     }
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.attempts = new ArrayList<>();
+        this.initialFeedback = new Feedback("", wordToGuess);
     }
 
     public void takeGuess(String attempt) {
@@ -39,25 +42,22 @@ public class Round implements Serializable {
         return Hint.of(attempts, wordToGuess);
     }
 
+    //BOOLEAN
     public boolean isOver()  {
-        Optional<Feedback> lastFeedbackOptional = getRecentFeedback();
-        if(lastFeedbackOptional.isPresent()) {
-            Feedback lastFeedback = lastFeedbackOptional.get();
-            return lastFeedback.isWordGuessed();
-        } else return false;
+        Feedback lastFeedback = this.getRecentFeedback();
+        return lastFeedback.isWordGuessed();
     }
-
 
     //GETTERS
     public Word getWordToGuess() {
         return wordToGuess;
     }
 
-    public Optional<Feedback> getRecentFeedback() {
+    public Feedback getRecentFeedback() {
         if(attempts.isEmpty()) {
-            return Optional.empty();
+            return initialFeedback;
         }
-        return Optional.of(this.attempts.get(this.attempts.size() - 1));
+        return this.attempts.get(this.attempts.size() - 1);
     }
 
     public List<Feedback> getAllFeedback() {

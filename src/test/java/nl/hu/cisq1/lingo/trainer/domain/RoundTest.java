@@ -17,31 +17,55 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoundTest {
     private static final Word BREAD = Word.of("BREAD");
 
+    private static Stream<Arguments> provideGuessExamples() {
+        return Stream.of(
+                Arguments.of(Collections.emptyList(),
+                        0, List.of('B', '.', '.', '.', '.'),
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
+                Arguments.of(List.of("BINGO"),
+                        1, List.of('B', '.', '.', '.', '.'),
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
+                Arguments.of(List.of("BEARS", "BREAK"),
+                        2, List.of('B', 'R', 'E', 'A', '.'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
+                Arguments.of(List.of("BEARS", "BREAK", "BREAD"),
+                        3, List.of('B', 'R', 'E', 'A', 'D'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideGuessExamples")
+    @DisplayName("taking a guess works correctly")
+    void takeGuessWorks(List<String> guesses, int amountOfGuesses, List<Character> hintCharacters, List<Mark> marks) {
+        Round round = new Round(BREAD);
+
+        for(String guess : guesses) {
+            round.takeGuess(guess);
+        }
+
+        assertEquals(amountOfGuesses, round.amountOfGuesses());
+        assertEquals(hintCharacters, round.giveHint().getHintCharacters());
+        assertEquals(marks, round.getRecentFeedback().getMarks());
+    }
+
     @Test
     @DisplayName("round is over")
     void roundIsOver() {
-        Round round = new Round(BREAD); //GIVEN
+        Round round = new Round(BREAD);
 
-        round.takeGuess("BREAD"); //WHEN
+        round.takeGuess("BREAD");
 
-        assertTrue(round.isOver()); //THEN
+        assertTrue(round.isOver());
     }
 
     @Test
     @DisplayName("round is not over")
     void roundIsNotOver() {
-        Round round = new Round(BREAD); //GIVEN
+        Round round = new Round(BREAD);
 
-        round.takeGuess("BINGO"); //WHEN
+        round.takeGuess("BINGO");
 
-        assertFalse(round.isOver()); //THEN
-    }
-
-    @Test
-    @DisplayName("round is not over when it has just started")
-    void roundIsNotOverWhenRoundJustStarted() {
-        Round round = new Round(BREAD); //WHEN
-
-        assertFalse(round.isOver()); //THEN
+        assertFalse(round.isOver());
     }
 }

@@ -55,7 +55,7 @@ class TrainerWebRequestHandlerIntegrationTest {
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.score").value(0))
-                .andExpect(jsonPath("$.feedback").value(IsNull.nullValue()))
+                .andExpect(jsonPath("$.feedback").exists())
                 .andExpect(jsonPath("$.hint").exists())
                 .andExpect(jsonPath("$.id").exists());
     }

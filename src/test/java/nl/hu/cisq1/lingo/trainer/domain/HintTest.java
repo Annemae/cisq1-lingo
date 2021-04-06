@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HintTest {
     private static final Word BREAD = Word.of("BREAD");
 
-    static Stream<Arguments> provideHintExamples() {
+    private static Stream<Arguments> provideHintExamples() {
         return Stream.of(
                 Arguments.of(Collections.emptyList(),
                         List.of('B', '.', '.', '.', '.')), //Testing if initial hint is correct by not giving any feedback.
@@ -46,7 +46,7 @@ class HintTest {
         );
     }
 
-    static Stream<Arguments> provideEqualsExamples() {
+    private static Stream<Arguments> provideEqualsExamples() {
         Hint hint = new Hint(Collections.emptyList(), BREAD);
         return Stream.of(
                 Arguments.of(hint,

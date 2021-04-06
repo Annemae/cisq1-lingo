@@ -57,8 +57,12 @@ public class Feedback implements Serializable {
         } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length or starts with wrong letter.");
     }
 
-    //CALCULATOR
+    //CALCULATORS
     private void calculateMarks() {
+        if(attemptCharacters.isEmpty()) {
+            calculateInitialFeedback();
+        }
+
         List<Character> wordToGuessCharacters = this.wordToGuess.getWordCharacters();
         List<Character> absentCharacters = new ArrayList<>();
 
@@ -84,6 +88,14 @@ public class Feedback implements Serializable {
                 absentCharacters.remove(character);
                 this.marks.set(this.attemptCharacters.indexOf(character), PRESENT);
             }
+        }
+    }
+
+    private void calculateInitialFeedback() {
+        for (int i = 0; i < wordToGuess.getWordCharacters().size(); i++) {
+            if (i == 0) {
+                this.marks.add(CORRECT);
+            } else this.marks.add(ABSENT);
         }
     }
 

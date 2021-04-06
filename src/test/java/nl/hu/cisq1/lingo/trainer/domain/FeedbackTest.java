@@ -19,6 +19,8 @@ class FeedbackTest {
 
     private static Stream<Arguments> provideMarkExamples() {
         return Stream.of(
+                Arguments.of(Feedback.of("", BREAD),
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
                 Arguments.of(Feedback.of("BINGO", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
 
@@ -43,7 +45,7 @@ class FeedbackTest {
         );
     }
 
-    static Stream<Arguments> provideEqualsExamples() {
+    private static Stream<Arguments> provideEqualsExamples() {
         Feedback feedback = new Feedback("BREAD", BREAD);
         return Stream.of(
                 Arguments.of(feedback,

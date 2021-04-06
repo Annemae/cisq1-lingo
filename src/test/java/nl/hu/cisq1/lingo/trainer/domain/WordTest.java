@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WordTest {
-    static Stream<Arguments> provideEqualsExamples() {
+    private static Stream<Arguments> provideEqualsExamples() {
         Word word = new Word("BREAD");
         return Stream.of(
                 Arguments.of(word,
