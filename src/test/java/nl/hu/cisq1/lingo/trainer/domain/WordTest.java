@@ -6,13 +6,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WordTest {
-
     static Stream<Arguments> provideEqualsExamples() {
         Word word = new Word("BREAD");
         return Stream.of(
@@ -31,18 +29,17 @@ class WordTest {
 
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
-    @DisplayName("test equals")
-    void equalsTest(Word wordOne, Word wordTwo, boolean isEqual) {
+    @DisplayName("equals works correctly")
+    void equalsWorks(Word wordOne, Word wordTwo, boolean isEqual) {
         assertEquals(wordOne.equals(wordTwo), isEqual);
     }
 
     @Test
     @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
-        Word expected = new Word("WORD"); //WHEN
+        Word expected = new Word("WORD");
         Word actual = Word.of("WORD");
 
-        assertEquals(expected.hashCode(), actual.hashCode()); //THEN
-        assertEquals(expected, actual);
+        assertEquals(expected.hashCode(), actual.hashCode());
     }
 }

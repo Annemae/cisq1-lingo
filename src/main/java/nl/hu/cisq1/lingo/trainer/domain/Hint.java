@@ -19,6 +19,7 @@ public class Hint {
         return new Hint(feedbackList, wordToGuess);
     }
 
+    //CALCULATORS
     private void calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
         calculateInitialCharacters(wordToGuess);
         List<Character> wordCharacters = wordToGuess.getWordCharacters();
@@ -46,10 +47,12 @@ public class Hint {
         }
     }
 
+    //GETTER
     public List<Character> getHintCharacters() {
         return this.hintCharacterList;
     }
 
+    //EQUALS AND HASHCODE
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

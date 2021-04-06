@@ -10,7 +10,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "word")
 public class Word implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "word_id")
@@ -46,6 +45,7 @@ public class Word implements Serializable {
         return length;
     }
 
+    //EQUALS AND HASHCODE
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
