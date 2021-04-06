@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,8 +19,6 @@ class StateConverterTest {
                         "activestate"),
                 Arguments.of(new InactiveState(),
                         "inactivestate")
-//                Arguments.of(new InactiveState(),
-//                        "")
         );
     }
 
@@ -39,5 +38,13 @@ class StateConverterTest {
         State actual = stateConverter.convertToEntityAttribute(string);
 
         assertTrue(actual.getClass().isAssignableFrom(expected.getClass()));
+    }
+
+    @Test //todo uitgebreider
+    @DisplayName("convert to entity attribute default")
+    void convertToEntityAttributeDefault() {
+        State actual = stateConverter.convertToEntityAttribute("");
+
+        assertTrue(actual.getClass().isAssignableFrom(InactiveState.class));
     }
 }

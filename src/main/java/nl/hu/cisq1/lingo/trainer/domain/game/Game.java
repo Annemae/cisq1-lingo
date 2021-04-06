@@ -18,7 +18,6 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 @Entity
 @Table(name = "game")
 public class Game implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "game_id")
