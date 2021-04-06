@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HintTest {
     private static final Word BREAD = Word.of("BREAD");
 
-    @MethodSource
-    private static Stream<Arguments> provideHintExamples() { //TODO later kijken of er nog een methode bij kan zoals Robin aangaf
+    static Stream<Arguments> provideHintExamples() {
         return Stream.of(
                 Arguments.of(Collections.emptyList(),
                         List.of('B', '.', '.', '.', '.')), //Testing if initial hint is correct by not giving any feedback.
@@ -66,31 +65,26 @@ class HintTest {
 
     @ParameterizedTest
     @MethodSource("provideHintExamples")
-    @DisplayName("hint is correct with given feedback list")
+    @DisplayName("the correct hints are given back")
     void hintIsCorrectWithGivenFeedbackList(List<Feedback> feedbackList, List<Character> expected) {
-        Hint hint = Hint.of(feedbackList, BREAD); //WHEN
+        Hint hint = Hint.of(feedbackList, BREAD);
 
-        assertEquals(expected, hint.getHintCharacters()); //THEN
+        assertEquals(expected, hint.getHintCharacters());
     }
 
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
-    @DisplayName("test equals")
-    void equalsTest(Hint hintOne, Hint hintTwo, boolean isEqual) {
-        if (hintTwo != null) {
-            assertEquals(Objects.equals(hintOne.hashCode(), hintTwo.hashCode()), isEqual);
-
-            assertEquals(hintOne.equals(hintTwo), isEqual);
-        }
+    @DisplayName("equals test works")
+    void equalsWorks(Hint hintOne, Hint hintTwo, boolean isEqual) {
+        assertEquals(hintOne.equals(hintTwo), isEqual);
     }
 
     @Test
     @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
-        Hint expected = new Hint(Collections.emptyList(), BREAD); //WHEN
+        Hint expected = new Hint(Collections.emptyList(), BREAD);
         Hint actual = Hint.of(Collections.emptyList(), BREAD);
 
-        assertEquals(expected.hashCode(), actual.hashCode()); //THEN
-        assertEquals(expected, actual);
+        assertEquals(expected.hashCode(), actual.hashCode());
     }
 }

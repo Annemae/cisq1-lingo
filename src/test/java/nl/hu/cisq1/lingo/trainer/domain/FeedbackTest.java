@@ -61,7 +61,7 @@ class FeedbackTest {
 
     @ParameterizedTest
     @MethodSource("provideMarkExamples")
-    @DisplayName("the correct marks are displayed")
+    @DisplayName("the correct marks are given back")
     void marksAreCorrect(Feedback feedback, List<Mark> expected) {
         List<Mark> actual = feedback.getMarks();
 
