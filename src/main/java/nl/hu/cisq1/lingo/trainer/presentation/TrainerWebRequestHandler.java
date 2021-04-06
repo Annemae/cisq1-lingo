@@ -2,6 +2,7 @@ package nl.hu.cisq1.lingo.trainer.presentation;
 
 import nl.hu.cisq1.lingo.trainer.application.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
@@ -55,5 +56,10 @@ public class TrainerWebRequestHandler {
     @ExceptionHandler(value = InvalidGameStateException.class)
     public ResponseEntity<String> igseHandler(InvalidGameStateException igse) {
         return new ResponseEntity<>(igse.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(value = InvalidGuessException.class)
+    public ResponseEntity<String>  igeHandler(InvalidGuessException ige) {
+        return new ResponseEntity<>(ige.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

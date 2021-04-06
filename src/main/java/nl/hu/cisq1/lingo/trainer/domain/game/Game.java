@@ -102,6 +102,10 @@ public class Game implements Serializable {
         return id;
     }
 
+    public State getState() {
+        return state;
+    }
+
     public WordLengthStrategy getWordLengthStrategy() {
         return wordLengthStrategy;
     }

@@ -33,11 +33,7 @@ class WordTest {
     @MethodSource("provideEqualsExamples")
     @DisplayName("test equals")
     void equalsTest(Word wordOne, Word wordTwo, boolean isEqual) {
-        if (wordTwo != null) {
-            assertEquals(Objects.equals(wordOne.hashCode(), wordTwo.hashCode()), isEqual);
-
-            assertEquals(wordOne.equals(wordTwo), isEqual);
-        }
+        assertEquals(wordOne.equals(wordTwo), isEqual);
     }
 
     @Test

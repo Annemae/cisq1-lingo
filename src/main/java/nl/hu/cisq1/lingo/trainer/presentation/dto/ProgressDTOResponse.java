@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.presentation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 

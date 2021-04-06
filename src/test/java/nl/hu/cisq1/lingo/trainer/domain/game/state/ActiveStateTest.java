@@ -45,7 +45,7 @@ class ActiveStateTest {
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
-    @DisplayName("take guess works")
+    @DisplayName("take guess works correctly")
     void takeGuessWorks(List<String> attempts, int expectedScore, GameStatus status) {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();

@@ -1,78 +1,80 @@
 package nl.hu.cisq1.lingo.trainer.domain.game;
 
-import nl.hu.cisq1.lingo.trainer.domain.Mark;
-import nl.hu.cisq1.lingo.trainer.domain.Word;
-import nl.hu.cisq1.lingo.trainer.domain.game.Game;
-
-import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    private static final Word BREAD = Word.of("BREAD");
-
-    private static Stream<Arguments> provideGuessExamples() {
-        return Stream.of(
-                Arguments.of(List.of("BEARS"),
-                        0,
-                        List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT),
-                        List.of('B', '.', '.', '.', '.')),
-                Arguments.of(List.of("BREAD"),
-                        25,
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
-                        List.of('B', 'R', 'E', 'A', 'D'))
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideGuessExamples")
-    @DisplayName("give current progress works")
-    void giveProgressWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks, List<Character> expectedHintCharacters) {
-        Game game = new Game(new DefaultLengthStrategy());
-        game.createNewRound("BREAD");
-        for(String attempt : attempts) {
-            game.takeGuess(attempt);
-        }
-
-        GameProgress gameProgress = game.createGameProgress();
-
-        assertEquals(expectedScore, gameProgress.getScore());
-        assertEquals(expectedMarks, gameProgress.getFeedback().getMarks());
-        assertEquals(expectedHintCharacters, gameProgress.getHint().getHintCharacters());
-    }
-
-//gamestatus
     @Test
-    @DisplayName("create a round")
-    void createRoundWorks() {
+    @DisplayName("gives back correct gamestatus")
+    void gameStatus() {
+        Game game = new Game(new DefaultLengthStrategy());
+
+        assertEquals(PLAYING, game.getGameStatus());
+    }
+
+    @Test
+    @DisplayName("gives back correct gamestatus")
+    void gameStatus2() {
+        Game game = new Game(new DefaultLengthStrategy());
+
+        game.createNewRound("WORTH");
+
+        assertEquals(WAITING_FOR_ROUND, game.getGameStatus());
+    }
+
+    @Test
+    @DisplayName("gives back correct gamestatus")
+    void gameStatus3() {
+        Game game = new Game(new DefaultLengthStrategy());
+        game.createNewRound("WORTH");
+
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+
+        assertEquals(ELIMINATED, game.getGameStatus());
+    }
+
+    @Test
+    @DisplayName("gives back correct state")
+    void gameState() {
+        Game game = new Game(new DefaultLengthStrategy());
+
+        assertEquals(ActiveState.class, game.getState().getClass());
+    }
+
+    @Test
+    @DisplayName("gives back correct state")
+    void gameState2() {
+        Game game = new Game(new DefaultLengthStrategy());
+        game.createNewRound("WORTH");
+
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+        game.takeGuess("WRONG");
+
+
+        assertEquals(InactiveState.class, game.getState().getClass());
+    }
+
+
+    @Test
+    @DisplayName("gives back correct state")
+    void gameState223() {
         Game game = new Game(new DefaultLengthStrategy());
 
         game.createNewRound("WORTH");
 
         assertEquals(1, game.getRounds().size());
-        assertEquals(WAITING_FOR_ROUND, game.getGameStatus());
-    }
-
-    @Test
-    @DisplayName("current round is correct")
-    void giveCorrectCurrentRound() {
-        Game game = new Game(new DefaultLengthStrategy());
-        game.createNewRound("WORTH");
-        game.takeGuess("WORTH");
-
-        game.createNewRound("BREAD");
-
-        assertEquals(BREAD, game.getCurrentRound().getWordToGuess());
     }
 }

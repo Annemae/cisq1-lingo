@@ -18,6 +18,8 @@ class StateConverterTest {
                         "activestate"),
                 Arguments.of(new InactiveState(),
                         "inactivestate")
+//                Arguments.of(new InactiveState(),
+//                        "")
         );
     }
 

@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -22,7 +21,7 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(Feedback.of("BINGO", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
-                //PRESENT
+
                 Arguments.of(Feedback.of("BAARD", BREAD),
                         List.of(CORRECT, PRESENT, ABSENT, PRESENT, CORRECT)),
                 Arguments.of(Feedback.of("BEARS", BREAD),
@@ -34,6 +33,7 @@ class FeedbackTest {
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(Feedback.of("BREAD", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
+
                 Arguments.of(Feedback.of("CACAO", BREAD),
                         List.of(INVALID, INVALID, INVALID, INVALID, INVALID)),
                 Arguments.of(Feedback.of("BROTHER", BREAD),
@@ -63,62 +63,57 @@ class FeedbackTest {
     @MethodSource("provideMarkExamples")
     @DisplayName("the correct marks are displayed")
     void marksAreCorrect(Feedback feedback, List<Mark> expected) {
-        List<Mark> actual = feedback.getMarks(); //WHEN
+        List<Mark> actual = feedback.getMarks();
 
-        assertEquals(expected, actual); //THEN
+        assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("word is guessed correctly")
     void wordIsGuessed() {
-        Feedback feedback = Feedback.of("BREAD", BREAD); //WHEN
+        Feedback feedback = Feedback.of("BREAD", BREAD);
 
-        assertTrue(feedback.isWordGuessed()); //THEN
+        assertTrue(feedback.isWordGuessed());
     }
 
     @Test
     @DisplayName("word is guessed incorrectly")
     void wordIsNotGuessed() {
-        Feedback feedback = Feedback.of("BRAND", BREAD); //WHEN
+        Feedback feedback = Feedback.of("BRAND", BREAD);
 
-        assertFalse(feedback.isWordGuessed()); //THEN
+        assertFalse(feedback.isWordGuessed());
     }
 
     @Test
     @DisplayName("guess is valid if no letters are invalid")
     void guessIsValid() {
-        Feedback feedback = Feedback.of("BRAND", BREAD); //WHEN
+        Feedback feedback = Feedback.of("BRAND", BREAD);
 
-        assertTrue(feedback.isGuessValid()); //THEN
+        assertTrue(feedback.isGuessValid());
     }
 
     @Test
     @DisplayName("guess is invalid if all letters are invalid")
     void guessIsInvalid() {
-        Feedback feedback = Feedback.of("BROTHER", BREAD); //GIVEN
+        Feedback feedback = Feedback.of("BROTHER", BREAD);
 
-        assertThrows(InvalidGuessException.class, //WHEN AND THEN
+        assertThrows(InvalidGuessException.class,
                 feedback::isGuessValid);
     }
 
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
-    @DisplayName("test equals")
-    void equalsTest(Feedback feedbackOne, Feedback feedbackTwo, boolean isEqual) {
-        if (feedbackTwo != null) {
-            assertEquals(Objects.equals(feedbackOne.hashCode(), feedbackTwo.hashCode()), isEqual);
-
-            assertEquals(feedbackOne.equals(feedbackTwo), isEqual);
-        }
+    @DisplayName("equals works correctly")
+    void equalsWorks(Feedback feedbackOne, Feedback feedbackTwo, boolean isEqual) {
+        assertEquals(feedbackOne.equals(feedbackTwo), isEqual);
     }
 
     @Test
     @DisplayName("static constructor gives the same object back as new keyword")
     void staticConstructorWorks() {
-        Feedback expected = new Feedback("BREAD", BREAD); //WHEN
+        Feedback expected = new Feedback("BREAD", BREAD);
         Feedback actual = Feedback.of("BREAD", BREAD);
 
-        assertEquals(expected.hashCode(), actual.hashCode()); //THEN
-        assertEquals(expected, actual);
+        assertEquals(expected.hashCode(), actual.hashCode());
     }
 }

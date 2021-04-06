@@ -39,7 +39,7 @@ public class Round implements Serializable {
         return Hint.of(attempts, wordToGuess);
     }
 
-    public boolean isOver() {
+    public boolean isOver()  {
         Optional<Feedback> lastFeedbackOptional = getRecentFeedback();
         if(lastFeedbackOptional.isPresent()) {
             Feedback lastFeedback = lastFeedbackOptional.get();

@@ -39,7 +39,6 @@ public class Feedback implements Serializable {
         }
 
         this.wordToGuess = wordToGuess;
-
         this.marks = new ArrayList<>();
         calculateMarks();
     }

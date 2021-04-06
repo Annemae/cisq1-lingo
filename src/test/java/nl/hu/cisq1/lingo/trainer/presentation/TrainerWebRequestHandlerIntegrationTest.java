@@ -102,7 +102,7 @@ class TrainerWebRequestHandlerIntegrationTest {
 //    @DisplayName("guess gives back correct values")
 //    void invalidGuessThrowsInvalidGuessException() throws Exception {
 //        RequestBuilder request = MockMvcRequestBuilders
-//                .post("/trainer/{id}/{guess}", id, "INVAD");
+//                .post("/trainer/{id}/{guess}", id, "INVALID");
 //
 //        MvcResult result = mockMvc.perform(request)
 //                .andExpect(status().isNotAcceptable())
