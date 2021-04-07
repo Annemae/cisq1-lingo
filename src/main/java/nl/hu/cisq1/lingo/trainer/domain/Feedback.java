@@ -20,7 +20,7 @@ public class Feedback implements Serializable {
     private UUID id;
 
     @ElementCollection
-    private List<Character> attemptCharacters;
+    private final List<Character> attemptCharacters = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private Word wordToGuess;
@@ -29,30 +29,25 @@ public class Feedback implements Serializable {
     @ElementCollection(targetClass = Mark.class)
     private final List<Mark> marks = new ArrayList<>();
 
-    public Feedback() {
-    }
+    public Feedback() { }
     public Feedback(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
+
         calculateInitialFeedback();
     }
     public Feedback(String attempt, Word wordToGuess) {
-        this.attemptCharacters = new ArrayList<>();
         for (char character : attempt.toCharArray()) {
             this.attemptCharacters.add(character);
         }
 
         this.wordToGuess = wordToGuess;
+
         calculateMarks();
     }
+    public static Feedback of(String attempt, Word wordToGuess) { return new Feedback(attempt, wordToGuess); }
 
-    public static Feedback of(String attempt, Word wordToGuess) {
-        return new Feedback(attempt, wordToGuess);
-    }
 
-    //BOOLEANS
-    public boolean isWordGuessed() {
-        return this.marks.stream().allMatch(mark -> mark == CORRECT);
-    }
+    public boolean isWordGuessed() { return this.marks.stream().allMatch(mark -> mark == CORRECT); }
 
     public boolean isGuessValid() {
         if (this.marks.stream().noneMatch(mark -> mark == INVALID)) {
@@ -60,16 +55,17 @@ public class Feedback implements Serializable {
         } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length or starts with wrong letter.");
     }
 
-    //CALCULATORS
+
     private void calculateMarks() {
         List<Character> wordToGuessCharacters = this.wordToGuess.getWordCharacters();
         List<Character> absentCharacters = new ArrayList<>();
 
         if ((this.wordToGuess.getLength() != this.attemptCharacters.size()) ||
-                (!wordToGuessCharacters.get(0).equals(this.attemptCharacters.get(0))))
+                (!wordToGuessCharacters.get(0).equals(this.attemptCharacters.get(0)))) {
             this.attemptCharacters.forEach(character -> this.marks.add(INVALID));
-        else {
+        } else {
             int index = 0;
+
             for (Character character : this.attemptCharacters) {
                 if (character.equals(wordToGuessCharacters.get(index))) {
                     this.marks.add(CORRECT);
@@ -78,6 +74,7 @@ public class Feedback implements Serializable {
                     absentCharacters.add(character);
                     this.marks.add(ABSENT);
                 }
+
                 index += 1;
             }
         }
@@ -98,12 +95,10 @@ public class Feedback implements Serializable {
         }
     }
 
-    //GETTER
-    public List<Mark> getMarks() {
-        return this.marks;
-    }
 
-    //EQUALS AND HASHCODE
+    public List<Mark> getMarks() { return this.marks; }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

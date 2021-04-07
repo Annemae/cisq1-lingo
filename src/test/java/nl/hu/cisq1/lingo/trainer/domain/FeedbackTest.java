@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
@@ -20,6 +21,7 @@ class FeedbackTest {
         return Stream.of(
                 Arguments.of(new Feedback(BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
+
                 Arguments.of(Feedback.of("BINGO", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
 
@@ -30,8 +32,6 @@ class FeedbackTest {
                 Arguments.of(Feedback.of("BAAAN", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, CORRECT, ABSENT)),
 
-                Arguments.of(Feedback.of("BREAK", BREAD),
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(Feedback.of("BREAD", BREAD),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
 
@@ -47,16 +47,18 @@ class FeedbackTest {
     private static Stream<Arguments> provideEqualsExamples() {
         Feedback feedback = new Feedback("BREAD", BREAD);
         return Stream.of(
-                Arguments.of(feedback,
+                Arguments.of(true,
+                        new Feedback("BREAD", BREAD),
+                        new Feedback("BREAD", BREAD)),
+                Arguments.of(true,
                         feedback,
-                        true),
-                Arguments.of(feedback,
-                        null,
-                        false),
-                Arguments.of(feedback,
-                        new Feedback("BREAD", Word.of("ACORN")),
-                        false
-                )
+                        feedback),
+                Arguments.of(false,
+                        feedback,
+                        null),
+                Arguments.of(false,
+                        feedback,
+                        new Feedback("BREAD", Word.of("ACORN")))
         );
     }
 
@@ -105,8 +107,12 @@ class FeedbackTest {
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals works correctly")
-    void equalsWorks(Feedback feedbackOne, Feedback feedbackTwo, boolean isEqual) {
-        assertEquals(feedbackOne.equals(feedbackTwo), isEqual);
+    void equalsWorks(boolean expectedIsEqual, Feedback feedbackOne, Feedback feedbackTwo) {
+        if(feedbackTwo != null) {
+            assertEquals(expectedIsEqual, Objects.equals(feedbackOne.hashCode(), feedbackTwo.hashCode()));
+        }
+
+        assertEquals(expectedIsEqual, feedbackOne.equals(feedbackTwo));
     }
 
     @Test
