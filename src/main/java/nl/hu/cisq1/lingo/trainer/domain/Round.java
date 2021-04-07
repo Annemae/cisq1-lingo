@@ -28,7 +28,7 @@ public class Round implements Serializable {
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.attempts = new ArrayList<>();
-        this.initialFeedback = new Feedback("", wordToGuess);
+        this.initialFeedback = new Feedback(wordToGuess);
     }
 
     public void takeGuess(String attempt) {
@@ -43,6 +43,9 @@ public class Round implements Serializable {
 
     //BOOLEAN
     public boolean isOver()  {
+        if(this.attempts.size() >= 5) {
+            return true;
+        }
         Feedback lastFeedback = this.getRecentFeedback();
         return lastFeedback.isWordGuessed();
     }

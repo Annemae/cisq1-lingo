@@ -34,16 +34,17 @@ public class ActiveState implements State, Serializable {
 
         currentRound.takeGuess(attempt);
 
-        List<Feedback> allFeedback = currentRound.getAllFeedback();
+        Feedback lastFeedback = currentRound.getRecentFeedback();
+        lastFeedback.isGuessValid();
 
-        if (currentRound.isOver() && allFeedback.size() <= 5) {
+        if (currentRound.isOver() && lastFeedback.isWordGuessed()) {
             game.setGameStatus(PLAYING);
 
             int attempts = game.getCurrentRound().amountOfGuesses();
             int newScore = 5 * (5 - attempts) + 5;
             game.setScore(game.getScore() + newScore);
 
-        } else if (!currentRound.isOver() && allFeedback.size() >= 5) {
+        } else if (currentRound.isOver() && !lastFeedback.isWordGuessed()) {
             game.changeState(new InactiveState());
             game.setGameStatus(ELIMINATED);
         }

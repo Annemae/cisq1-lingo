@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
@@ -19,7 +18,7 @@ class FeedbackTest {
 
     private static Stream<Arguments> provideMarkExamples() {
         return Stream.of(
-                Arguments.of(Feedback.of("", BREAD),
+                Arguments.of(new Feedback(BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
                 Arguments.of(Feedback.of("BINGO", BREAD),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),

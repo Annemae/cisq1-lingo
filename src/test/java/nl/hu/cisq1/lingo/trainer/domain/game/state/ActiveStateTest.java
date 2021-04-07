@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
+import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
@@ -65,7 +66,7 @@ class ActiveStateTest {
         Game gameSpy = spy(Game.class);
         State activeState = new ActiveState();
 
-        activeState.createNewRound(Word.of("ATTEMPD"), gameSpy);
+        Round round = activeState.createNewRound(Word.of("ATTEMPD"), gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);
         activeState.takeGuess("ATTEMPT", gameSpy);
@@ -73,18 +74,20 @@ class ActiveStateTest {
         activeState.takeGuess("ATTEMPT", gameSpy);
 
         assertEquals(ELIMINATED, gameSpy.getGameStatus());
+        assertTrue(round.isOver());
+
         verify(gameSpy).changeState(ArgumentMatchers.any());
     }
 
     @Test
     @DisplayName("throws exception when round is already ongoing")
     void createRoundGivesError() {
-        Game game = new Game(new DefaultLengthStrategy()); //GIVEN
+        Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
 
-        activeState.createNewRound(BREAD, game); //WHEN
+        activeState.createNewRound(BREAD, game);
 
-        assertThrows(InvalidGameStateException.class, () -> //THEN
+        assertThrows(InvalidGameStateException.class, () ->
                 activeState.createNewRound(BREAD, game)
         );
     }

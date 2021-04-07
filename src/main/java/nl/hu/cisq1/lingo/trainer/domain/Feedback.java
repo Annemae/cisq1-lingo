@@ -27,9 +27,13 @@ public class Feedback implements Serializable {
 
     @Enumerated
     @ElementCollection(targetClass = Mark.class)
-    private List<Mark> marks;
+    private final List<Mark> marks = new ArrayList<>();
 
     public Feedback() {
+    }
+    public Feedback(Word wordToGuess) {
+        this.wordToGuess = wordToGuess;
+        calculateInitialFeedback();
     }
     public Feedback(String attempt, Word wordToGuess) {
         this.attemptCharacters = new ArrayList<>();
@@ -38,7 +42,6 @@ public class Feedback implements Serializable {
         }
 
         this.wordToGuess = wordToGuess;
-        this.marks = new ArrayList<>();
         calculateMarks();
     }
 
@@ -59,10 +62,6 @@ public class Feedback implements Serializable {
 
     //CALCULATORS
     private void calculateMarks() {
-        if(attemptCharacters.isEmpty()) {
-            calculateInitialFeedback();
-        }
-
         List<Character> wordToGuessCharacters = this.wordToGuess.getWordCharacters();
         List<Character> absentCharacters = new ArrayList<>();
 

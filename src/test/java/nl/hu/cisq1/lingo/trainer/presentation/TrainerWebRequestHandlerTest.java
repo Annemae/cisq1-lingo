@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
@@ -32,7 +33,7 @@ class TrainerWebRequestHandlerTest {
         gameProgress = new GameProgress(UUID.randomUUID(),
                 0,
                 GameStatus.WAITING_FOR_ROUND,
-                null,
+                new Feedback(Word.of("APPLE")),
                 new Hint(Collections.emptyList(), wordToGuess),
                 List.of(new Round(wordToGuess))
         );

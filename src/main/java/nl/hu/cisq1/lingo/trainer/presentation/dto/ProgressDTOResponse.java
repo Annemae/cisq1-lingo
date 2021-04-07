@@ -1,20 +1,24 @@
 package nl.hu.cisq1.lingo.trainer.presentation.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Hint;
+import nl.hu.cisq1.lingo.trainer.domain.Mark;
+import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 public class ProgressDTOResponse implements Serializable {
-    private int score;
-    private Feedback feedback;
-    private Hint hint;
     private UUID id;
+    private GameStatus gameStatus;
+    private int score;
+    private List<Mark> feedback;
+    private Hint hint;
 
-    public ProgressDTOResponse(UUID id, int score, Feedback feedback, Hint hint) {
+
+    public ProgressDTOResponse(UUID id, GameStatus gameStatus, int score, List<Mark> feedback, Hint hint) {
         this.id = id;
+        this.gameStatus = gameStatus;
         this.score = score;
         this.feedback = feedback;
         this.hint = hint;
@@ -24,11 +28,15 @@ public class ProgressDTOResponse implements Serializable {
         return this.id;
     }
 
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
     public int getScore() {
         return score;
     }
 
-    public Feedback getFeedback() {
+    public List<Mark> getFeedback() {
         return feedback;
     }
 

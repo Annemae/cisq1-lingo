@@ -6,32 +6,49 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WordTest {
-    private static Stream<Arguments> provideEqualsExamples() {
+    private static Stream<Arguments> provideTrueEqualsExamples() {
         Word word = new Word("BREAD");
         return Stream.of(
-                Arguments.of(word,
+                Arguments.of(true,
+                        new Word("BREAD"),
+                        new Word("BREAD")),
+                Arguments.of(true,
                         word,
-                        true),
-                Arguments.of(word,
-                        null,
-                        false),
-                Arguments.of(word,
-                        new Word("BETTER"),
-                        false
+                        word),
+                Arguments.of(false,
+                        word,
+                        null),
+                Arguments.of(false,
+                        word,
+                        new Word("BETTER")
                 )
         );
     }
 
     @ParameterizedTest
-    @MethodSource("provideEqualsExamples")
+    @MethodSource("provideTrueEqualsExamples")
     @DisplayName("equals works correctly")
-    void equalsWorks(Word wordOne, Word wordTwo, boolean isEqual) {
-        assertEquals(wordOne.equals(wordTwo), isEqual);
+    void equalsWorks(boolean expectedIsEqual, Word wordOne, Word wordTwo) {
+        if(wordTwo != null) {
+            assertEquals(expectedIsEqual, Objects.equals(wordOne.hashCode(), wordTwo.hashCode()));
+        }
+
+        assertEquals(expectedIsEqual, wordOne.equals(wordTwo));
+    }
+
+    @Test
+    @DisplayName("gives back correct word characters")
+    void wordCharactersWorks() {
+        Word word = Word.of("APPLE");
+
+        assertEquals(List.of('A', 'P', 'P', 'L', 'E'), word.getWordCharacters());
     }
 
     @Test

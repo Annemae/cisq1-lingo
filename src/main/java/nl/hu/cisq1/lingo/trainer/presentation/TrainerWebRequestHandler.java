@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController //HATEOAS, STATUSCODE
+@RestController //todo HATEOAS
 @RequestMapping("/trainer")
 public class TrainerWebRequestHandler {
     private final TrainerService service;
@@ -44,7 +44,7 @@ public class TrainerWebRequestHandler {
 
 
     private ProgressDTOResponse createProgressDTOResponse(GameProgress gameProgress) {
-        return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getScore(), gameProgress.getFeedback(), gameProgress.getHint());
+        return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
     }
 
 

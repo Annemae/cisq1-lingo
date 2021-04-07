@@ -108,7 +108,7 @@
                                         <limit>
                                             <counter>BRANCH</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.90</minimum>
+                                            <minimum>0.85</minimum>
                                         </limit>
                                         <limit>
                                             <counter>CLASS</counter>
@@ -139,7 +139,7 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
-                    <mutationThreshold>89</mutationThreshold>
+                    <mutationThreshold>85</mutationThreshold>
                     <timestampedReports>false</timestampedReports>
                 </configuration>
                 <version>1.6.2</version>

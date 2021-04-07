@@ -98,23 +98,23 @@ class TrainerWebRequestHandlerIntegrationTest {
     }
 
 
-//    @Test
-//    @DisplayName("guess gives back correct values")
-//    void invalidGuessThrowsInvalidGuessException() throws Exception {
-//        RequestBuilder request = MockMvcRequestBuilders
-//                .post("/trainer/{id}/{guess}", id, "INVALID");
-//
-//        MvcResult result = mockMvc.perform(request)
-//                .andExpect(status().isNotAcceptable())
-//                .andReturn();
-//
-//        String errorMessage = result.getResponse().getContentAsString();
-//        assertEquals("Guess is invalid, because guess is not the right length or starts with wrong letter.", errorMessage);
-//    }
+    @Test
+    @DisplayName("wrong guess throws exception")
+    void invalidGuessThrowsInvalidGuessException() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/trainer/{id}/{guess}", id, "INVALID");
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        String errorMessage = result.getResponse().getContentAsString();
+        assertEquals("Guess is invalid, because guess is not the right length or starts with wrong letter.", errorMessage);
+    }
 
     @Test
-    @DisplayName("guess gives back correct values")
-    void invalidGuessThrowsException() throws Exception {
+    @DisplayName("too many guesses throws exception")
+    void tooManyGuessesThrowsInvalidGameStateException() throws Exception { //todo othewr nam,e
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/trainer/{id}/{guess}", id, "ACORN");
 

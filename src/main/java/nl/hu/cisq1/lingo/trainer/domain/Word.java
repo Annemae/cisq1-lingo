@@ -21,31 +21,27 @@ public class Word implements Serializable {
     @Column
     private int length;
 
-    public Word() {
-    }
+    public Word() { }
     public Word(String wordToGuess) {
         this.wordToGuess = wordToGuess;
         this.length = this.getWordCharacters().size();
     }
+    public static Word of(String word) { return new Word(word); }
 
-    public static Word of(String word) {
-        return new Word(word);
-    }
 
-    //GETTERS
     public List<Character> getWordCharacters() {
         List<Character> wordCharacters = new ArrayList<>();
+
         for (char character : wordToGuess.toCharArray()) {
             wordCharacters.add(character);
         }
+
         return wordCharacters;
     }
 
-    public int getLength() {
-        return length;
-    }
+    public int getLength() { return length; }
 
-    //EQUALS AND HASHCODE
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

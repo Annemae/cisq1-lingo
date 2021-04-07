@@ -23,26 +23,30 @@ class GameTest {
                 Arguments.of(List.of("BEARS"),
                         0,
                         List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT),
-                        List.of('B', '.', '.', '.', '.')),
+                        List.of('B', '.', '.', '.', '.'),
+                        WAITING_FOR_ROUND),
                 Arguments.of(List.of("BEARS", "BORED"),
                         0,
                         List.of(CORRECT, ABSENT, PRESENT, PRESENT, CORRECT),
-                        List.of('B', '.', '.', '.', 'D')),
+                        List.of('B', '.', '.', '.', 'D'),
+                        WAITING_FOR_ROUND),
                 Arguments.of(List.of("BREAD"),
                         25,
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
-                        List.of('B', 'R', 'E', 'A', 'D')),
+                        List.of('B', 'R', 'E', 'A', 'D'),
+                        PLAYING),
                 Arguments.of(List.of("BEARS", "BORED", "BREAD"),
                         15,
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
-                        List.of('B', 'R', 'E', 'A', 'D'))
+                        List.of('B', 'R', 'E', 'A', 'D'),
+                        PLAYING)
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
     @DisplayName("give current progress works")
-    void giveProgressWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks, List<Character> expectedHintCharacters) {
+    void giveProgressWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks, List<Character> expectedHintCharacters, GameStatus expectedGameStatus) {
         Game game = new Game(new DefaultLengthStrategy());
         game.createNewRound("BREAD");
         for(String attempt : attempts) {
@@ -54,6 +58,7 @@ class GameTest {
         assertEquals(expectedScore, gameProgress.getScore());
         assertEquals(expectedMarks, gameProgress.getFeedback().getMarks());
         assertEquals(expectedHintCharacters, gameProgress.getHint().getHintCharacters());
+        assertEquals(expectedGameStatus, game.getGameStatus());
     }
 
     @Test
