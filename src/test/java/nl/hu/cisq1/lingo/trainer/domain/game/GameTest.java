@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,6 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
     private static Stream<Arguments> provideGuessExamples() {
         return Stream.of(
+                Arguments.of(Collections.emptyList(),
+                        0,
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT),
+                        List.of('B', '.', '.', '.', '.'),
+                        WAITING_FOR_ROUND),
                 Arguments.of(List.of("BEARS"),
                         0,
                         List.of(CORRECT, PRESENT, PRESENT, PRESENT, ABSENT),
@@ -49,7 +55,7 @@ class GameTest {
         );
     }
 
-    @ParameterizedTest //todo guess or progress
+    @ParameterizedTest
     @MethodSource("provideGuessExamples")
     @DisplayName("take guess works correctly")
     void takeGuessWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks,
@@ -68,59 +74,12 @@ class GameTest {
         assertEquals(expectedGameStatus, game.getGameStatus());
     }
 
-//    @Test //todo hier of niet?
-//    @DisplayName("create a round works")
-//    void createRoundWorks() {
-//        Game game = new Game(new DefaultLengthStrategy());
-//
-//        game.createNewRound("WORTH");
-//
-//        assertEquals(1, game.getRounds().size());
-//    }
-//
-//    @Test //todo hier of niet?
-//    @DisplayName("create a round works")
-//    void createRoundThrowsInvalidGameStateException() {
-//        Game game = new Game(new DefaultLengthStrategy());
-//
-//        game.createNewRound("WORTH");
-//
-//        assertThrows(InvalidGameStateException.class, () -> {
-//            game.createNewRound("WHILE");
-//        });
-//    }
-
     @Test
-    @DisplayName("gives back playing game status")
+    @DisplayName("gives back playing game status before starting round")
     void gameStatusPlaying() {
         Game game = new Game(new DefaultLengthStrategy());
 
         assertEquals(PLAYING, game.getGameStatus());
-    }
-
-    @Test
-    @DisplayName("gives back waiting for round game status")
-    void gameStatusWaitingForRound() {
-        Game game = new Game(new DefaultLengthStrategy());
-
-        game.createNewRound("WORTH");
-
-        assertEquals(WAITING_FOR_ROUND, game.getGameStatus());
-    }
-
-    @Test
-    @DisplayName("gives back eliminated game status")
-    void gameStatusEliminated() {
-        Game game = new Game(new DefaultLengthStrategy());
-        game.createNewRound("WORTH");
-
-        game.takeGuess("WRONG");
-        game.takeGuess("WRONG");
-        game.takeGuess("WRONG");
-        game.takeGuess("WRONG");
-        game.takeGuess("WRONG");
-
-        assertEquals(ELIMINATED, game.getGameStatus());
     }
 
     @Test

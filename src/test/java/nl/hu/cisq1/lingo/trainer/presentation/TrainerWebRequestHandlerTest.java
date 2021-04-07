@@ -7,18 +7,14 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
-import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TrainerWebRequestHandlerTest {
@@ -27,7 +23,7 @@ class TrainerWebRequestHandlerTest {
     private final TrainerWebRequestHandler trainerWebRequestHandler = new TrainerWebRequestHandler(trainerService);
 
     @BeforeEach
-    void setUp() {
+    void beforeEachTest() {
         Word wordToGuess = Word.of("APPLE");
 
         gameProgress = new GameProgress(UUID.randomUUID(),
@@ -42,33 +38,33 @@ class TrainerWebRequestHandlerTest {
     @Test
     @DisplayName("start game uses service start game")
     void startGameUsesServiceMethod() {
-        when(trainerService.startGame()) //GIVEN
+        when(trainerService.startGame())
                 .thenReturn(gameProgress);
 
-        trainerWebRequestHandler.startGame(); //WHEN
+        trainerWebRequestHandler.startGame();
 
-        verify(trainerService, times(1)).startGame(); //THEN
+        verify(trainerService, times(1)).startGame();
     }
 
     @Test
     @DisplayName("start game uses service start game")
     void takeGuessUsesServiceMethod() {
-        when(trainerService.guess(any(), any())) //GIVEN
+        when(trainerService.guess(any(), any()))
                 .thenReturn(gameProgress);
 
-        trainerWebRequestHandler.takeGuess(UUID.randomUUID(), "ANY"); //WHEN
+        trainerWebRequestHandler.takeGuess(UUID.randomUUID(), "ANY");
 
-        verify(trainerService, times(1)).guess(any(), any()); //THEN
+        verify(trainerService, times(1)).guess(any(), any());
     }
 
     @Test
     @DisplayName("start game uses service start game")
     void showProgressUsesServiceMethod() {
-        when(trainerService.showProgress(any())) //GIVEN
+        when(trainerService.showProgress(any()))
                 .thenReturn(gameProgress);
 
-        trainerWebRequestHandler.showProgress(UUID.randomUUID()); //WHEN
+        trainerWebRequestHandler.showProgress(UUID.randomUUID());
 
-        verify(trainerService, times(1)).showProgress(any()); //THEN
+        verify(trainerService, times(1)).showProgress(any());
     }
 }

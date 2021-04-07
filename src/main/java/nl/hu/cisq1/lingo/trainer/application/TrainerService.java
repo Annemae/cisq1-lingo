@@ -18,16 +18,16 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 @Service
 @Transactional
 public class TrainerService {
-    private final SpringGameRepository gameRepository;
+    private final SpringGameRepository repository;
     private final WordService wordService;
 
-    public TrainerService(SpringGameRepository gameRepository, WordService wordService) {
-        this.gameRepository = gameRepository;
+    public TrainerService(SpringGameRepository repository, WordService wordService) {
+        this.repository = repository;
         this.wordService = wordService;
     }
 
     private Game getGame(UUID id) {
-        return this.gameRepository.findById(id)
+        return this.repository.findById(id)
                 .orElseThrow(() -> new NoGameFoundException("Game was not found with given ID."));
     }
 
@@ -50,16 +50,14 @@ public class TrainerService {
         game.createNewRound(word);
     }
 
-    public GameProgress showProgress(UUID id) {
-        return this.getGame(id).createGameProgress();
-    }
+    public GameProgress showProgress(UUID id) { return this.getGame(id).createGameProgress(); }
 
     public GameProgress startGame() {
         Game game = new Game(new DefaultLengthStrategy());
 
         this.startNewRound(game);
 
-        return gameRepository.save(game).createGameProgress();
+        return repository.save(game).createGameProgress();
     }
 
     public GameProgress guess(UUID id, String attempt) {
@@ -67,10 +65,8 @@ public class TrainerService {
 
         game.takeGuess(attempt);
 
-        if(game.getGameStatus() == PLAYING) {
-            this.startNewRound(game);
-        }
+        if(game.getGameStatus() == PLAYING) { this.startNewRound(game); }
 
-        return gameRepository.save(game).createGameProgress();
+        return repository.save(game).createGameProgress();
     }
 }

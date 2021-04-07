@@ -3,7 +3,6 @@ package nl.hu.cisq1.lingo.trainer.presentation;
 import com.jayway.jsonpath.JsonPath;
 import nl.hu.cisq1.lingo.CiTestConfiguration;
 import nl.hu.cisq1.lingo.words.application.WordService;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -97,7 +96,6 @@ class TrainerWebRequestHandlerIntegrationTest {
         assertEquals("Game was not found with given ID.", errorMessage);
     }
 
-
     @Test
     @DisplayName("wrong guess throws exception")
     void invalidGuessThrowsInvalidGuessException() throws Exception {
@@ -114,7 +112,7 @@ class TrainerWebRequestHandlerIntegrationTest {
 
     @Test
     @DisplayName("too many guesses throws exception")
-    void tooManyGuessesThrowsInvalidGameStateException() throws Exception { //todo othewr nam,e
+    void tooManyGuessesThrowsInvalidGameStateException() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/trainer/{id}/{guess}", id, "ACORN");
 

@@ -22,7 +22,7 @@ class TrainerServiceTest {
     private final Game game = new Game(new DefaultLengthStrategy());
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEachTest() {
         when(wordService.provideRandomWord(any()))
                 .thenReturn("APPLE");
 
@@ -114,7 +114,7 @@ class TrainerServiceTest {
 
     @Test
     @DisplayName("start game uses word service")
-    void GuessUsesWordService() { //when word is guessed
+    void GuessUsesWordService() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
         trainerService.guess(UUID.randomUUID(), "APPLE");

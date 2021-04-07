@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController //todo HATEOAS
+@RestController
 @RequestMapping("/trainer")
 public class TrainerWebRequestHandler {
     private final TrainerService service;
 
-    public TrainerWebRequestHandler(TrainerService service) {
-        this.service = service;
-    }
+    public TrainerWebRequestHandler(TrainerService service) { this.service = service; }
 
     @PostMapping(value = "/start")
     public ResponseEntity<ProgressDTOResponse> startGame() {
@@ -44,7 +42,8 @@ public class TrainerWebRequestHandler {
 
 
     private ProgressDTOResponse createProgressDTOResponse(GameProgress gameProgress) {
-        return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
+        return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(),
+                gameProgress.getFeedback().getMarks(), gameProgress.getHint());
     }
 
 

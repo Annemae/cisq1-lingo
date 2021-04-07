@@ -38,7 +38,7 @@ class TrainerServiceIntegrationTest {
     private final Game game = new Game(new DefaultLengthStrategy());
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEachTest() {
         when(wordService.provideRandomWord(any()))
                 .thenReturn("APPLE");
 
