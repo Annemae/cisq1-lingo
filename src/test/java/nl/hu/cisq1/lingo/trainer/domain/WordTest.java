@@ -27,8 +27,7 @@ class WordTest {
                         null),
                 Arguments.of(false,
                         word,
-                        new Word("BETTER")
-                )
+                        new Word("BETTER"))
         );
     }
 

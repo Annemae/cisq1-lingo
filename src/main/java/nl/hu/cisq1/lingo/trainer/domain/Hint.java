@@ -8,20 +8,19 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.CORRECT;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 
 public class Hint {
-    private final List<Character> hintCharacterList;
+    private final List<Character> hintCharacterList = new ArrayList<>();
 
     public Hint(List<Feedback> feedbackList, Word wordToGuess) {
-        this.hintCharacterList = new ArrayList<>();
         calculateHint(feedbackList, wordToGuess);
     }
-
     public static Hint of(List<Feedback> feedbackList, Word wordToGuess) {
         return new Hint(feedbackList, wordToGuess);
     }
 
-    //CALCULATORS
+
     private void calculateHint(List<Feedback> feedbackList, Word wordToGuess) {
         calculateInitialCharacters(wordToGuess);
+
         List<Character> wordCharacters = wordToGuess.getWordCharacters();
 
         for (Feedback feedback : feedbackList) {
@@ -47,12 +46,10 @@ public class Hint {
         }
     }
 
-    //GETTER
-    public List<Character> getHintCharacters() {
-        return this.hintCharacterList;
-    }
 
-    //EQUALS AND HASHCODE
+    public List<Character> getHintCharacters() { return this.hintCharacterList; }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

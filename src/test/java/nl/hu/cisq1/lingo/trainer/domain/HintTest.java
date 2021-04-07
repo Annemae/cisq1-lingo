@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,47 +19,46 @@ class HintTest {
     private static Stream<Arguments> provideHintExamples() {
         return Stream.of(
                 Arguments.of(Collections.emptyList(),
-                        List.of('B', '.', '.', '.', '.')), //Testing if initial hint is correct by not giving any feedback.
-
+                        List.of('B', '.', '.', '.', '.')),
                 Arguments.of(List.of(Feedback.of("BINGO", BREAD)),
-                        List.of('B', '.', '.', '.', '.')), //Testing that it doesn't change after wrong 1st feedback.
-
+                        List.of('B', '.', '.', '.', '.')),
                 Arguments.of(List.of(Feedback.of("BRAND", BREAD)),
-                        List.of('B', 'R', '.', '.', 'D')), //Testing that it does change after good 1st feedback.
-
+                        List.of('B', 'R', '.', '.', 'D')),
                 Arguments.of(List.of(Feedback.of("BREAD", BREAD)),
-                        List.of('B', 'R', 'E', 'A', 'D')), //Testing that it gives back full hint after right 1st feedback.
+                        List.of('B', 'R', 'E', 'A', 'D')),
+
 
                 Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("BRAND", BREAD)),
-                        List.of('B', 'R', '.', '.', 'D')), //Testing that it gives back most recent hint after two feedbacks.
+                        List.of('B', 'R', '.', '.', 'D')),
+                Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("BRAND", BREAD), Feedback.of("BREAD", BREAD)),
+                        List.of('B', 'R', 'E', 'A', 'D')),
 
                 Arguments.of(List.of(Feedback.of("BATH", BREAD)),
-                        List.of('B', '.', '.', '.', '.')), //Testing it gives back most recent hint when invalid guess is given.
-
+                        List.of('B', '.', '.', '.', '.')),
                 Arguments.of(List.of(Feedback.of("BROTHER", BREAD)),
-                        List.of('B', '.', '.', '.', '.')), //Testing it gives back most recent hint when invalid guess is given.
-
+                        List.of('B', '.', '.', '.', '.')),
                 Arguments.of(List.of(Feedback.of("COCOA", BREAD)),
-                        List.of('B', '.', '.', '.', '.')), //Testing it gives back most recent hint when invalid guess is given.
-
+                        List.of('B', '.', '.', '.', '.')),
                 Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("COCOA", BREAD)),
-                        List.of('B', '.', '.', '.', '.')) //Testing that it gives back most recent hint after two feedbacks and last feedback is wrong.
+                        List.of('B', '.', '.', '.', '.'))
         );
     }
 
     private static Stream<Arguments> provideEqualsExamples() {
         Hint hint = new Hint(Collections.emptyList(), BREAD);
         return Stream.of(
-                Arguments.of(hint,
+                Arguments.of(true,
+                        new Hint(Collections.emptyList(), BREAD),
+                        new Hint(Collections.emptyList(), BREAD)),
+                Arguments.of(true,
                         hint,
-                        true),
-                Arguments.of(hint,
-                        null,
-                        false),
-                Arguments.of(hint,
-                        new Hint(Collections.emptyList(), Word.of("ACORN")),
-                        false
-                )
+                        hint),
+                Arguments.of(false,
+                        hint,
+                        null),
+                Arguments.of(false,
+                        hint,
+                        new Hint(Collections.emptyList(), Word.of("ACORN")))
         );
     }
 
@@ -74,8 +74,12 @@ class HintTest {
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals test works")
-    void equalsWorks(Hint hintOne, Hint hintTwo, boolean isEqual) {
-        assertEquals(hintOne.equals(hintTwo), isEqual);
+    void equalsWorks(boolean expectedIsEqual, Hint hintOne, Hint hintTwo) {
+        if(hintTwo != null) {
+            assertEquals(expectedIsEqual, Objects.equals(hintOne.hashCode(), hintTwo.hashCode()));
+        }
+
+        assertEquals(expectedIsEqual, hintOne.equals(hintTwo));
     }
 
     @Test
