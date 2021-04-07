@@ -3,6 +3,7 @@ package nl.hu.cisq1.lingo.trainer.domain.game;
 import nl.hu.cisq1.lingo.trainer.domain.Mark;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,23 +31,29 @@ class GameTest {
                         List.of(CORRECT, ABSENT, PRESENT, PRESENT, CORRECT),
                         List.of('B', '.', '.', '.', 'D'),
                         WAITING_FOR_ROUND),
+                Arguments.of(List.of("BEARS", "BORED", "BREAD"),
+                        15,
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
+                        List.of('B', 'R', 'E', 'A', 'D'),
+                        PLAYING),
                 Arguments.of(List.of("BREAD"),
                         25,
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
                         List.of('B', 'R', 'E', 'A', 'D'),
                         PLAYING),
-                Arguments.of(List.of("BEARS", "BORED", "BREAD"),
-                        15,
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT),
-                        List.of('B', 'R', 'E', 'A', 'D'),
-                        PLAYING)
+                Arguments.of(List.of("BEARS", "BORED", "BORED", "BORED", "BORED"),
+                        0,
+                        List.of(CORRECT, ABSENT, PRESENT, PRESENT, CORRECT),
+                        List.of('B', '.', '.', '.', 'D'),
+                        ELIMINATED)
         );
     }
 
-    @ParameterizedTest
+    @ParameterizedTest //todo guess or progress
     @MethodSource("provideGuessExamples")
-    @DisplayName("give current progress works")
-    void giveProgressWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks, List<Character> expectedHintCharacters, GameStatus expectedGameStatus) {
+    @DisplayName("take guess works correctly")
+    void takeGuessWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks,
+                           List<Character> expectedHintCharacters, GameStatus expectedGameStatus) {
         Game game = new Game(new DefaultLengthStrategy());
         game.createNewRound("BREAD");
         for(String attempt : attempts) {
@@ -61,15 +68,27 @@ class GameTest {
         assertEquals(expectedGameStatus, game.getGameStatus());
     }
 
-    @Test
-    @DisplayName("create a round works")
-    void createRoundWorks() {
-        Game game = new Game(new DefaultLengthStrategy());
-
-        game.createNewRound("WORTH");
-
-        assertEquals(1, game.getRounds().size());
-    }
+//    @Test //todo hier of niet?
+//    @DisplayName("create a round works")
+//    void createRoundWorks() {
+//        Game game = new Game(new DefaultLengthStrategy());
+//
+//        game.createNewRound("WORTH");
+//
+//        assertEquals(1, game.getRounds().size());
+//    }
+//
+//    @Test //todo hier of niet?
+//    @DisplayName("create a round works")
+//    void createRoundThrowsInvalidGameStateException() {
+//        Game game = new Game(new DefaultLengthStrategy());
+//
+//        game.createNewRound("WORTH");
+//
+//        assertThrows(InvalidGameStateException.class, () -> {
+//            game.createNewRound("WHILE");
+//        });
+//    }
 
     @Test
     @DisplayName("gives back playing game status")

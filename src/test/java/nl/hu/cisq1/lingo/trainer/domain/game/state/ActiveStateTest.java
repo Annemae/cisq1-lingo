@@ -2,11 +2,9 @@ package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.State;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,8 +48,8 @@ class ActiveStateTest {
     void takeGuessWorks(List<String> attempts, int expectedScore, GameStatus status) {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
-
         activeState.createNewRound(BREAD, game);
+
         for(String attempt : attempts) {
             activeState.takeGuess(attempt, game);
         }
@@ -61,7 +59,18 @@ class ActiveStateTest {
     }
 
     @Test
-    @DisplayName("gamestate turns inactive after too many tries")
+    @DisplayName("take guess throws error when invalid")
+    void takeGuessThrowsInvalidGuessException() {
+        Game game = new Game(new DefaultLengthStrategy());
+        State activeState = new ActiveState();
+
+        activeState.createNewRound(BREAD, game);
+
+        assertThrows(InvalidGuessException.class, () -> activeState.takeGuess("INVALID", game));
+    }
+
+    @Test
+    @DisplayName("game state turns inactive after too many tries")
     void checkIfGameStateTurnsInactiveWhenEliminated() {
         Game gameSpy = spy(Game.class);
         State activeState = new ActiveState();
@@ -74,14 +83,15 @@ class ActiveStateTest {
         activeState.takeGuess("ATTEMPT", gameSpy);
 
         assertEquals(ELIMINATED, gameSpy.getGameStatus());
+        assertEquals(InactiveState.class, gameSpy.getState().getClass());
         assertTrue(round.isOver());
 
         verify(gameSpy).changeState(ArgumentMatchers.any());
     }
 
     @Test
-    @DisplayName("throws exception when round is already ongoing")
-    void createRoundGivesError() {
+    @DisplayName("create round throws exception when a round is already ongoing")
+    void createRoundThrowsInvalidGameStateException() {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
 

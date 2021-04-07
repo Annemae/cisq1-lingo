@@ -51,7 +51,6 @@ class RoundTest {
         for(String guess : guesses) { round.takeGuess(guess); }
 
         Feedback lastFeedback = round.getLastFeedback();
-
         assertEquals(expectedAmountOfGuesses, round.amountOfGuesses());
         assertEquals(expectedHintCharacters, round.giveHint().getHintCharacters());
         assertEquals(expectedMarks, lastFeedback.getMarks());

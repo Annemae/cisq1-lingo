@@ -18,6 +18,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 @Entity
 @Table(name = "game")
 public class Game implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "game_id")
@@ -46,17 +47,12 @@ public class Game implements Serializable {
         this.wordLengthStrategy = wordLengthStrategy;
     }
 
-    public void changeState(State state) {
-        this.state = state;
-    }
 
-    public void createNewRound(String wordToGuess) {
-        state.createNewRound(Word.of(wordToGuess), this);
-    }
+    public void changeState(State state) { this.state = state; }
 
-    public void takeGuess(String attempt) {
-        state.takeGuess(attempt, this);
-    }
+    public void createNewRound(String wordToGuess) { state.createNewRound(Word.of(wordToGuess), this); }
+
+    public void takeGuess(String attempt) { state.takeGuess(attempt, this); }
 
     public GameProgress createGameProgress() {
         Round round = getCurrentRound();
@@ -66,46 +62,27 @@ public class Game implements Serializable {
         return new GameProgress(id, score, gameStatus, feedback, hint, rounds);
     }
 
-    //ROUND
-    public void addRound(Round round) {
-        rounds.add(round);
-    }
 
-    public Round getCurrentRound() {
-        return rounds.get(rounds.size() - 1);
-    }
+    public void addRound(Round round) { rounds.add(round); }
 
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
+    public List<Round> getRounds() { return this.rounds; }
 
-    public void setGameStatus(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
-    }
+    public Round getCurrentRound() { return rounds.get(rounds.size() - 1); }
 
-    //SCORE
-    public int getScore() {
-        return score;
-    }
 
-    public List<Round> getRounds() {
-        return this.rounds;
-    }
+    public GameStatus getGameStatus() { return gameStatus; }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+    public void setGameStatus(GameStatus gameStatus) { this.gameStatus = gameStatus; }
 
-    //GETTER
-    public UUID getId() {
-        return id;
-    }
 
-    public State getState() {
-        return state;
-    }
+    public int getScore() { return score; }
 
-    public WordLengthStrategy getWordLengthStrategy() {
-        return wordLengthStrategy;
-    }
+    public void setScore(int score) { this.score = score; }
+
+
+    public UUID getId() { return id; }
+
+    public State getState() { return state; }
+
+    public WordLengthStrategy getWordLengthStrategy() { return wordLengthStrategy; }
 }

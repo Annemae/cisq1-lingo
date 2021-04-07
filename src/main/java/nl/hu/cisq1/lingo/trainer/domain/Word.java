@@ -10,6 +10,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "word")
 public class Word implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "word_id")

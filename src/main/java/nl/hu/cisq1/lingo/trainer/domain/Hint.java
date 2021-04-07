@@ -8,6 +8,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.CORRECT;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 
 public class Hint {
+
     private final List<Character> hintCharacterList = new ArrayList<>();
 
     public Hint(List<Feedback> feedbackList, Word wordToGuess) {

@@ -14,6 +14,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 @Entity
 @Table(name = "feedback")
 public class Feedback implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "feedback_id")
