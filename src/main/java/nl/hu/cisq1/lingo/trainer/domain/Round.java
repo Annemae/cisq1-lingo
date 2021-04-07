@@ -18,7 +18,7 @@ public class Round implements Serializable {
     private Word wordToGuess;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Feedback> attempts;
+    private final List<Feedback> attempts = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     private Feedback initialFeedback;
@@ -27,46 +27,37 @@ public class Round implements Serializable {
     }
     public Round(Word wordToGuess) {
         this.wordToGuess = wordToGuess;
-        this.attempts = new ArrayList<>();
         this.initialFeedback = new Feedback(wordToGuess);
     }
 
     public void takeGuess(String attempt) {
         Feedback newFeedback = new Feedback(attempt, wordToGuess);
 
-        this.attempts.add(newFeedback);
+        if(!this.isOver()) { this.attempts.add(newFeedback); }
     }
 
-    public Hint giveHint() {
-        return Hint.of(attempts, wordToGuess);
-    }
+    public Hint giveHint() { return Hint.of(attempts, wordToGuess); }
 
-    //BOOLEAN
+
     public boolean isOver()  {
-        if(this.attempts.size() >= 5) {
-            return true;
-        }
-        Feedback lastFeedback = this.getRecentFeedback();
+        if(this.attempts.size() >= 5) { return true; }
+
+        Feedback lastFeedback = this.getLastFeedback();
+
         return lastFeedback.isWordGuessed();
     }
 
-    //GETTERS
-    public Word getWordToGuess() {
-        return wordToGuess;
-    }
 
-    public Feedback getRecentFeedback() {
+    public Word getWordToGuess() { return wordToGuess; }
+
+    public Feedback getLastFeedback() {
         if(attempts.isEmpty()) {
             return initialFeedback;
         }
         return this.attempts.get(this.attempts.size() - 1);
     }
 
-    public List<Feedback> getAllFeedback() {
-        return attempts;
-    }
+    public List<Feedback> getAllFeedback() { return attempts; }
 
-    public int amountOfGuesses() {
-        return attempts.size();
-    }
+    public int amountOfGuesses() { return attempts.size(); }
 }

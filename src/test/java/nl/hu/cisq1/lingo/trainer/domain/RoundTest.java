@@ -1,6 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,6 +21,7 @@ class RoundTest {
                 Arguments.of(Collections.emptyList(),
                         0, List.of('B', '.', '.', '.', '.'),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
+
                 Arguments.of(List.of("BINGO"),
                         1, List.of('B', '.', '.', '.', '.'),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
@@ -30,23 +30,31 @@ class RoundTest {
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(List.of("BEARS", "BREAK", "BREAD"),
                         3, List.of('B', 'R', 'E', 'A', 'D'),
-                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT))
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
+
+                Arguments.of(List.of("BEARS", "BREAK", "BREAK", "BREAK", "BREAK", "BREAD"),
+                        5, List.of('B', 'R', 'E', 'A', '.'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
+                Arguments.of(List.of("BEARS", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAD"),
+                        5, List.of('B', 'R', 'E', 'A', '.'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT))
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
     @DisplayName("taking a guess works correctly")
-    void takeGuessWorks(List<String> guesses, int amountOfGuesses, List<Character> hintCharacters, List<Mark> marks) {
+    void takeGuessWorks(List<String> guesses, int expectedAmountOfGuesses, List<Character> expectedHintCharacters,
+                        List<Mark> expectedMarks) {
         Round round = new Round(BREAD);
 
-        for(String guess : guesses) {
-            round.takeGuess(guess);
-        }
+        for(String guess : guesses) { round.takeGuess(guess); }
 
-        assertEquals(amountOfGuesses, round.amountOfGuesses());
-        assertEquals(hintCharacters, round.giveHint().getHintCharacters());
-        assertEquals(marks, round.getRecentFeedback().getMarks());
+        Feedback lastFeedback = round.getLastFeedback();
+
+        assertEquals(expectedAmountOfGuesses, round.amountOfGuesses());
+        assertEquals(expectedHintCharacters, round.giveHint().getHintCharacters());
+        assertEquals(expectedMarks, lastFeedback.getMarks());
     }
 
     @Test
@@ -55,6 +63,20 @@ class RoundTest {
         Round round = new Round(BREAD);
 
         round.takeGuess("BREAD");
+
+        assertTrue(round.isOver());
+    }
+
+    @Test
+    @DisplayName("round is over by too many attempts")
+    void roundIsOverTooManyAttempts() {
+        Round round = new Round(BREAD);
+
+        round.takeGuess("BINGO");
+        round.takeGuess("BINGO");
+        round.takeGuess("BINGO");
+        round.takeGuess("BINGO");
+        round.takeGuess("BINGO");
 
         assertTrue(round.isOver());
     }

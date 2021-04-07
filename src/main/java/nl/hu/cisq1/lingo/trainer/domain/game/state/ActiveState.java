@@ -6,7 +6,6 @@ import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 
 import java.io.Serializable;
-import java.util.List;
 
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
@@ -34,7 +33,7 @@ public class ActiveState implements State, Serializable {
 
         currentRound.takeGuess(attempt);
 
-        Feedback lastFeedback = currentRound.getRecentFeedback();
+        Feedback lastFeedback = currentRound.getLastFeedback();
         lastFeedback.isGuessValid();
 
         if (currentRound.isOver() && lastFeedback.isWordGuessed()) {

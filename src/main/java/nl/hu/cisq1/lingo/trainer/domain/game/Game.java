@@ -60,7 +60,7 @@ public class Game implements Serializable {
 
     public GameProgress createGameProgress() {
         Round round = getCurrentRound();
-        Feedback feedback = round.getRecentFeedback();
+        Feedback feedback = round.getLastFeedback();
         Hint hint = round.giveHint();
 
         return new GameProgress(id, score, gameStatus, feedback, hint, rounds);
