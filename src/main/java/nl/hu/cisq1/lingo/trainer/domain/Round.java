@@ -58,7 +58,5 @@ public class Round implements Serializable {
         return this.attempts.get(this.attempts.size() - 1);
     }
 
-    public List<Feedback> getAllFeedback() { return attempts; }
-
     public int amountOfGuesses() { return attempts.size(); }
 }

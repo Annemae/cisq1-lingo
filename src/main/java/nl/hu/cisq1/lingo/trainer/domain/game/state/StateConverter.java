@@ -4,9 +4,7 @@ import javax.persistence.AttributeConverter;
 
 public class StateConverter implements AttributeConverter<State, String> {
     @Override
-    public String convertToDatabaseColumn(State state) {
-        return state.getClass().getSimpleName().toLowerCase();
-    }
+    public String convertToDatabaseColumn(State state) { return state.getClass().getSimpleName().toLowerCase(); }
 
     @Override
     public State convertToEntityAttribute(String string) {

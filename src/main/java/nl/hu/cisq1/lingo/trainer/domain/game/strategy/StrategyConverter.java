@@ -10,7 +10,5 @@ public class StrategyConverter implements AttributeConverter<WordLengthStrategy,
     }
 
     @Override
-    public WordLengthStrategy convertToEntityAttribute(String string) {
-        return new DefaultLengthStrategy();
-    }
+    public WordLengthStrategy convertToEntityAttribute(String string) { return new DefaultLengthStrategy(); }
 }

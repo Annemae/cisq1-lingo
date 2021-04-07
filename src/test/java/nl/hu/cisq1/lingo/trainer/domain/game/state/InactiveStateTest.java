@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InactiveStateTest {
-
     @Test
-    @DisplayName("create new round works")
-    void createNewRoundGivesError() {
+    @DisplayName("create new round throws exception")
+    void createNewRoundThrowsInvalidGameStateException() {
         State inactiveState = new InactiveState();
 
         assertThrows(InvalidGameStateException.class, () ->
@@ -18,8 +17,8 @@ class InactiveStateTest {
     }
 
     @Test
-    @DisplayName("take guess works")
-    void takeGuessGivesError() {
+    @DisplayName("take guess throws exception")
+    void takeGuessThrowsInvalidGameStateException() {
         State inactiveState = new InactiveState();
 
         assertThrows(InvalidGameStateException.class, () ->

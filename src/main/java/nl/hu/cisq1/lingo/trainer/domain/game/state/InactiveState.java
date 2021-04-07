@@ -7,8 +7,7 @@ import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import java.io.Serializable;
 
 public class InactiveState implements State, Serializable {
-    public InactiveState() {
-    }
+    public InactiveState() { }
 
     @Override
     public Round createNewRound(Word wordToGuess, Game game) {
