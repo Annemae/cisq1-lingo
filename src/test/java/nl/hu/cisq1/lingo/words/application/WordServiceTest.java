@@ -3,6 +3,7 @@ package nl.hu.cisq1.lingo.words.application;
 import nl.hu.cisq1.lingo.words.data.SpringWordRepository;
 import nl.hu.cisq1.lingo.words.domain.Word;
 import nl.hu.cisq1.lingo.words.domain.exception.WordLengthNotSupportedException;
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,8 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -53,6 +53,30 @@ class WordServiceTest {
                 WordLengthNotSupportedException.class,
                 () -> service.provideRandomWord(5)
         );
+    }
+
+    @Test
+    @DisplayName("word does exist")
+    void wordDoesNotExist() {
+        SpringWordRepository mockRepository = mock(SpringWordRepository.class);
+        when(mockRepository.getWordByValue(any()))
+                .thenReturn(Optional.empty());
+
+        WordService wordService = new WordService(mockRepository);
+
+        assertFalse(wordService.wordDoesExist("word"));
+    }
+
+    @Test
+    @DisplayName("word does not exist")
+    void wordDoesExist() {
+        SpringWordRepository mockRepository = mock(SpringWordRepository.class);
+        when(mockRepository.getWordByValue(any()))
+                .thenReturn(Optional.of(new Word("woord")));
+
+        WordService wordService = new WordService(mockRepository);
+
+        assertTrue(wordService.wordDoesExist("woord"));
     }
 
     static Stream<Arguments> randomWordExamples() {
