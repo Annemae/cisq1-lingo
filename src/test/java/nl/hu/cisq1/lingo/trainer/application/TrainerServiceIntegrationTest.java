@@ -57,9 +57,11 @@ class TrainerServiceIntegrationTest {
         when(repository.findById(any()))
                 .thenReturn(Optional.empty());
 
+        UUID uuid = UUID.randomUUID();
+
         assertThrows(
                 NoGameFoundException.class,
-                () -> trainerService.guess(UUID.randomUUID(), "ATTEMPT")
+                () -> trainerService.guess(uuid, "ATTEMPT")
         );
 
         verify(repository, times(1)).findById(any());

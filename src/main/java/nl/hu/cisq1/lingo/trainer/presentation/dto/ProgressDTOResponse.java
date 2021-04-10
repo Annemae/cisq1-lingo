@@ -4,16 +4,15 @@ import nl.hu.cisq1.lingo.trainer.domain.Hint;
 import nl.hu.cisq1.lingo.trainer.domain.Mark;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-public class ProgressDTOResponse implements Serializable {
-    private UUID id;
-    private GameStatus gameStatus;
-    private int score;
-    private List<Mark> feedback;
-    private Hint hint;
+public class ProgressDTOResponse {
+    private final UUID id;
+    private final GameStatus gameStatus;
+    private final int score;
+    private final List<Mark> feedback;
+    private final Hint hint;
 
 
     public ProgressDTOResponse(UUID id, GameStatus gameStatus, int score, List<Mark> feedback, Hint hint) {

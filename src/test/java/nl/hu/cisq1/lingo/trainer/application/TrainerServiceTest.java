@@ -43,9 +43,11 @@ class TrainerServiceTest {
 
         TrainerService trainerService = new TrainerService(repository, wordService);
 
+        UUID uuid = UUID.randomUUID();
+
         assertThrows(
                 NoGameFoundException.class,
-                () -> trainerService.guess(UUID.randomUUID(), "ATTEMPT")
+                () -> trainerService.guess(uuid, "ATTEMPT")
         );
 
         verify(repository, times(1)).findById(any());
