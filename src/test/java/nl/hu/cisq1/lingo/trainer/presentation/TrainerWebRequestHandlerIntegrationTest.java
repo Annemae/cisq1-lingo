@@ -2,6 +2,7 @@ package nl.hu.cisq1.lingo.trainer.presentation;
 
 import com.jayway.jsonpath.JsonPath;
 import nl.hu.cisq1.lingo.CiTestConfiguration;
+import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ class TrainerWebRequestHandlerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private SpringGameRepository repository;
+
     @MockBean
     private WordService wordService;
 
@@ -43,6 +47,11 @@ class TrainerWebRequestHandlerIntegrationTest {
 
         String content = result.getResponse().getContentAsString();
         id = JsonPath.read(content, "id");
+    }
+
+    @AfterEach
+    void afterEachTest() {
+        this.repository.deleteById(UUID.fromString(id));
     }
 
     @Test
@@ -107,7 +116,7 @@ class TrainerWebRequestHandlerIntegrationTest {
                 .andReturn();
 
         String errorMessage = result.getResponse().getContentAsString();
-        assertEquals("Guess is invalid, because guess is not the right length or starts with wrong letter.", errorMessage);
+        assertEquals("Guess is invalid because guess is not the right length, not a word or starts with wrong letter.", errorMessage);
     }
 
     @Test

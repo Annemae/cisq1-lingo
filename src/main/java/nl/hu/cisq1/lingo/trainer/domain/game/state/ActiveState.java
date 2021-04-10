@@ -5,11 +5,9 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 
-import java.io.Serializable;
-
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
-public class ActiveState implements State, Serializable {
+public class ActiveState implements State {
 
     public ActiveState() {}
 

@@ -1,14 +1,13 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "round")
-public class Round implements Serializable {
+public class Round {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +33,7 @@ public class Round implements Serializable {
     public void takeGuess(String attempt) {
         Feedback newFeedback = new Feedback(attempt, wordToGuess);
 
-        if(!this.isOver()) { this.attempts.add(newFeedback); }
+        if(!isOver() && newFeedback.isGuessValid()) { this.attempts.add(newFeedback); }
     }
 
     public Hint giveHint() { return Hint.of(attempts, wordToGuess); }

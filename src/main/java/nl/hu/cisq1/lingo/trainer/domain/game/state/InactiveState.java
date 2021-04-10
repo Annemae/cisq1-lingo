@@ -4,9 +4,7 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 
-import java.io.Serializable;
-
-public class InactiveState implements State, Serializable {
+public class InactiveState implements State {
     public InactiveState() { }
 
     @Override

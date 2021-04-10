@@ -75,10 +75,6 @@ class HintTest {
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals test works")
     void equalsWorks(boolean expectedIsEqual, Hint hintOne, Hint hintTwo) {
-        if(hintTwo != null) {
-            assertEquals(expectedIsEqual, Objects.equals(hintOne.hashCode(), hintTwo.hashCode()));
-        }
-
         assertEquals(expectedIsEqual, hintOne.equals(hintTwo));
     }
 

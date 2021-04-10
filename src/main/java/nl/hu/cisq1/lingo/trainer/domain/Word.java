@@ -1,7 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "word")
-public class Word implements Serializable {
+public class Word {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

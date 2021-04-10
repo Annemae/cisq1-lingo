@@ -3,7 +3,6 @@ package nl.hu.cisq1.lingo.trainer.domain.game;
 import nl.hu.cisq1.lingo.trainer.domain.Mark;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.ActiveState;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

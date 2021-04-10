@@ -3,7 +3,6 @@ package nl.hu.cisq1.lingo.trainer.domain;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 
 @Entity
 @Table(name = "feedback")
-public class Feedback implements Serializable {
+public class Feedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,7 +52,7 @@ public class Feedback implements Serializable {
     public boolean isGuessValid() {
         if (this.marks.stream().noneMatch(mark -> mark == INVALID)) {
             return true;
-        } else throw new InvalidGuessException("Guess is invalid, because guess is not the right length or starts with wrong letter.");
+        } else throw new InvalidGuessException("Guess is invalid because guess is not the right length, not a word or starts with wrong letter.");
     }
 
 

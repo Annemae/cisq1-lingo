@@ -108,10 +108,6 @@ class FeedbackTest {
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals works correctly")
     void equalsWorks(boolean expectedIsEqual, Feedback feedbackOne, Feedback feedbackTwo) {
-        if(feedbackTwo != null) {
-            assertEquals(expectedIsEqual, Objects.equals(feedbackOne.hashCode(), feedbackTwo.hashCode()));
-        }
-
         assertEquals(expectedIsEqual, feedbackOne.equals(feedbackTwo));
     }
 

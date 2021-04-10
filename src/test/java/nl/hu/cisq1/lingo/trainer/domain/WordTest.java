@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,10 +34,6 @@ class WordTest {
     @MethodSource("provideTrueEqualsExamples")
     @DisplayName("equals works correctly")
     void equalsWorks(boolean expectedIsEqual, Word wordOne, Word wordTwo) {
-        if(wordTwo != null) {
-            assertEquals(expectedIsEqual, Objects.equals(wordOne.hashCode(), wordTwo.hashCode()));
-        }
-
         assertEquals(expectedIsEqual, wordOne.equals(wordTwo));
     }
 

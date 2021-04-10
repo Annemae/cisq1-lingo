@@ -1,12 +1,12 @@
 package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
-import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
-import nl.hu.cisq1.lingo.trainer.domain.game.strategy.WordLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
+import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
+import nl.hu.cisq1.lingo.trainer.domain.game.strategy.WordLengthStrategy;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 

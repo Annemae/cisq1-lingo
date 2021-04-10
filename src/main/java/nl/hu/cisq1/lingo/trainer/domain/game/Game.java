@@ -8,7 +8,6 @@ import nl.hu.cisq1.lingo.trainer.domain.game.strategy.StrategyConverter;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.WordLengthStrategy;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +16,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 
 @Entity
 @Table(name = "game")
-public class Game implements Serializable {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
