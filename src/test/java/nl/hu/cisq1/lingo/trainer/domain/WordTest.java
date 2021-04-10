@@ -12,34 +12,33 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WordTest {
-    private static Stream<Arguments> provideTrueEqualsExamples() {
-        Word word = new Word("BREAD");
+    private static Stream<Arguments> provideEqualsExamples() {
         return Stream.of(
                 Arguments.of(true,
                         new Word("BREAD"),
                         new Word("BREAD")),
-                Arguments.of(true,
-                        word,
-                        word),
                 Arguments.of(false,
-                        word,
+                        new Word("BREAD"),
                         null),
                 Arguments.of(false,
-                        word,
-                        new Word("BETTER"))
+                        new Word("BREAD"),
+                        new Word("BETTER")),
+                Arguments.of(false,
+                        new Word("BREAD"),
+                        new Feedback("EQUALS", Word.of("EQUALS")))
         );
     }
 
     @ParameterizedTest
-    @MethodSource("provideTrueEqualsExamples")
+    @MethodSource("provideEqualsExamples")
     @DisplayName("equals works correctly")
-    void equalsWorks(boolean expectedIsEqual, Word wordOne, Word wordTwo) {
-        assertEquals(expectedIsEqual, wordOne.equals(wordTwo));
+    void equalsWorks(boolean expectedIsEqual, Word word, Object object) {
+        assertEquals(expectedIsEqual, word.equals(object));
     }
 
     @Test
     @DisplayName("gives back correct word characters")
-    void wordCharactersWorks() {
+    void giveWordCharactersWorks() {
         Word word = Word.of("APPLE");
 
         assertEquals(List.of('A', 'P', 'P', 'L', 'E'), word.getWordCharacters());

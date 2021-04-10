@@ -18,13 +18,9 @@ public class Word {
     @Column
     private String wordToGuess;
 
-    @Column
-    private int length;
-
     public Word() { }
     public Word(String wordToGuess) {
         this.wordToGuess = wordToGuess;
-        this.length = this.getWordCharacters().size();
     }
     public static Word of(String word) { return new Word(word); }
 
@@ -39,7 +35,7 @@ public class Word {
         return wordCharacters;
     }
 
-    public int getLength() { return length; }
+    public int getLength() { return this.getWordCharacters().size(); }
 
 
     @Override
@@ -47,11 +43,11 @@ public class Word {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Word word = (Word) o;
-        return length == word.length && Objects.equals(id, word.id) && Objects.equals(wordToGuess, word.wordToGuess);
+        return Objects.equals(id, word.id) && Objects.equals(wordToGuess, word.wordToGuess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, wordToGuess, length);
+        return Objects.hash(id, wordToGuess);
     }
 }
