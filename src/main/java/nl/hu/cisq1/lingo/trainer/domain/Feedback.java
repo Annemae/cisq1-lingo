@@ -1,7 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +43,11 @@ public class Feedback {
     }
     public static Feedback of(String attempt, Word wordToGuess) { return new Feedback(attempt, wordToGuess); }
 
-
     public boolean isWordGuessed() { return this.marks.stream().allMatch(mark -> mark == CORRECT); }
 
     public boolean isGuessValid() {
-        if (this.marks.stream().noneMatch(mark -> mark == INVALID)) {
-            return true;
-        } else throw new InvalidGuessException("Guess is invalid because guess is not the right length, not a word or starts with wrong letter.");
+        return this.marks.stream().noneMatch(mark -> mark == INVALID);
     }
-
 
     private void calculateMarks() {
         List<Character> wordToGuessCharacters = this.wordToGuess.getWordCharacters();
@@ -90,20 +84,18 @@ public class Feedback {
         }
     }
 
-
     public List<Mark> getMarks() { return this.marks; }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Feedback feedback = (Feedback) o;
-        return Objects.equals(id, feedback.id) && Objects.equals(attemptCharacters, feedback.attemptCharacters) && Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
+        return Objects.equals(attemptCharacters, feedback.attemptCharacters) && Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, attemptCharacters, wordToGuess, marks);
+        return Objects.hash(attemptCharacters, wordToGuess, marks);
     }
 }

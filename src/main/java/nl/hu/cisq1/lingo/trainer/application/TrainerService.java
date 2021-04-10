@@ -1,8 +1,10 @@
 package nl.hu.cisq1.lingo.trainer.application;
 
+import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
@@ -62,6 +64,10 @@ public class TrainerService {
 
     public GameProgress guess(UUID id, String attempt) {
         Game game = this.getGame(id);
+
+        if(!wordService.wordDoesExist(attempt.toLowerCase())) {
+            throw new InvalidGuessException("Guess is invalid because guess is not the right length, not a word or starts with wrong letter.");
+        }
 
         game.takeGuess(attempt);
 

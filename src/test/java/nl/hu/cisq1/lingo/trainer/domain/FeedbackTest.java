@@ -1,6 +1,5 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,10 +43,14 @@ class FeedbackTest {
     }
 
     private static Stream<Arguments> provideEqualsExamples() {
+        Feedback feedback = new Feedback("BREAD", BREAD);
         return Stream.of(
                 Arguments.of(true,
                         new Feedback("BREAD", BREAD),
                         new Feedback("BREAD", BREAD)),
+                Arguments.of(true,
+                        feedback,
+                        feedback),
                 Arguments.of(false,
                         new Feedback("BREAD", BREAD),
                         null),
@@ -98,8 +101,7 @@ class FeedbackTest {
     void guessIsInvalid() {
         Feedback feedback = Feedback.of("BROTHER", BREAD);
 
-        assertThrows(InvalidGuessException.class,
-                feedback::isGuessValid);
+        assertFalse(feedback.isGuessValid());
     }
 
     @ParameterizedTest

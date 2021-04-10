@@ -2,9 +2,9 @@ package nl.hu.cisq1.lingo.trainer.domain.game.state;
 
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
-import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameStatus;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.exception.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,26 +26,26 @@ class ActiveStateTest {
     private static Stream<Arguments> provideGuessExamples() {
         return Stream.of(
                 Arguments.of(List.of("BEARS", "BEARS", "BEARS", "BEARS", "BEARS"),
-                        0, ELIMINATED),
+                        0, true, ELIMINATED),
                 Arguments.of(List.of("BEARS", "BEARS", "BEARS", "BEARS", "BREAD"),
-                        5, PLAYING),
+                        5, true, PLAYING),
                 Arguments.of(List.of("BEARS", "BEARS", "BEARS", "BREAD"),
-                        10, PLAYING),
+                        10, true, PLAYING),
                 Arguments.of(List.of("BEARS", "BEARS", "BREAD"),
-                        15, PLAYING),
+                        15, true, PLAYING),
                 Arguments.of(List.of("BEARS", "BREAD"),
-                        20, PLAYING),
+                        20, true, PLAYING),
                 Arguments.of(List.of("BREAD"),
-                        25, PLAYING),
+                        25, true, PLAYING),
                 Arguments.of(List.of("BEARS", "BEARS", "BEARS"),
-                        0, WAITING_FOR_ROUND)
+                        0, false, WAITING_FOR_ROUND)
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
     @DisplayName("take guess works correctly")
-    void takeGuessWorks(List<String> attempts, int expectedScore, GameStatus status) {
+    void takeGuessWorks(List<String> attempts, int expectedScore, boolean expectedRoundIsOver, GameStatus status) {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
         activeState.createNewRound(BREAD, game);
@@ -55,18 +55,8 @@ class ActiveStateTest {
         }
 
         assertEquals(expectedScore, game.getScore());
+        assertEquals(expectedRoundIsOver, game.getCurrentRound().isOver());
         assertEquals(status, game.getGameStatus());
-    }
-
-    @Test
-    @DisplayName("take guess throws error when invalid")
-    void takeGuessThrowsInvalidGuessException() {
-        Game game = new Game(new DefaultLengthStrategy());
-        State activeState = new ActiveState();
-
-        activeState.createNewRound(BREAD, game);
-
-        assertThrows(InvalidGuessException.class, () -> activeState.takeGuess("INVALID", game));
     }
 
     @Test

@@ -38,7 +38,6 @@ public class Round {
 
     public Hint giveHint() { return Hint.of(attempts, wordToGuess); }
 
-
     public boolean isOver()  {
         if(this.attempts.size() >= 5) { return true; }
 
@@ -46,7 +45,6 @@ public class Round {
 
         return lastFeedback.isWordGuessed();
     }
-
 
     public Word getWordToGuess() { return wordToGuess; }
 

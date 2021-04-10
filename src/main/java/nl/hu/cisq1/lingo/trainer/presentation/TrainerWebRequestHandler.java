@@ -1,10 +1,10 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
-import nl.hu.cisq1.lingo.trainer.application.NoGameFoundException;
+import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
-import nl.hu.cisq1.lingo.trainer.domain.game.state.InvalidGameStateException;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.exception.InvalidGameStateException;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.ProgressDTOResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -19,39 +19,47 @@ class RoundTest {
     private static Stream<Arguments> provideGuessExamples() {
         return Stream.of(
                 Arguments.of(Collections.emptyList(),
-                        0, List.of('B', '.', '.', '.', '.'),
+                        0, false, List.of('B', '.', '.', '.', '.'),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
 
                 Arguments.of(List.of("BINGO"),
-                        1, List.of('B', '.', '.', '.', '.'),
+                        1, false, List.of('B', '.', '.', '.', '.'),
                         List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
                 Arguments.of(List.of("BEARS", "BREAK"),
-                        2, List.of('B', 'R', 'E', 'A', '.'),
+                        2, false, List.of('B', 'R', 'E', 'A', '.'),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(List.of("BEARS", "BREAK", "BREAD"),
-                        3, List.of('B', 'R', 'E', 'A', 'D'),
+                        3, true, List.of('B', 'R', 'E', 'A', 'D'),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT)),
 
                 Arguments.of(List.of("BEARS", "BREAK", "BREAK", "BREAK", "BREAK", "BREAD"),
-                        5, List.of('B', 'R', 'E', 'A', '.'),
+                        5, true, List.of('B', 'R', 'E', 'A', '.'),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
                 Arguments.of(List.of("BEARS", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAK", "BREAD"),
-                        5, List.of('B', 'R', 'E', 'A', '.'),
+                        5, true, List.of('B', 'R', 'E', 'A', '.'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
+
+                Arguments.of(List.of("INVALID"),
+                        0, false, List.of('B', '.', '.', '.', '.'),
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
+                Arguments.of(List.of("BREAK", "INVALID"),
+                        1, false, List.of('B', 'R', 'E', 'A', '.'),
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT))
-        );
+                );
     }
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
     @DisplayName("taking a guess works correctly")
-    void takeGuessWorks(List<String> guesses, int expectedAmountOfGuesses, List<Character> expectedHintCharacters,
-                        List<Mark> expectedMarks) {
+    void takeGuessWorks(List<String> guesses, int expectedAmountOfGuesses, boolean expectedRoundIsOver,
+                        List<Character> expectedHintCharacters, List<Mark> expectedMarks) {
         Round round = new Round(BREAD);
 
         for(String guess : guesses) { round.takeGuess(guess); }
 
         Feedback lastFeedback = round.getLastFeedback();
         assertEquals(expectedAmountOfGuesses, round.amountOfGuesses());
+        assertEquals(expectedRoundIsOver, round.isOver());
         assertEquals(expectedHintCharacters, round.giveHint().getHintCharacters());
         assertEquals(expectedMarks, lastFeedback.getMarks());
     }

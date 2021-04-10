@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.CiTestConfiguration;
+import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
@@ -41,6 +42,9 @@ class TrainerServiceIntegrationTest {
     void beforeEachTest() {
         when(wordService.provideRandomWord(any()))
                 .thenReturn("APPLE");
+
+        when(wordService.wordDoesExist(any()))
+                .thenReturn(true);
 
         when(repository.findById(any()))
                 .thenReturn(Optional.of(game));

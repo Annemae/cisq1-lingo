@@ -42,11 +42,11 @@ public class Word {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Word word = (Word) o;
-        return Objects.equals(id, word.id) && Objects.equals(wordToGuess, word.wordToGuess);
+        return Objects.equals(wordToGuess, word.wordToGuess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, wordToGuess);
+        return Objects.hash(wordToGuess);
     }
 }

@@ -4,6 +4,7 @@ import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
+import nl.hu.cisq1.lingo.trainer.domain.game.state.exception.InvalidGameStateException;
 
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
@@ -32,7 +33,6 @@ public class ActiveState implements State {
         currentRound.takeGuess(attempt);
 
         Feedback lastFeedback = currentRound.getLastFeedback();
-        lastFeedback.isGuessValid();
 
         if (currentRound.isOver() && lastFeedback.isWordGuessed()) {
             game.setGameStatus(PLAYING);
@@ -41,7 +41,7 @@ public class ActiveState implements State {
             int newScore = 5 * (5 - attempts) + 5;
             game.setScore(game.getScore() + newScore);
 
-        } else if (currentRound.isOver() && !lastFeedback.isWordGuessed()) {
+        } else if (currentRound.isOver()) {
             game.changeState(new InactiveState());
             game.setGameStatus(ELIMINATED);
         }

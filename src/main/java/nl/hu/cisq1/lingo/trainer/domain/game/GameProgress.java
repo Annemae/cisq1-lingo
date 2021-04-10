@@ -7,12 +7,12 @@ import nl.hu.cisq1.lingo.trainer.domain.Round;
 import java.util.*;
 
 public class GameProgress {
-    private UUID id;
-    private int score;
-    private GameStatus gameStatus;
-    private Feedback feedback;
-    private Hint hint;
-    private List<Round> rounds;
+    private final UUID id;
+    private final int score;
+    private final GameStatus gameStatus;
+    private final Feedback feedback;
+    private final Hint hint;
+    private final List<Round> rounds;
 
     public GameProgress(UUID id, int score, GameStatus gameStatus, Feedback feedback, Hint hint, List<Round> rounds) {
         this.id = id;

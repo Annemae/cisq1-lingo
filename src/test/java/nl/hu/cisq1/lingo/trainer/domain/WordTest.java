@@ -13,10 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WordTest {
     private static Stream<Arguments> provideEqualsExamples() {
+        Word word = new Word("BREAD");
         return Stream.of(
                 Arguments.of(true,
                         new Word("BREAD"),
                         new Word("BREAD")),
+                Arguments.of(true,
+                        word,
+                        word),
                 Arguments.of(false,
                         new Word("BREAD"),
                         null),

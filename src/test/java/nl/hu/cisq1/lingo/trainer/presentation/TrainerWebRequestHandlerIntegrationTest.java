@@ -40,7 +40,10 @@ class TrainerWebRequestHandlerIntegrationTest {
     @BeforeEach
     void beforeEachTest() throws Exception {
         when(wordService.provideRandomWord(any()))
-                .thenReturn("APPLE");
+                .thenReturn("AARDE");
+
+        when(wordService.wordDoesExist(any()))
+                .thenReturn(true);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                 .post("/trainer/start")).andReturn();
@@ -84,7 +87,7 @@ class TrainerWebRequestHandlerIntegrationTest {
     void guessWorks() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/trainer/{id}/{guess}", id, "APPLE");
+                .post("/trainer/{id}/{guess}", id, "AARDE");
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -111,6 +114,9 @@ class TrainerWebRequestHandlerIntegrationTest {
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/trainer/{id}/{guess}", id, "INVALID");
 
+        when(wordService.wordDoesExist(any()))
+                .thenReturn(false);
+
         MvcResult result = mockMvc.perform(request)
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -123,7 +129,7 @@ class TrainerWebRequestHandlerIntegrationTest {
     @DisplayName("too many guesses throws exception")
     void tooManyGuessesThrowsInvalidGameStateException() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/trainer/{id}/{guess}", id, "ACORN");
+                .post("/trainer/{id}/{guess}", id, "AASJE");
 
         mockMvc.perform(request);
         mockMvc.perform(request);

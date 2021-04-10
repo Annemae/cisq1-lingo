@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +29,8 @@ class HintTest {
 
                 Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("BRAND", BREAD)),
                         List.of('B', 'R', '.', '.', 'D')),
-                Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("BRAND", BREAD), Feedback.of("BREAD", BREAD)),
+                Arguments.of(List.of(Feedback.of("BINGO", BREAD), Feedback.of("BRAND", BREAD),
+                        Feedback.of("BREAD", BREAD)),
                         List.of('B', 'R', 'E', 'A', 'D')),
 
                 Arguments.of(List.of(Feedback.of("BATH", BREAD)),
@@ -54,11 +54,14 @@ class HintTest {
                         hint,
                         hint),
                 Arguments.of(false,
-                        hint,
+                        new Hint(Collections.emptyList(), BREAD),
                         null),
                 Arguments.of(false,
-                        hint,
-                        new Hint(Collections.emptyList(), Word.of("ACORN")))
+                        new Hint(Collections.emptyList(), BREAD),
+                        new Hint(Collections.emptyList(), Word.of("ACORN"))),
+                Arguments.of(false,
+                        new Hint(Collections.emptyList(), BREAD),
+                        new Word("ACORN"))
         );
     }
 
@@ -73,9 +76,9 @@ class HintTest {
 
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
-    @DisplayName("equals test works")
-    void equalsWorks(boolean expectedIsEqual, Hint hintOne, Hint hintTwo) {
-        assertEquals(expectedIsEqual, hintOne.equals(hintTwo));
+    @DisplayName("equals works correctly")
+    void equalsWorks(boolean expectedIsEqual, Hint hint, Object object)  {
+        assertEquals(expectedIsEqual, hint.equals(object));
     }
 
     @Test
