@@ -22,7 +22,7 @@ class WordTest {
                         null),
                 Arguments.of(false,
                         new Word("BREAD"),
-                        new Word("BETTER")),
+                        new Word("BROOD")),
                 Arguments.of(false,
                         new Word("BREAD"),
                         new Feedback("EQUALS", Word.of("EQUALS")))

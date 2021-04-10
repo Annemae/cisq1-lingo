@@ -44,20 +44,19 @@ class FeedbackTest {
     }
 
     private static Stream<Arguments> provideEqualsExamples() {
-        Feedback feedback = new Feedback("BREAD", BREAD);
         return Stream.of(
                 Arguments.of(true,
                         new Feedback("BREAD", BREAD),
                         new Feedback("BREAD", BREAD)),
-                Arguments.of(true,
-                        feedback,
-                        feedback),
                 Arguments.of(false,
-                        feedback,
+                        new Feedback("BREAD", BREAD),
                         null),
                 Arguments.of(false,
-                        feedback,
-                        new Feedback("BREAD", Word.of("ACORN")))
+                        new Feedback("BREAD", BREAD),
+                        new Feedback("BREAD", Word.of("BROOD"))),
+                Arguments.of(false,
+                        new Feedback("BREAD", BREAD),
+                        new Word("BREAD"))
         );
     }
 
@@ -106,8 +105,8 @@ class FeedbackTest {
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals works correctly")
-    void equalsWorks(boolean expectedIsEqual, Feedback feedbackOne, Feedback feedbackTwo) {
-        assertEquals(expectedIsEqual, feedbackOne.equals(feedbackTwo));
+    void equalsWorks(boolean expectedIsEqual, Feedback feedback, Object object) {
+        assertEquals(expectedIsEqual, feedback.equals(object));
     }
 
     @Test

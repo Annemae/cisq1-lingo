@@ -8,7 +8,6 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.CORRECT;
 import static nl.hu.cisq1.lingo.trainer.domain.Mark.INVALID;
 
 public class Hint {
-
     private final List<Character> hintCharacterList = new ArrayList<>();
 
     public Hint(List<Feedback> feedbackList, Word wordToGuess) {
@@ -40,10 +39,9 @@ public class Hint {
     private void calculateInitialCharacters(Word wordToGuess) {
         List<Character> wordArray = wordToGuess.getWordCharacters();
 
-        for (int i = 0; i < wordArray.size(); i++) {
-            if (i == 0) {
-                this.hintCharacterList.add(wordArray.get(0));
-            } else this.hintCharacterList.add('.');
+        this.hintCharacterList.add(wordArray.get(0));
+        for (int i = 1; i < wordArray.size(); i++) {
+            this.hintCharacterList.add('.');
         }
     }
 

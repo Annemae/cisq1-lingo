@@ -13,7 +13,6 @@ import static nl.hu.cisq1.lingo.trainer.domain.Mark.*;
 @Entity
 @Table(name = "feedback")
 public class Feedback {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "feedback_id")
@@ -64,34 +63,30 @@ public class Feedback {
                 (!wordToGuessCharacters.get(0).equals(this.attemptCharacters.get(0)))) {
             this.attemptCharacters.forEach(character -> this.marks.add(INVALID));
         } else {
-            int index = 0;
-
-            for (Character character : this.attemptCharacters) {
-                if (character.equals(wordToGuessCharacters.get(index))) {
+            for (int i = 0; i < this.attemptCharacters.size(); i++) {
+                Character character = this.attemptCharacters.get(i);
+                if (character.equals(wordToGuessCharacters.get(i))) {
                     this.marks.add(CORRECT);
-                    wordToGuessCharacters.set(index, '_');
-                }else {
-                    absentCharacters.add(character);
+                    wordToGuessCharacters.set(i, '_');
+                } else {
                     this.marks.add(ABSENT);
+                    absentCharacters.add(character);
                 }
-
-                index += 1;
             }
         }
 
         for (Character character : this.attemptCharacters) {
             if(absentCharacters.contains(character) && wordToGuessCharacters.contains(character)){
-                absentCharacters.remove(character);
                 this.marks.set(this.attemptCharacters.indexOf(character), PRESENT);
+                absentCharacters.remove(character);
             }
         }
     }
 
     private void calculateInitialFeedback() {
-        for (int i = 0; i < wordToGuess.getWordCharacters().size(); i++) {
-            if (i == 0) {
-                this.marks.add(CORRECT);
-            } else this.marks.add(ABSENT);
+        this.marks.add(CORRECT);
+        for (int i = 1; i < wordToGuess.getWordCharacters().size(); i++) {
+            this.marks.add(ABSENT);
         }
     }
 
