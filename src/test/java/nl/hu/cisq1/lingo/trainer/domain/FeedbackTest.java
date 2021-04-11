@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import nl.hu.cisq1.lingo.trainer.domain.game.state.InactiveState;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,10 +57,10 @@ class FeedbackTest {
                         null),
                 Arguments.of(false,
                         new Feedback("BREAD", BREAD),
-                        new Feedback("BREAD", Word.of("BROOD"))),
+                        new Feedback("ISOLATE", Word.of("ISOLATE"))),
                 Arguments.of(false,
                         new Feedback("BREAD", BREAD),
-                        new Word("BREAD"))
+                        new InactiveState())
         );
     }
 

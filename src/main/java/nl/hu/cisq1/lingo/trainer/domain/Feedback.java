@@ -91,7 +91,8 @@ public class Feedback {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Feedback feedback = (Feedback) o;
-        return Objects.equals(attemptCharacters, feedback.attemptCharacters) && Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
+        return Objects.equals(attemptCharacters, feedback.attemptCharacters) &&
+                Objects.equals(wordToGuess, feedback.wordToGuess) && Objects.equals(marks, feedback.marks);
     }
 
     @Override

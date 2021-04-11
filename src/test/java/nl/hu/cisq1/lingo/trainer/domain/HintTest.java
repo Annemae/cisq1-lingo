@@ -58,10 +58,10 @@ class HintTest {
                         null),
                 Arguments.of(false,
                         new Hint(Collections.emptyList(), BREAD),
-                        new Hint(Collections.emptyList(), Word.of("ACORN"))),
+                        new Hint(Collections.emptyList(), Word.of("BROTHER"))),
                 Arguments.of(false,
                         new Hint(Collections.emptyList(), BREAD),
-                        new Word("ACORN"))
+                        new Word("BROTHER"))
         );
     }
 
