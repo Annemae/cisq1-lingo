@@ -37,7 +37,7 @@ class TrainerWebRequestHandlerTest {
     }
 
     @Test
-    @DisplayName("start game uses service start game")
+    @DisplayName("start game uses start game in service")
     void startGameUsesServiceMethod() {
         when(trainerService.startGame())
                 .thenReturn(gameProgress);
@@ -48,7 +48,7 @@ class TrainerWebRequestHandlerTest {
     }
 
     @Test
-    @DisplayName("start game uses service start game")
+    @DisplayName("start game uses start game in service")
     void takeGuessUsesServiceMethod() {
         when(trainerService.guess(any(), any()))
                 .thenReturn(gameProgress);
@@ -59,7 +59,7 @@ class TrainerWebRequestHandlerTest {
     }
 
     @Test
-    @DisplayName("start game uses service start game")
+    @DisplayName("start game uses start game in service")
     void showProgressUsesServiceMethod() {
         when(trainerService.showProgress(any()))
                 .thenReturn(gameProgress);
