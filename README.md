@@ -9,6 +9,4 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Annemae_cisq1-lingo&metric=security_rating)](https://sonarcloud.io/dashboard?id=Annemae_cisq1-lingo)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Annemae_cisq1-lingo&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Annemae_cisq1-lingo)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Annemae_cisq1-lingo&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Annemae_cisq1-lingo)
-
-
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=Annemae_cisq1-lingo)

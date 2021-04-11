@@ -2,52 +2,97 @@
 
 ## A1:2017 Injection
 
-### Description
+### Descriptie
+_Wat houdt de vulnerability in?_
+
 Injection gaat over de mogelijkheid om data
-door te geven aan een interpreter met kwaadaardige intenties. Dit kan met elke soorten inputs, enviromental
-variables, parameters, interne en externe web services en elke soort gebruikers.
+door te geven aan een interpreter met kwaadaardige intenties. Code wordt
+als het ware _geinjecteerd_ in een applicatie, zodat het vervolgens door de applicatie 
+verwerkt wordt. 
 
 Het kan data loss, data corruption, disclosure (leaking to third parties), loss of
 accountability, denial of access en host takeover veroorzaken.
 
-### Risk
-Het is zeker wel een risico binnen mijn project, omdat ik bij mijn
-web request handler niet gebruik maak van een request dto, ik whitelist de toegestande user inputs niet, of
-van prepared statements voor de database.
+### Risico
+_Hoe groot is het risico voor deze kwetsbaarheid binnen het project?_
 
-Als je authenticatie en autorisatie toevoegt zou je resource gebruik kunnen relateren
-aan een gebruiker.
-### Counter-measures
-Hibernate gaat SQL injection tegen.
+Het is zeker wel een risico binnen dit project, omdat de user inputs gelijk worden gebruikt.
+Er is ook geen validatie, filtering en sanitization van de user inputs.
+
+_Wat als we authenticatie en autorisatie toevoegen?_
+
+Als je authenticatie en autorisatie toevoegt zal dit niets veranderen. Het kan zelfs voor meer risico's zorgen, door broken 
+access control.
+
+### Tegenmaatregelen
+_Hoe wordt dit risico tegengegaan binnen het project?_
+
+Door middel van prepared statements. 
+
+_Als je denkt dat (een onderdeel van) een library of framework dit voor je oplost, probeer dan uit te zoeken welk onderdeel dit is en hoe deze dat tegengaat._
+
+Hibernate maakt gebruik van prepared statements: "_Hibernate executes all SQL queries and DML operations using prepared statements._" Dit houdt in dat de user inputs
+alleen worden toegelaten via parametrisatie. Dit helpt bij het bestrijden van SQL injection.
 
 
 ## A5:2017 Broken Access Control
 
-### Description
-Broken access control heeft te maken met dat een aanvaller _acces_ heeft tot data, gebruiker- en/of adminaccounts of acties terwijl hij of
-zij hier geen autorisatie voor heeft. 
+### Descriptie
+_Wat houdt de vulnerability in?_
 
-### Risk
+Broken access control heeft te maken met dat een aanvaller _acces_ heeft tot data, gebruiker- en/of adminaccounts of acties terwijl hij of
+zij hier geen autorisatie hiervoor heeft. 
+
+Het kan overname van accounts, extra priveleges toekennen aan onbedoelde partijen
+en data aantasting veroorzaken.
+
+### Risico's
+_Hoe groot is het risico voor deze kwetsbaarheid binnen het project?_
+
 Mijn **dependency check report** geeft aan dat _information exposure_ een probleem is. Dit kan komen doordat de primary key in
-de URL aangepast kan worden. Hierdoor wordt informatie van iemand anders zijn of haar game _blootgesteld_ aan een ander.
+de URL aangepast kan worden en door CORS misconfiguratie. Hierdoor wordt informatie van iemand anders zijn of haar game _blootgesteld_ aan een ander.
+
+_Wat als we authenticatie en autorisatie toevoegen?_
 
 Als je authenticatie en autorisatie toevoegt zou je resource gebruik kunnen relateren
 aan een gebruiker. 
-### Counter-measures
+### Tegenmaatregelen
+_Hoe wordt dit risico tegengegaan binnen het project?_
 
+Door middel van voldoende testen.
+
+_Als je denkt dat (een onderdeel van) een library of framework dit voor je oplost, probeer dan uit te zoeken welk onderdeel dit is en hoe deze dat tegengaat._
+
+N.V.T.
 
 ## A8:2017 Insecure Deserialization
 
-### Description
-Insecure deserialization heeft te maken met een aanval die de structuur of inhoud
-van de serializatie aanpast om zo bepaalde acties uit te voeren op een machine.
+### Descriptie
+_Wat houdt de vulnerability in?_
 
-### Risk
+Insecure deserialization heeft te maken met aanvallers die de structuur of inhoud
+van de serializatie veranderen om zo bepaalde aanvallen uit te voeren op een machine.
+
+Het kan een grote impact hebben, omdat aanvallers veel kunnen doen met betreffende machines;
+remote request execution.
+### Risico's
+_Hoe groot is het risico voor deze kwetsbaarheid binnen het project?_
+
 Mijn **dependency check report** geeft aan dat _deserialization of untrusted data_ ook een probleem is.
+Er is dus zeker een risico binnen mijn project, omdat er geen validatie-
+en typeregels worden toegepast op ongeldige data.
 
-Als je authenticatie en autorisatie zal geen invloed hebben op het serializen. Het is
-gewoon belangrijk dat er gebruik wordt gemaakt van uitvoerige validatie- en typeregels
-om ongeldige data te voorkomen.
-### Counter-measures
-In mijn project wordt er gebruik gemaakt van serialisatie door **Hibernate** en **Jackson**. Hibernate zet mijn
-objecten om naar objecten die passen in de database en Jackson zet bijvoorbeeld mijn DTO-data om naar JSON.
+_Wat als we authenticatie en autorisatie toevoegen?_
+
+Als je authenticatie en autoratisatie toevoegt, zou je een check kunnen uitvoeren op ongeautoriseerd 
+gedrag.
+
+### Tegenmaatregelen
+_Hoe wordt dit risico tegengegaan binnen het project?_
+
+Er wordt in dit project volgens mij niets gedaan om insecure deserialization
+tegen te gaan.
+
+_Als je denkt dat (een onderdeel van) een library of framework dit voor je oplost, probeer dan uit te zoeken welk onderdeel dit is en hoe deze dat tegengaat._
+
+**Jackson** en **Hibernate** maken gebruik van serialization en deserialization. Volgens mij doen zij echter niet veel / genoeg aan insecure deserialization.
