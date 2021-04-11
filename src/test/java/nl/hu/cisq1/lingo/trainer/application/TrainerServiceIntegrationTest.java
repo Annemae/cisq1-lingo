@@ -76,7 +76,7 @@ class TrainerServiceIntegrationTest {
     @Test
     @DisplayName("gives back game")
     void gameIsFound() {
-        UUID actual = trainerService.guess(UUID.randomUUID(), "APPLE").getId();
+        UUID actual = trainerService.guess(UUID.randomUUID(), "aarde").getId();
 
         assertEquals(actual, game.getId());
         verify(repository, times(1)).findById(any());
@@ -94,7 +94,7 @@ class TrainerServiceIntegrationTest {
     @Test
     @DisplayName("start game saves")
     void GuessSaves() {
-        GameProgress gameProgress = trainerService.guess(UUID.randomUUID(), "ACORN");
+        GameProgress gameProgress = trainerService.guess(UUID.randomUUID(), "aasje");
 
         assertEquals(game.createGameProgress().getId(), gameProgress.getId());
         verify(repository, times(1)).save(any());
@@ -173,5 +173,4 @@ class TrainerServiceIntegrationTest {
 
         assertEquals(game.getId(), gameProgress.getId());
     }
-
 }
