@@ -23,7 +23,7 @@ class StrategyConverterTest {
 
     @ParameterizedTest
     @MethodSource("provideStrategyExamples")
-    @DisplayName("convert to entity attribute (default): default length strategy")
+    @DisplayName("convert to entity attribute works correctly")
     void convertToEntityAttribute(String expected) {
         WordLengthStrategy wordLengthStrategy = strategyConverter.convertToEntityAttribute(expected);
 
@@ -31,7 +31,7 @@ class StrategyConverterTest {
     }
 
     @Test
-    @DisplayName("convert to database column")
+    @DisplayName("convert to database column works correctly")
     void convertToDatabaseColumn() {
         String actual = strategyConverter.convertToDatabaseColumn(new DefaultLengthStrategy());
 

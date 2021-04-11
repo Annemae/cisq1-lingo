@@ -33,19 +33,19 @@ class WordTest {
         );
     }
 
+    @Test
+    @DisplayName("the correct word characters are given back")
+    void giveWordCharactersIsCorrect() {
+        Word word = Word.of("APPLE");
+
+        assertEquals(List.of('A', 'P', 'P', 'L', 'E'), word.getWordCharacters());
+    }
+
     @ParameterizedTest
     @MethodSource("provideEqualsExamples")
     @DisplayName("equals works correctly")
     void equalsWorks(boolean expectedIsEqual, Word word, Object object) {
         assertEquals(expectedIsEqual, word.equals(object));
-    }
-
-    @Test
-    @DisplayName("gives back correct word characters")
-    void giveWordCharactersWorks() {
-        Word word = Word.of("APPLE");
-
-        assertEquals(List.of('A', 'P', 'P', 'L', 'E'), word.getWordCharacters());
     }
 
     @Test

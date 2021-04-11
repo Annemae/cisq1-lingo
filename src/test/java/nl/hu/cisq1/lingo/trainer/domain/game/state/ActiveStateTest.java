@@ -44,8 +44,8 @@ class ActiveStateTest {
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
-    @DisplayName("take guess works correctly")
-    void takeGuessWorks(List<String> attempts, int expectedScore, boolean expectedRoundIsOver, GameStatus status) {
+    @DisplayName("take guess gives back correct data")
+    void takeGuessGivesCorrectData(List<String> attempts, int expectedScore, boolean expectedRoundIsOver, GameStatus status) {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
         activeState.createNewRound(BREAD, game);
@@ -94,7 +94,7 @@ class ActiveStateTest {
 
     @Test
     @DisplayName("create a new round")
-    void createRoundWorks() {
+    void createRound() {
         Game game = new Game(new DefaultLengthStrategy());
         State activeState = new ActiveState();
 

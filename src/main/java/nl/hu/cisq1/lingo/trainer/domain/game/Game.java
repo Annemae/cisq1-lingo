@@ -46,7 +46,6 @@ public class Game {
         this.wordLengthStrategy = wordLengthStrategy;
     }
 
-
     public void changeState(State state) { this.state = state; }
 
     public void createNewRound(String wordToGuess) { state.createNewRound(Word.of(wordToGuess), this); }
@@ -66,23 +65,19 @@ public class Game {
         return new GameProgress(id, score, round.amountOfGuesses(), gameStatus, word, feedback, hint, rounds);
     }
 
-
     public void addRound(Round round) { rounds.add(round); }
 
     public List<Round> getRounds() { return this.rounds; }
 
     public Round getCurrentRound() { return rounds.get(rounds.size() - 1); }
 
-
     public GameStatus getGameStatus() { return gameStatus; }
 
     public void setGameStatus(GameStatus gameStatus) { this.gameStatus = gameStatus; }
 
-
     public int getScore() { return score; }
 
     public void setScore(int score) { this.score = score; }
-
 
     public UUID getId() { return id; }
 

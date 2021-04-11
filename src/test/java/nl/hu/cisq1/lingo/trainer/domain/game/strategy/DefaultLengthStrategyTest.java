@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DefaultLengthStrategyTest {
     DefaultLengthStrategy defaultLengthStrategy = new DefaultLengthStrategy();
 
-    private static Stream<Arguments> provideCorrectWordLengthExamples() {
+    private static Stream<Arguments> provideWordLengthExamples() {
         return Stream.of(
                 Arguments.of(0, 5),
                 Arguments.of(5, 6),
@@ -26,9 +26,9 @@ class DefaultLengthStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideCorrectWordLengthExamples")
-    @DisplayName("gives back the correct length")
-    void calculateCorrectWordLength(int previous, int expected) {
+    @MethodSource("provideWordLengthExamples")
+    @DisplayName("the correct lengths are given back")
+    void calculateWordLength(int previous, int expected) {
         int actual = defaultLengthStrategy.calculateWordLength(previous);
 
         assertEquals(expected, actual);

@@ -56,8 +56,8 @@ class GameTest {
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
-    @DisplayName("take guess works correctly")
-    void takeGuessWorks(List<String> attempts, int expectedScore, List<Mark> expectedMarks,
+    @DisplayName("take guess gives back correct data")
+    void takeGuessGivesCorrectData(List<String> attempts, int expectedScore, List<Mark> expectedMarks,
                            List<Character> expectedHintCharacters, GameStatus expectedGameStatus) {
         Game game = new Game(new DefaultLengthStrategy());
         game.createNewRound("BREAD");
@@ -74,7 +74,7 @@ class GameTest {
     }
 
     @Test
-    @DisplayName("gives back playing game status before starting round")
+    @DisplayName("gives back playing game status before starting a round")
     void gameStatusPlaying() {
         Game game = new Game(new DefaultLengthStrategy());
 

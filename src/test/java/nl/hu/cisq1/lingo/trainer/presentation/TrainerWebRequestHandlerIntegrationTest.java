@@ -58,42 +58,54 @@ class TrainerWebRequestHandlerIntegrationTest {
     }
 
     @Test
-    @DisplayName("start game gives back correct values")
-    void startGameWorks() throws Exception {
+    @DisplayName("start game gives back correct data")
+    void startGameGivesCorrectData() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/trainer/start");
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.gameStatus").exists())
                 .andExpect(jsonPath("$.score").value(0))
+                .andExpect(jsonPath("$.amountOfGuesses").value(0))
                 .andExpect(jsonPath("$.feedback").exists())
                 .andExpect(jsonPath("$.hint").exists())
-                .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$._links").exists());
     }
 
     @Test
-    @DisplayName("get gives back correct values")
-    void getProgressWorks() throws Exception {
+    @DisplayName("get gives back correct data")
+    void getProgressGivesCorrectData() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/trainer/{id}", id);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.gameStatus").exists())
+                .andExpect(jsonPath("$.score").value(0))
+                .andExpect(jsonPath("$.amountOfGuesses").exists())
+                .andExpect(jsonPath("$.feedback").exists())
+                .andExpect(jsonPath("$.hint").exists())
                 .andExpect(jsonPath("$._links").exists());
     }
 
     @Test
-    @DisplayName("guess gives back correct values")
-    void guessWorks() throws Exception {
+    @DisplayName("guess gives back correct data")
+    void guessGivesCorrectData() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/trainer/{id}/{guess}", id, "AARDE");
+                .post("/trainer/{id}/{guess}", id, "aarde");
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.gameStatus").exists())
+                .andExpect(jsonPath("$.score").value(25))
+                .andExpect(jsonPath("$.amountOfGuesses").exists())
+                .andExpect(jsonPath("$.feedback").exists())
+                .andExpect(jsonPath("$.hint").exists())
                 .andExpect(jsonPath("$._links").exists());
     }
 

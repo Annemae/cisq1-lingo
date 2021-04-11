@@ -23,7 +23,6 @@ public class Word {
     }
     public static Word of(String word) { return new Word(word); }
 
-
     public List<Character> getWordCharacters() {
         List<Character> wordCharacters = new ArrayList<>();
 
@@ -35,7 +34,6 @@ public class Word {
     }
 
     public int getLength() { return this.getWordCharacters().size(); }
-
 
     @Override
     public boolean equals(Object o) {

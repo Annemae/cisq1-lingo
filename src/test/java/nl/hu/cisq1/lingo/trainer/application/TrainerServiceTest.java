@@ -43,7 +43,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("throws exception when game is not found")
+    @DisplayName("game not found throws exception")
     void gameNotFound() {
         when(repository.findById(any()))
                 .thenReturn(Optional.empty());
@@ -61,7 +61,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("gives back game")
+    @DisplayName("game is found")
     void gameIsFound() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
@@ -72,7 +72,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("start game saves")
+    @DisplayName("start game saves game")
     void startGameSaves() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
@@ -83,7 +83,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("start game saves")
+    @DisplayName("guess saves game")
     void GuessSaves() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
@@ -94,7 +94,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("guess takes a guess")
+    @DisplayName("guess uses takes a guess method")
     void GuessTakesGuess() {
         Game game = mock(Game.class);
         Round round = mock(Round.class);
@@ -129,7 +129,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("start game uses word service")
+    @DisplayName("guess uses word service")
     void GuessUsesWordService() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
@@ -169,7 +169,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("guess throws error")
+    @DisplayName("guess throws exception")
     void guessThrowsInvalidGuessException() {
         when(wordService.wordDoesExist(any()))
                 .thenReturn(false);
@@ -182,8 +182,8 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("progress returns right data")
-    void progressWorks() {
+    @DisplayName("progress gives back correct data")
+    void progressGivesCorrectData() {
         TrainerService trainerService = new TrainerService(repository, wordService);
 
         GameProgress gameProgress = trainerService.showProgress(UUID.randomUUID());

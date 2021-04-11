@@ -50,8 +50,8 @@ class RoundTest {
 
     @ParameterizedTest
     @MethodSource("provideGuessExamples")
-    @DisplayName("taking a guess works correctly")
-    void takeGuessWorks(List<String> guesses, int expectedAmountOfGuesses, boolean expectedRoundIsOver,
+    @DisplayName("take guess gives back correct data")
+    void takeGuessGivesCorrectData(List<String> guesses, int expectedAmountOfGuesses, boolean expectedRoundIsOver,
                         List<Character> expectedHintCharacters, List<Mark> expectedMarks) {
         Round round = new Round(BREAD);
 
@@ -75,7 +75,7 @@ class RoundTest {
     }
 
     @Test
-    @DisplayName("round is over by too many attempts")
+    @DisplayName("round is over because of too many attempts")
     void roundIsOverTooManyAttempts() {
         Round round = new Round(BREAD);
 

@@ -31,7 +31,7 @@ class StateConverterTest {
 
     @ParameterizedTest
     @MethodSource("provideStateExamples")
-    @DisplayName("convert to database column")
+    @DisplayName("convert to database column works correctly")
     void convertToDatabaseColumn(State state, String expected) {
         String actual = stateConverter.convertToDatabaseColumn(state);
 
@@ -40,7 +40,7 @@ class StateConverterTest {
 
     @ParameterizedTest
     @MethodSource("provideStateExamples")
-    @DisplayName("convert to entity attribute")
+    @DisplayName("convert to entity attribute works correctly")
     void convertToEntityAttribute(State expected, String string) {
         State actual = stateConverter.convertToEntityAttribute(string);
 
