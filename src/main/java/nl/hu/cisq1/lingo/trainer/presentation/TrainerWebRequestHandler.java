@@ -75,7 +75,7 @@ public class TrainerWebRequestHandler {
 
     private ProgressDTOResponse createProgressDTOResponse(GameProgress gameProgress) {
         return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(),
-                gameProgress.getAmountOfAttempts(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
+                gameProgress.getAmountOfAttempts(), gameProgress.getWord(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
     }
 
     @ExceptionHandler(value = NoGameFoundException.class)

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.ELIMINATED;
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 
 @Entity
@@ -57,7 +58,12 @@ public class Game {
         Feedback feedback = round.getLastFeedback();
         Hint hint = round.giveHint();
 
-        return new GameProgress(id, score, round.amountOfGuesses(), gameStatus, feedback, hint, rounds);
+        Word word;
+        if(!gameStatus.equals(ELIMINATED)) {
+            word = null;
+        } else word = round.getWordToGuess();
+
+        return new GameProgress(id, score, round.amountOfGuesses(), gameStatus, word, feedback, hint, rounds);
     }
 
 

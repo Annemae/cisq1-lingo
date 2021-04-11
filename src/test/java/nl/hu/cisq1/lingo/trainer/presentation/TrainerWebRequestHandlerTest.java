@@ -30,6 +30,7 @@ class TrainerWebRequestHandlerTest {
                 0,
                 0,
                 GameStatus.WAITING_FOR_ROUND,
+                null,
                 new Feedback(Word.of("APPLE")),
                 new Hint(Collections.emptyList(), wordToGuess),
                 List.of(new Round(wordToGuess))
