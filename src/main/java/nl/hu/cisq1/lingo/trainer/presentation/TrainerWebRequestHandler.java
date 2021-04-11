@@ -73,12 +73,10 @@ public class TrainerWebRequestHandler {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     private ProgressDTOResponse createProgressDTOResponse(GameProgress gameProgress) {
         return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(),
                 gameProgress.getAmountOfAttempts(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
     }
-
 
     @ExceptionHandler(value = NoGameFoundException.class)
     public ResponseEntity<String> ngfeHandler(NoGameFoundException ngfe) {

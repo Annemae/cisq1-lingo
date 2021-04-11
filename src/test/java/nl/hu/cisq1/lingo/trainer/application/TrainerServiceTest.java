@@ -2,6 +2,9 @@ package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.Round;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
@@ -94,9 +97,21 @@ class TrainerServiceTest {
     @DisplayName("guess takes a guess")
     void GuessTakesGuess() {
         Game game = mock(Game.class);
+        Round round = mock(Round.class);
+        Feedback feedback = mock(Feedback.class);
 
         when(repository.findById(any()))
                 .thenReturn(Optional.of(game));
+
+        when(game.getCurrentRound())
+                .thenReturn(round);
+
+        when(round.getLastFeedback())
+                .thenReturn(feedback);
+
+        when(feedback.isGuessValid())
+                .thenReturn(true);
+
 
         when(repository.save(any(Game.class)))
                 .thenReturn(game);
@@ -156,6 +171,19 @@ class TrainerServiceTest {
         GameProgress gameProgress = trainerService.guess(game.getId(), "ACORN");
 
         assertEquals(1, gameProgress.getRounds().size());
+    }
+
+    @Test
+    @DisplayName("guess throws error")
+    void guessThrowsInvalidGuessException() {
+        when(wordService.wordDoesExist(any()))
+                .thenReturn(false);
+
+        TrainerService trainerService = new TrainerService(repository, wordService);
+
+        UUID uuid = UUID.randomUUID();
+
+        assertThrows(InvalidGuessException.class, () -> trainerService.guess(uuid, "ikbestaniet"));
     }
 
     @Test

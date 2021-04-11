@@ -3,6 +3,9 @@ package nl.hu.cisq1.lingo.trainer.application;
 import nl.hu.cisq1.lingo.CiTestConfiguration;
 import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.Round;
+import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
@@ -10,15 +13,23 @@ import nl.hu.cisq1.lingo.words.application.WordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.ABSENT;
+import static nl.hu.cisq1.lingo.trainer.domain.Mark.CORRECT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -101,9 +112,20 @@ class TrainerServiceIntegrationTest {
     @DisplayName("guess takes a guess")
     void GuessTakesGuess() {
         Game game = mock(Game.class);
+        Round round = mock(Round.class);
+        Feedback feedback = mock(Feedback.class);
 
         when(repository.findById(any()))
                 .thenReturn(Optional.of(game));
+
+        when(game.getCurrentRound())
+                .thenReturn(round);
+
+        when(round.getLastFeedback())
+                .thenReturn(feedback);
+
+        when(feedback.isGuessValid())
+                .thenReturn(true);
 
         when(repository.save(any(Game.class)))
                 .thenReturn(game);
@@ -146,11 +168,14 @@ class TrainerServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("guess makes no new round when round is not over")
-    void guessDoesNotMakeRound() {
-        GameProgress gameProgress = trainerService.guess(game.getId(), "ACORN");
+    @DisplayName("guess throws error")
+    void guessThrowsInvalidGuessException() {
+        when(wordService.wordDoesExist(any()))
+                .thenReturn(false);
 
-        assertEquals(1, gameProgress.getRounds().size());
+        UUID uuid = UUID.randomUUID();
+
+        assertThrows(InvalidGuessException.class, () -> trainerService.guess(uuid, "ikbestaniet"));
     }
 
     @Test
