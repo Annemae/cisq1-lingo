@@ -2,7 +2,6 @@ package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
-import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
@@ -14,8 +13,6 @@ import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;

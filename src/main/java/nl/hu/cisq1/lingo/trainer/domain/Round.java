@@ -32,7 +32,7 @@ public class Round {
     public void takeGuess(String attempt) {
         Feedback newFeedback = new Feedback(attempt, wordToGuess);
 
-        if(!isOver() && newFeedback.isGuessValid()) { this.attempts.add(newFeedback); }
+        if(!isOver()) { this.attempts.add(newFeedback); }
     }
 
     public Hint giveHint() { return Hint.of(attempts, wordToGuess); }
@@ -54,5 +54,5 @@ public class Round {
         return this.attempts.get(this.attempts.size() - 1);
     }
 
-    public int amountOfGuesses() { return attempts.size(); }
+    public int amountOfGuesses() { return attempts.size(); } //todo
 }
