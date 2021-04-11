@@ -16,12 +16,12 @@ accountability, denial of access en host takeover veroorzaken.
 ### Risico
 _Hoe groot is het risico voor deze kwetsbaarheid binnen het project?_
 
-Het is zeker wel een risico binnen dit project, omdat de user inputs gelijk worden gebruikt.
+Het is een groot risico binnen dit project, omdat de user inputs gelijk worden gebruikt.
 Er is ook geen validatie, filtering en sanitization van de user inputs.
 
 _Wat als we authenticatie en autorisatie toevoegen?_
 
-Als je authenticatie en autorisatie toevoegt zal dit niets veranderen. Het kan zelfs voor meer risico's zorgen, door broken 
+Als je authenticatie en autorisatie toevoegt zal dit niets veranderen. Het kan zelfs voor meer risico's zorgen, vanwege broken 
 access control.
 
 ### Tegenmaatregelen
@@ -41,25 +41,26 @@ alleen worden toegelaten via parametrisatie. Dit helpt bij het bestrijden van SQ
 _Wat houdt de vulnerability in?_
 
 Broken access control heeft te maken met dat een aanvaller _acces_ heeft tot data, gebruiker- en/of adminaccounts of acties terwijl hij of
-zij hier geen autorisatie hiervoor heeft. 
+zij hier geen autorisatie voor heeft. 
 
 Het kan overname van accounts, extra priveleges toekennen aan onbedoelde partijen
-en data aantasting veroorzaken.
+en data-aantasting veroorzaken.
 
 ### Risico's
 _Hoe groot is het risico voor deze kwetsbaarheid binnen het project?_
 
 Mijn **dependency check report** geeft aan dat _information exposure_ een probleem is. Dit kan komen doordat de primary key in
-de URL aangepast kan worden en door CORS misconfiguratie. Hierdoor wordt informatie van iemand anders zijn of haar game _blootgesteld_ aan een ander.
+de URL aangepast kan worden en door CORS misconfiguratie. Hierdoor wordt informatie van iemand anders zijn game _blootgesteld_ aan een ander.
 
 _Wat als we authenticatie en autorisatie toevoegen?_
 
 Als je authenticatie en autorisatie toevoegt zou je resource gebruik kunnen relateren
-aan een gebruiker. 
+aan een gebruiker. Dit helpt tegen broken acces control.
+
 ### Tegenmaatregelen
 _Hoe wordt dit risico tegengegaan binnen het project?_
 
-Door middel van voldoende testen.
+Door middel van voldoende testen om het risico van broken acces te verkleinen.
 
 _Als je denkt dat (een onderdeel van) een library of framework dit voor je oplost, probeer dan uit te zoeken welk onderdeel dit is en hoe deze dat tegengaat._
 

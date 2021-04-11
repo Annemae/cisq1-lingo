@@ -40,7 +40,7 @@ class TrainerWebRequestHandlerIntegrationTest {
     @BeforeEach
     void beforeEachTest() throws Exception {
         when(wordService.provideRandomWord(any()))
-                .thenReturn("AARDE");
+                .thenReturn("aarde");
 
         when(wordService.wordDoesExist(any()))
                 .thenReturn(true);
@@ -68,7 +68,8 @@ class TrainerWebRequestHandlerIntegrationTest {
                 .andExpect(jsonPath("$.score").value(0))
                 .andExpect(jsonPath("$.feedback").exists())
                 .andExpect(jsonPath("$.hint").exists())
-                .andExpect(jsonPath("$.id").exists());
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$._links").exists());
     }
 
     @Test
@@ -79,7 +80,8 @@ class TrainerWebRequestHandlerIntegrationTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id));
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$._links").exists());
     }
 
     @Test
@@ -91,7 +93,8 @@ class TrainerWebRequestHandlerIntegrationTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id));
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$._links").exists());
     }
 
     @Test
@@ -129,7 +132,7 @@ class TrainerWebRequestHandlerIntegrationTest {
     @DisplayName("too many guesses throws exception")
     void tooManyGuessesThrowsInvalidGameStateException() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/trainer/{id}/{guess}", id, "AASJE");
+                .post("/trainer/{id}/{guess}", id, "aasje");
 
         mockMvc.perform(request);
         mockMvc.perform(request);

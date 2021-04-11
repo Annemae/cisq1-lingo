@@ -3,6 +3,8 @@ package nl.hu.cisq1.lingo.trainer.application;
 import nl.hu.cisq1.lingo.CiTestConfiguration;
 import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
+import nl.hu.cisq1.lingo.trainer.domain.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.Round;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
@@ -26,7 +28,6 @@ import static org.mockito.Mockito.*;
 @Import(CiTestConfiguration.class)
 @AutoConfigureMockMvc
 class TrainerServiceIntegrationTest {
-
     @Autowired
     private TrainerService trainerService;
 
@@ -41,7 +42,7 @@ class TrainerServiceIntegrationTest {
     @BeforeEach
     void beforeEachTest() {
         when(wordService.provideRandomWord(any()))
-                .thenReturn("APPLE");
+                .thenReturn("aarde");
 
         when(wordService.wordDoesExist(any()))
                 .thenReturn(true);
@@ -52,7 +53,7 @@ class TrainerServiceIntegrationTest {
         when(repository.save(any(Game.class)))
                 .thenReturn(game);
 
-        game.createNewRound("APPLE");
+        game.createNewRound("aarde");
     }
 
     @Test
@@ -65,7 +66,7 @@ class TrainerServiceIntegrationTest {
 
         assertThrows(
                 NoGameFoundException.class,
-                () -> trainerService.guess(uuid, "ATTEMPT")
+                () -> trainerService.guess(uuid, "attempt")
         );
 
         verify(repository, times(1)).findById(any());
@@ -102,9 +103,20 @@ class TrainerServiceIntegrationTest {
     @DisplayName("guess takes a guess")
     void GuessTakesGuess() {
         Game game = mock(Game.class);
+        Round round = mock(Round.class);
+        Feedback feedback = mock(Feedback.class);
 
         when(repository.findById(any()))
                 .thenReturn(Optional.of(game));
+
+        when(game.getCurrentRound())
+                .thenReturn(round);
+
+        when(round.getLastFeedback())
+                .thenReturn(feedback);
+
+        when(feedback.isGuessValid())
+                .thenReturn(true);
 
         when(repository.save(any(Game.class)))
                 .thenReturn(game);
@@ -124,8 +136,8 @@ class TrainerServiceIntegrationTest {
 
     @Test
     @DisplayName("start game uses word service")
-    void GuessUsesWordService() { //when word is guessed
-        trainerService.guess(UUID.randomUUID(), "APPLE");
+    void GuessUsesWordService() {
+        trainerService.guess(UUID.randomUUID(), "aarde");
 
         verify(wordService, times(1)).provideRandomWord(any());
     }
@@ -141,7 +153,7 @@ class TrainerServiceIntegrationTest {
     @Test
     @DisplayName("guess makes new round when round is over")
     void guessMakesRound() {
-        GameProgress gameProgress = trainerService.guess(game.getId(), "APPLE");
+        GameProgress gameProgress = trainerService.guess(game.getId(), "aarde");
 
         assertEquals(2, gameProgress.getRounds().size());
     }

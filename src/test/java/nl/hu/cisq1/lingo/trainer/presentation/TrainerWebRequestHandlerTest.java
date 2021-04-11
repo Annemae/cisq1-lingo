@@ -28,6 +28,7 @@ class TrainerWebRequestHandlerTest {
 
         gameProgress = new GameProgress(UUID.randomUUID(),
                 0,
+                0,
                 GameStatus.WAITING_FOR_ROUND,
                 new Feedback(Word.of("APPLE")),
                 new Hint(Collections.emptyList(), wordToGuess),

@@ -9,41 +9,33 @@ import java.util.*;
 public class GameProgress {
     private final UUID id;
     private final int score;
+    private final int amountOfAttempts;
     private final GameStatus gameStatus;
     private final Feedback feedback;
     private final Hint hint;
     private final List<Round> rounds;
 
-    public GameProgress(UUID id, int score, GameStatus gameStatus, Feedback feedback, Hint hint, List<Round> rounds) {
+    public GameProgress(UUID id, int score, int amountOfAttempts, GameStatus gameStatus, Feedback feedback, Hint hint, List<Round> rounds) {
         this.id = id;
         this.score = score;
+        this.amountOfAttempts = amountOfAttempts;
         this.gameStatus = gameStatus;
         this.feedback = feedback;
         this.hint = hint;
         this.rounds = rounds;
     }
 
-    public UUID getId() {
-        return id;
-    }
+    public UUID getId() { return id; }
 
-    public int getScore() {
-        return score;
-    }
+    public int getScore() { return score; }
 
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
+    public int getAmountOfAttempts() { return amountOfAttempts; }
 
-    public Feedback getFeedback() {
-        return feedback;
-    }
+    public GameStatus getGameStatus() { return gameStatus; }
 
-    public Hint getHint() {
-        return hint;
-    }
+    public Feedback getFeedback() { return feedback; }
 
-    public List<Round> getRounds() {
-        return rounds;
-    }
+    public Hint getHint() { return hint; }
+
+    public List<Round> getRounds() { return rounds; }
 }

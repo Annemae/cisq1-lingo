@@ -8,7 +8,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "round")
 public class Round {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "round_id")

@@ -17,7 +17,6 @@ import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.PLAYING;
 @Entity
 @Table(name = "game")
 public class Game {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "game_id")
@@ -58,7 +57,7 @@ public class Game {
         Feedback feedback = round.getLastFeedback();
         Hint hint = round.giveHint();
 
-        return new GameProgress(id, score, gameStatus, feedback, hint, rounds);
+        return new GameProgress(id, score, round.amountOfGuesses(), gameStatus, feedback, hint, rounds);
     }
 
 

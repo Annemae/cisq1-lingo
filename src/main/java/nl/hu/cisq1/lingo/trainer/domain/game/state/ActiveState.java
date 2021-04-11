@@ -9,7 +9,6 @@ import nl.hu.cisq1.lingo.trainer.domain.game.state.exception.InvalidGameStateExc
 import static nl.hu.cisq1.lingo.trainer.domain.game.GameStatus.*;
 
 public class ActiveState implements State {
-
     public ActiveState() { }
 
     @Override

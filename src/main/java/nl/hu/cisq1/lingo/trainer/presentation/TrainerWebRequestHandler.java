@@ -1,7 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
-import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.application.TrainerService;
+import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.GameProgress;
 import nl.hu.cisq1.lingo.trainer.domain.game.state.exception.InvalidGameStateException;
@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/trainer")
 public class TrainerWebRequestHandler {
@@ -19,31 +22,61 @@ public class TrainerWebRequestHandler {
 
     public TrainerWebRequestHandler(TrainerService service) { this.service = service; }
 
+    private void addShowProgressLink(ProgressDTOResponse response) {
+        response.add(linkTo(methodOn(TrainerWebRequestHandler.class)
+                .showProgress(response.getId()))
+                .withRel("get"));
+    }
+
+    private void addGuessLink(ProgressDTOResponse response) {
+        response.add(linkTo(methodOn(TrainerWebRequestHandler.class)
+                .takeGuess(response.getId(), "x"))
+                .withRel("post"));
+    }
+
+    private void addStartLink(ProgressDTOResponse response) {
+        response.add(linkTo(methodOn(TrainerWebRequestHandler.class)
+                .startGame())
+                .withRel("post"));
+    }
+
     @PostMapping(value = "/start")
     public ResponseEntity<ProgressDTOResponse> startGame() {
         GameProgress gameProgress = service.startGame();
 
-        return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.CREATED);
+        ProgressDTOResponse response = createProgressDTOResponse(gameProgress);
+        addShowProgressLink(response);
+        addGuessLink(response);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/{id}/{guess}")
     public ResponseEntity<ProgressDTOResponse> takeGuess(@PathVariable UUID id, @PathVariable String guess) {
-        GameProgress gameProgress = service.guess(id, guess);
+        GameProgress gameProgress = service.guess(id, guess.toLowerCase());
 
-        return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.OK);
+        ProgressDTOResponse response = createProgressDTOResponse(gameProgress);
+        addStartLink(response);
+        addShowProgressLink(response);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProgressDTOResponse> showProgress(@PathVariable UUID id) {
         GameProgress gameProgress = service.showProgress(id);
 
-        return new ResponseEntity<>(createProgressDTOResponse(gameProgress), HttpStatus.OK);
+        ProgressDTOResponse response = createProgressDTOResponse(gameProgress);
+        addStartLink(response);
+        addGuessLink(response);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     private ProgressDTOResponse createProgressDTOResponse(GameProgress gameProgress) {
         return new ProgressDTOResponse(gameProgress.getId(), gameProgress.getGameStatus(), gameProgress.getScore(),
-                gameProgress.getFeedback().getMarks(), gameProgress.getHint());
+                gameProgress.getAmountOfAttempts(), gameProgress.getFeedback().getMarks(), gameProgress.getHint());
     }
 
 
