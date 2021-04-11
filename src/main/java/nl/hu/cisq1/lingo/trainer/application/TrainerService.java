@@ -65,7 +65,7 @@ public class TrainerService {
     public GameProgress guess(UUID id, String attempt) {
         Game game = this.getGame(id);
 
-        if(!wordService.wordDoesExist(attempt) || !game.getCurrentRound().getLastFeedback().isGuessValid()) {
+        if(!wordService.wordDoesExist(attempt) || attempt.toCharArray().length != game.getCurrentRound().getWordToGuess().getLength()) {
             throw new InvalidGuessException("Guess is invalid because guess is not the right length, not a word or starts with wrong letter.");
         }
 

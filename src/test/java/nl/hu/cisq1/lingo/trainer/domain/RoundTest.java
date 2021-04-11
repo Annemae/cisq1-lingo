@@ -40,11 +40,11 @@ class RoundTest {
                         List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT)),
 
                 Arguments.of(List.of("INVALID"),
-                        1, false, List.of('B', '.', '.', '.', '.'),
-                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID)),
+                        0, false, List.of('B', '.', '.', '.', '.'),
+                        List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT)),
                 Arguments.of(List.of("BREAK", "INVALID"),
-                        2, false, List.of('B', 'R', 'E', 'A', '.'),
-                        List.of(INVALID, INVALID, INVALID, INVALID, INVALID, INVALID, INVALID))
+                        1, false, List.of('B', 'R', 'E', 'A', '.'),
+                        List.of(CORRECT, CORRECT, CORRECT, CORRECT, ABSENT))
                 );
     }
 

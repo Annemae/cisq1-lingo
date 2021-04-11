@@ -4,6 +4,7 @@ import nl.hu.cisq1.lingo.trainer.application.exception.NoGameFoundException;
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.Round;
+import nl.hu.cisq1.lingo.trainer.domain.Word;
 import nl.hu.cisq1.lingo.trainer.domain.exception.InvalidGuessException;
 import nl.hu.cisq1.lingo.trainer.domain.game.strategy.DefaultLengthStrategy;
 import nl.hu.cisq1.lingo.trainer.domain.game.Game;
@@ -98,7 +99,6 @@ class TrainerServiceTest {
     void GuessTakesGuess() {
         Game game = mock(Game.class);
         Round round = mock(Round.class);
-        Feedback feedback = mock(Feedback.class);
 
         when(repository.findById(any()))
                 .thenReturn(Optional.of(game));
@@ -106,12 +106,8 @@ class TrainerServiceTest {
         when(game.getCurrentRound())
                 .thenReturn(round);
 
-        when(round.getLastFeedback())
-                .thenReturn(feedback);
-
-        when(feedback.isGuessValid())
-                .thenReturn(true);
-
+        when(round.getWordToGuess())
+                .thenReturn(Word.of("aarde"));
 
         when(repository.save(any(Game.class)))
                 .thenReturn(game);
