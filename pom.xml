@@ -142,7 +142,7 @@
                     <mutationThreshold>90</mutationThreshold>
                     <timestampedReports>false</timestampedReports>
                 </configuration>
-                <version>1.6.2</version>
+                <version>1.6.7</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.pitest</groupId>
